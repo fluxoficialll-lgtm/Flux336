@@ -7,6 +7,7 @@ import ProviderSettingsModal from '../components/financial/ProviderSettingsModal
 import { paypalService } from '../services/paypalService';
 import { stripeService } from '../services/stripeService';
 import { syncPayService } from '../services/syncPayService';
+import { apiClient } from '../services/apiClient'; // Importe o apiClient
 
 interface ProviderData {
     id: string;
@@ -164,6 +165,10 @@ export const ProviderConfig: React.FC = () => {
       if (!selectedProvider) return;
 
       try {
+          // Chamada de API para remover a credencial do backend
+          await apiClient.post('/financial/disconnect-provider', { provider: selectedProvider });
+
+          // Lógica original para desconexão local
           let success = false;
           switch (selectedProvider) {
               case 'paypal':
@@ -185,6 +190,7 @@ export const ProviderConfig: React.FC = () => {
           }
       } catch (error) {
           console.error(`Erro ao desconectar ${selectedProvider}:`, error);
+          // Opcional: Adicionar feedback visual para o usuário sobre o erro
       } finally {
           setIsSettingsModalOpen(false);
       }

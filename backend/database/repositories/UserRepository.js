@@ -100,6 +100,26 @@ export const UserRepository = {
         return true;
     },
 
+    async clearProviderConnection(userId, provider) {
+        const uuid = toUuid(userId);
+        if (!uuid || !provider) {
+            throw new Error('User ID and provider are required.');
+        }
+
+        // Define o caminho para a chave do provedor dentro do objeto paymentConfigs
+        const pathToRemove = ['paymentConfigs', provider];
+
+        // Utiliza o operador #- do PostgreSQL para remover a chave do objeto JSONB
+        const sql = `
+            UPDATE users
+            SET data = data #- $2::text[]
+            WHERE id = $1
+        `;
+
+        await query(sql, [uuid, pathToRemove]);
+        return true;
+    },
+
     async getAll() {
         const res = await query('SELECT * FROM users ORDER BY created_at DESC LIMIT 1000');
         return res.rows.map(mapRowToUser);
