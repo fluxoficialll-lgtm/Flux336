@@ -2,9 +2,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
-import { SyncPayForm } from '../components/payments/providers/SyncPayForm';
-import { StripeForm } from '../components/payments/providers/StripeForm';
-import { PayPalForm } from '../components/payments/providers/PayPalForm';
+import { ProviderCredentialsModal } from '../components/financial/ProviderCredentialsModal';
 import ProviderSettingsModal from '../components/financial/ProviderSettingsModal';
 import { paypalService } from '../services/paypalService';
 import { stripeService } from '../services/stripeService';
@@ -24,7 +22,8 @@ export const ProviderConfig: React.FC = () => {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [connectedProviders, setConnectedProviders] = useState<Set<string>>(new Set());
   const hasInitialized = useRef(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isCredentialsModalOpen, setIsCredentialsModalOpen] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
 
   const providers: ProviderData[] = useMemo(() => [
@@ -112,6 +111,32 @@ export const ProviderConfig: React.FC = () => {
       });
   };
 
+    const handleConnect = async (credentials: any) => {
+        if (!selectedProvider) return;
+
+        try {
+            let success = false;
+            switch (selectedProvider) {
+                case 'paypal':
+                    await paypalService.authenticate(credentials.clientId, credentials.clientSecret);
+                    break;
+                case 'stripe':
+                    await stripeService.authenticate(credentials.secretKey);
+                    break;
+                case 'syncpay':
+                    await syncPayService.authenticate(credentials.clientId, credentials.clientSecret);
+                    break;
+                default:
+                    console.error('Provedor desconhecido para conexão:', selectedProvider);
+                    return;
+            }
+            handleStatusChange(selectedProvider, true);
+        } catch (error) {
+            console.error(`Erro ao conectar ${selectedProvider}:`, error);
+            throw error;
+        }
+    };
+
   const toggleProvider = (id: string) => {
       setExpanded(prev => prev === id ? null : id);
   };
@@ -126,13 +151,13 @@ export const ProviderConfig: React.FC = () => {
   
   const openSettingsModal = (providerId: string) => {
       setSelectedProvider(providerId);
-      setIsModalOpen(true);
+      setIsSettingsModalOpen(true);
   };
 
   const handleManageCredentials = () => {
       if (!selectedProvider) return;
-      setExpanded(selectedProvider);
-      setIsModalOpen(false);
+      setIsSettingsModalOpen(false);
+      setIsCredentialsModalOpen(true);
   };
 
   const handleDisconnect = async () => {
@@ -161,7 +186,7 @@ export const ProviderConfig: React.FC = () => {
       } catch (error) {
           console.error(`Erro ao desconectar ${selectedProvider}:`, error);
       } finally {
-          setIsModalOpen(false);
+          setIsSettingsModalOpen(false);
       }
   };
 
@@ -208,20 +233,6 @@ export const ProviderConfig: React.FC = () => {
                     </button>
                 </div>
             </div>
-            
-            {isExpanded && !isSoon && (
-                <div className="provider-body">
-                    {provider.id === 'syncpay' && (
-                        <SyncPayForm isConnected={isConnected} onStatusChange={handleStatusChange} />
-                    )}
-                    {provider.id === 'stripe' && (
-                        <StripeForm isConnected={isConnected} onStatusChange={handleStatusChange} />
-                    )}
-                    {provider.id === 'paypal' && (
-                        <PayPalForm isConnected={isConnected} onStatusChange={handleStatusChange} />
-                    )}
-                </div>
-            )}
         </div>
     );
   };
@@ -312,6 +323,17 @@ export const ProviderConfig: React.FC = () => {
         .feedback-msg.error { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); }
 
         .badge-soon { background: rgba(255,255,255,0.05); color: #444; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 900; margin-top: 5px; align-self: flex-start; text-transform: uppercase; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 20;
+        }
+        .modal-content {
+            background: #1a1e26; padding: 24px; border-radius: 16px; width: 90%; max-width: 400px; position: relative;
+        }
+        .close-button { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+        .connect-button { width: 100%; padding: 12px; background: #00c2ff; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .error-message { color: #ff4d4d; font-size: 12px; margin-bottom: 10px; }
+
       `}</style>
 
       <header>
@@ -338,12 +360,19 @@ export const ProviderConfig: React.FC = () => {
         </div>
       </main>
       <ProviderSettingsModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
         providerName={selectedProviderData?.name || ''}
         isConnected={selectedProvider ? connectedProviders.has(selectedProvider) : false}
         onManageCredentials={handleManageCredentials}
         onDisconnect={handleDisconnect}
+      />
+      <ProviderCredentialsModal
+        isOpen={isCredentialsModalOpen}
+        onClose={() => setIsCredentialsModalOpen(false)}
+        providerId={selectedProvider}
+        providerName={selectedProviderData?.name || ''}
+        onConnect={handleConnect}
       />
     </div>
   );

@@ -14,6 +14,9 @@ import adsRoutes from './routes/ads.js';
 import screensRoutes from './routes/screens.js';
 import moderationRoutes from './routes/moderation.js';
 import trackingRoutes from './routes/tracking.js';
+import rankingRoutes from './routes/ranking.js';
+import profileRoutes from './routes/profile.js';
+import fluxmapRoutes from './routes/fluxmap.js';
 
 // Gateway specific routes
 import syncpayRoutes from './routes/gateways/syncpay.js';
@@ -41,6 +44,9 @@ router.use('/posts', postsRoutes);
 router.use('/ads', adsRoutes);
 router.use('/moderation', moderationRoutes);
 router.use('/tracking', trackingRoutes);
+router.use('/ranking', rankingRoutes);
+router.use('/profile', profileRoutes);
+router.use('/fluxmap', fluxmapRoutes);
 
 // Mounting Gateways
 router.use('/syncpay', syncpayRoutes);
