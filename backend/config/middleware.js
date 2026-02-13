@@ -3,9 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
-import { bridgeLogger } from '../services/audit/bridgeLogger.js';
-import { trafficLogger } from '../services/audit/trafficLogger.js';
-import { heartbeatLogger } from '../services/audit/heartbeatLogger.js';
+import { bridgeLogger } from '../services/audit/bridgeLogger.js.js';
+import { trafficLogger } from '../services/audit/trafficLogger.js.js';
+import { heartbeatLogger } from '../services/audit/heartbeatLogger.js.js';
 
 export const setupMiddlewares = (app, io) => {
     // Configuração do Helmet otimizada para Google Auth e Aplicações Híbridas

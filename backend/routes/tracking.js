@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { facebookCapi } from '../services/facebookCapi.js';
-import { dbManager } from '../databaseManager.js';
+import { facebookCapi } from '../services/facebookCapi.js.js';
+import { dbManager } from '../databaseManager.js.js';
 
 const router = express.Router();
 

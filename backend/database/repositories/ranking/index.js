@@ -1,5 +1,5 @@
 
-import { GroupRankingRepository } from './GroupRankingRepository.js';
+import { GroupRankingRepository } from './GroupRankingRepository.js.js';
 
 /**
  * HUB DE RANKING

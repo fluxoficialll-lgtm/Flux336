@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { AdAnalyticsRepository } from '../database/repositories/AdAnalyticsRepository.js';
-import { dbManager } from '../databaseManager.js';
+import { AdAnalyticsRepository } from '../database/repositories/AdAnalyticsRepository.js.js';
+import { dbManager } from '../databaseManager.js.js';
 
 const router = express.Router();
 

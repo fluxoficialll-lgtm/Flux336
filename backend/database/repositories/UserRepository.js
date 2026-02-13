@@ -1,5 +1,5 @@
 
-import { query } from '../pool.js';
+import { query } from '../pool.js.js';
 
 const toUuid = (val) => (val === "" || val === "undefined" || val === "null") ? null : val;
 

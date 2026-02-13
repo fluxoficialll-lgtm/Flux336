@@ -1,6 +1,6 @@
 
-import { commentRepository } from '../database/repositories/CommentRepository';
-import { NotFoundError, AppError } from '../utils/errors';
+import { commentRepository } from '../database/repositories/CommentRepository.js';
+import { NotFoundError, AppError } from '../utils/errors.js';
 
 /**
  * @fileoverview Serviço para gerenciar a lógica de negócios relacionada a comentários.

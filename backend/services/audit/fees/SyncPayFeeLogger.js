@@ -1,4 +1,4 @@
-import { BaseFeeFormatter } from './BaseFeeFormatter.js';
+import { BaseFeeFormatter } from './BaseFeeFormatter.js.js';
 
 /**
  * SyncPayFeeLogger

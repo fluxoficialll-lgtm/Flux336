@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { stripeService } from '../../services/stripeService.js';
-import { dbManager } from '../../databaseManager.js';
+import { stripeService } from '../../services/stripeService.js.js';
+import { dbManager } from '../../databaseManager.js.js';
 
 const router = express.Router();
 

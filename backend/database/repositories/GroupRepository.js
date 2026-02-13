@@ -1,5 +1,5 @@
 
-import { query } from '../pool.js';
+import { query } from '../pool.js.js';
 
 const mapRowToGroup = (row) => {
     if (!row) return null;

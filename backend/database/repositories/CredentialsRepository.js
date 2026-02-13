@@ -1,6 +1,6 @@
 
 // Importa a função 'query' do pool de conexões do banco de dados.
-import { query } from '../pool.js';
+import { query } from '../pool.js.js';
 
 /**
  * @namespace CredentialsRepository

@@ -1,7 +1,7 @@
 
 import express from 'express';
 import { z } from 'zod';
-import { UserRepository } from '../database/repositories/UserRepository.js';
+import { UserRepository } from '../database/repositories/UserRepository.js.js';
 
 const router = express.Router();
 

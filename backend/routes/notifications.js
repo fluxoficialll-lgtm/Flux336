@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { RepositoryHub } from '../database/RepositoryHub.js';
-import { authMiddleware } from '../middleware/authMiddleware.js'; // Assumindo que temos um middleware de autenticação
+import { RepositoryHub } from '../database/RepositoryHub.js.js';
+import { authMiddleware } from '../middleware/authMiddleware.js.js'; // Assumindo que temos um middleware de autenticação
 
 const router = express.Router();
 

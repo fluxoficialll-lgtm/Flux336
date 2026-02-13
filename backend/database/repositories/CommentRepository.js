@@ -1,6 +1,6 @@
 
-import { db } from '../config'; // Importa a configuração do banco de dados
-import { NotFoundError, AppError } from '../../utils/errors';
+import { db } from '../config.js'; // Importa a configuração do banco de dados
+import { NotFoundError, AppError } from '../../utils/errors.js';
 
 /**
  * @fileoverview Repositório para gerenciar a entidade de Comentários no banco de dados.

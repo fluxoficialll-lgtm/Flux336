@@ -1,6 +1,6 @@
-import { StripeFeeLogger } from './StripeFeeLogger.js';
-import { SyncPayFeeLogger } from './SyncPayFeeLogger.js';
-import { PayPalFeeLogger } from './PayPalFeeLogger.js';
+import { StripeFeeLogger } from './StripeFeeLogger.js.js';
+import { SyncPayFeeLogger } from './SyncPayFeeLogger.js.js';
+import { PayPalFeeLogger } from './PayPalFeeLogger.js.js';
 
 /**
  * FeeAuditOrchestrator

@@ -1,5 +1,5 @@
 
-import { pool } from './pool.js';
+import { pool } from './pool.js.js';
 
 /**
  * TransactionOrchestrator: Garante o princípio ACID.

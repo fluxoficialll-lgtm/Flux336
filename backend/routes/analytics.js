@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { FinancialAnalyticsRepository } from '../database/repositories/FinancialAnalyticsRepository.js';
-import { validateAdmin } from '../middleware.js';
+import { FinancialAnalyticsRepository } from '../database/repositories/FinancialAnalyticsRepository.js.js';
+import { validateAdmin } from '../middleware.js.js';
 
 const router = express.Router();
 

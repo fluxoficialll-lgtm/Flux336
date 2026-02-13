@@ -1,6 +1,6 @@
 
-import { commentService } from '../services/CommentService.js';
-import { AppError } from '../utils/errors';
+import { commentService } from '../services/CommentService.js.js';
+import { AppError } from '../utils/errors.js';
 
 /**
  * @fileoverview Controlador para gerenciar as requisições HTTP relacionadas a comentários.

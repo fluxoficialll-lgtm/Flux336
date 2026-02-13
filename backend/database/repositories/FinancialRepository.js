@@ -1,6 +1,6 @@
 // Importa a função 'query' do pool de conexões do banco de dados.
 // Esta função é usada para executar todas as consultas SQL.
-import { query } from '../pool.js';
+import { query } from '../pool.js.js';
 
 /**
  * @namespace FinancialRepository

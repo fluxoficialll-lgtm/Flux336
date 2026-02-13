@@ -1,6 +1,6 @@
 
-import { AdRepository } from '../database/repositories/AdRepository.js';
-import { RecommendationService } from './ai/core/RecommendationService.js';
+import { AdRepository } from '../database/repositories/AdRepository.js.js';
+import { RecommendationService } from './ai/core/RecommendationService.js.js';
 
 export const AdService = {
 

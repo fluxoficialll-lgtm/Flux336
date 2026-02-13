@@ -1,19 +1,19 @@
 
-import { UserRepository } from './repositories/UserRepository.js';
-import { FinancialRepository } from './repositories/FinancialRepository.js';
-import { FeeRepository } from './repositories/financial/FeeRepository.js';
-import { GroupRepository } from './repositories/GroupRepository.js';
-import { PostRepository } from './repositories/PostRepository.js';
-import { ChatRepository } from './repositories/ChatRepository.js';
-import { MarketplaceRepository } from './repositories/MarketplaceRepository.js';
-import { RelationshipRepository } from './repositories/RelationshipRepository.js';
-import { InteractionRepository } from './repositories/InteractionRepository.js';
-import { ReportRepository } from './repositories/ReportRepository.js';
-import { AuditRepository } from './repositories/AuditRepository.js';
-import { AdRepository } from './repositories/AdRepository.js';
-import { CredentialsRepository } from './repositories/CredentialsRepository.js';
-import { PaymentRepository } from './repositories/PaymentRepository.js'; // <-- Adicionado
-import { query } from './pool.js';
+import { UserRepository } from './repositories/UserRepository.js.js';
+import { FinancialRepository } from './repositories/FinancialRepository.js.js';
+import { FeeRepository } from './repositories/financial/FeeRepository.js.js';
+import { GroupRepository } from './repositories/GroupRepository.js.js';
+import { PostRepository } from './repositories/PostRepository.js.js';
+import { ChatRepository } from './repositories/ChatRepository.js.js';
+import { MarketplaceRepository } from './repositories/MarketplaceRepository.js.js';
+import { RelationshipRepository } from './repositories/RelationshipRepository.js.js';
+import { InteractionRepository } from './repositories/InteractionRepository.js.js';
+import { ReportRepository } from './repositories/ReportRepository.js.js';
+import { AuditRepository } from './repositories/AuditRepository.js.js';
+import { AdRepository } from './repositories/AdRepository.js.js';
+import { CredentialsRepository } from './repositories/CredentialsRepository.js.js';
+import { PaymentRepository } from './repositories/PaymentRepository.js.js'; // <-- Adicionado
+import { query } from './pool.js.js';
 
 /**
  * RepositoryHub

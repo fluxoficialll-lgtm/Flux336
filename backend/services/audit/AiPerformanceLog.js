@@ -1,5 +1,5 @@
 
-import { dbManager } from '../../databaseManager.js';
+import { dbManager } from '../../databaseManager.js.js';
 
 /**
  * AiPerformanceLog: Monitor de inteligência artificial.

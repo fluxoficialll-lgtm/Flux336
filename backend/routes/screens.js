@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { AggregatorRepository } from '../database/repositories/AggregatorRepository.js';
+import { AggregatorRepository } from '../database/repositories/AggregatorRepository.js.js';
 
 const router = express.Router();
 

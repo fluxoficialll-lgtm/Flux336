@@ -1,5 +1,5 @@
 
-import { FeeRepository } from '../../database/repositories/financial/FeeRepository.js';
+import { FeeRepository } from '../../database/repositories/financial/FeeRepository.js.js';
 
 /**
  * FeeCalculator (Motor de Taxas)

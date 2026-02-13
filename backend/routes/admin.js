@@ -1,6 +1,6 @@
 import express from 'express';
-import { validateAdmin } from '../middleware.js';
-import { adminDispatcher } from './admin/dispatcher.js';
+import { validateAdmin } from '../middleware.js.js';
+import { adminDispatcher } from './admin/dispatcher.js.js';
 
 const router = express.Router();
 

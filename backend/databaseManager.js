@@ -1,6 +1,6 @@
 
-import { SchemaBootstrapper } from './database/SchemaBootstrapper.js';
-import { RepositoryHub } from './database/RepositoryHub.js';
+import { SchemaBootstrapper } from './database/SchemaBootstrapper.js.js';
+import { RepositoryHub } from './database/RepositoryHub.js.js';
 
 /**
  * dbManager

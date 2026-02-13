@@ -1,7 +1,7 @@
 
 import express from 'express';
 import { z } from 'zod';
-import { eventProcessor } from '../services/eventProcessor.js';
+import { eventProcessor } from '../services/eventProcessor.js.js';
 
 const router = express.Router();
 

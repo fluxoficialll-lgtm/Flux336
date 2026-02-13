@@ -1,23 +1,23 @@
 
-import { query } from './pool.js';
+import { query } from './pool.js.js';
 
 // Importação centralizada de todos os schemas estruturais
-import { usersSchema } from './schemas/users.js';
-import { groupsSchema } from './schemas/groups.js';
-import { financialSchema } from './schemas/financial.js';
-import { adsSchema } from './schemas/ads.js';
-import { feesSchema } from './schemas/fees.js';
-import { vipSchema } from './schemas/vip.js';
-import { postsSchema } from './schemas/posts.js';
-import { chatsSchema } from './schemas/chats.js';
-import { marketplaceSchema } from './schemas/marketplace.js';
-import { relationshipsSchema } from './schemas/relationships.js';
-import { reportsSchema } from './schemas/reports.js';
-import { interactionsSchema } from './schemas/interactions.js';
-import { auditSchema } from './schemas/audit.js';
-import { settingsSchema } from './schemas/settings.js';
-import { paymentsSchema } from './schemas/payments.js'; // <-- Adicionado
-import { up as paymentProviderCredentialsSchema } from './schemas/PaymentProviderCredentialsSchema.js'; 
+import { usersSchema } from './schemas/users.js.js';
+import { groupsSchema } from './schemas/groups.js.js';
+import { financialSchema } from './schemas/financial.js.js';
+import { adsSchema } from './schemas/ads.js.js';
+import { feesSchema } from './schemas/fees.js.js';
+import { vipSchema } from './schemas/vip.js.js';
+import { postsSchema } from './schemas/posts.js.js';
+import { chatsSchema } from './schemas/chats.js.js';
+import { marketplaceSchema } from './schemas/marketplace.js.js';
+import { relationshipsSchema } from './schemas/relationships.js.js';
+import { reportsSchema } from './schemas/reports.js.js';
+import { interactionsSchema } from './schemas/interactions.js.js';
+import { auditSchema } from './schemas/audit.js.js';
+import { settingsSchema } from './schemas/settings.js.js';
+import { paymentsSchema } from './schemas/payments.js.js'; // <-- Adicionado
+import { up as paymentProviderCredentialsSchema } from './schemas/PaymentProviderCredentialsSchema.js.js'; 
 
 export const SchemaBootstrapper = {
     /**

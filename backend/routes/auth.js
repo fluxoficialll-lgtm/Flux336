@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { dbManager } from '../databaseManager.js';
-import { googleAuthConfig } from '../authConfig.js';
+import { dbManager } from '../databaseManager.js.js';
+import { googleAuthConfig } from '../authConfig.js.js';
 import { OAuth2Client } from 'google-auth-library';
 import crypto from 'crypto';
 
