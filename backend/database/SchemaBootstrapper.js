@@ -17,6 +17,7 @@ import { interactionsSchema } from './schemas/interactions.js';
 import { auditSchema } from './schemas/audit.js';
 import { settingsSchema } from './schemas/settings.js';
 import { paymentsSchema } from './schemas/payments.js'; // <-- Adicionado
+import { reelsSchema } from './schemas/reels.js';
 import { up as paymentProviderCredentialsSchema } from './schemas/PaymentProviderCredentialsSchema.js'; 
 
 export const SchemaBootstrapper = {
@@ -36,7 +37,7 @@ export const SchemaBootstrapper = {
                 chatsSchema, marketplaceSchema, relationshipsSchema,
                 reportsSchema, interactionsSchema, vipSchema,    
                 financialSchema, adsSchema, feesSchema, auditSchema,
-                settingsSchema, paymentProviderCredentialsSchema, paymentsSchema // <-- Adicionado
+                settingsSchema, paymentProviderCredentialsSchema, paymentsSchema, reelsSchema
             ];
 
             for (const sql of schemas) { 
