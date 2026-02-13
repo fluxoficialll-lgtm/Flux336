@@ -1,14 +1,15 @@
 
 import express from 'express';
 import { RepositoryHub } from '../database/RepositoryHub.js';
-import { authMiddleware } from '../middleware/authMiddleware.js'; // Assumindo que temos um middleware de autenticação
+import { authMiddleware } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // Middleware para garantir que o RepositoryHub está disponível
 router.use((req, res, next) => {
     if (!req.hub) {
-        req.hub = new RepositoryHub();
+        // Correção: Atribui o objeto diretamente, sem o 'new'
+        req.hub = RepositoryHub;
     }
     next();
 });
@@ -20,7 +21,8 @@ router.use((req, res, next) => {
  */
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const notifications = await req.hub.notificationRepository.findByUserId(req.user.id);
+        // Agora 'notifications' está disponível em req.hub.notifications
+        const notifications = await req.hub.notifications.findByUserId(req.user.id);
         res.json(notifications);
     } catch (err) {
         console.error(err.message);
@@ -35,7 +37,7 @@ router.get('/', authMiddleware, async (req, res) => {
  */
 router.get('/unread-count', authMiddleware, async (req, res) => {
     try {
-        const count = await req.hub.notificationRepository.getUnreadCount(req.user.id);
+        const count = await req.hub.notifications.getUnreadCount(req.user.id);
         res.json({ count });
     } catch (err) {
         console.error(err.message);
@@ -50,7 +52,7 @@ router.get('/unread-count', authMiddleware, async (req, res) => {
  */
 router.post('/:id/mark-as-read', authMiddleware, async (req, res) => {
     try {
-        const success = await req.hub.notificationRepository.markAsRead(req.params.id);
+        const success = await req.hub.notifications.markAsRead(req.params.id);
         if (success) {
             res.json({ msg: 'Notification marked as read' });
         } else {
@@ -61,10 +63,5 @@ router.post('/:id/mark-as-read', authMiddleware, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-
-// Nota: A rota para CRIAR notificações (POST /) não será exposta diretamente aqui.
-// A criação de notificações será feita internamente por outros serviços/repositórios.
-// Por exemplo, o PostRepository.addLike() chamaria diretamente NotificationRepository.create().
-// Isso mantém a lógica de negócio coesa.
 
 export default router;

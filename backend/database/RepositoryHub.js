@@ -12,7 +12,8 @@ import { ReportRepository } from './repositories/ReportRepository.js';
 import { AuditRepository } from './repositories/AuditRepository.js';
 import { AdRepository } from './repositories/AdRepository.js';
 import { CredentialsRepository } from './repositories/CredentialsRepository.js';
-import { PaymentRepository } from './repositories/PaymentRepository.js'; // <-- Adicionado
+import { PaymentRepository } from './repositories/PaymentRepository.js';
+import { NotificationRepository } from './repositories/NotificationRepository.js'; // Importado
 import { query } from './pool.js';
 
 /**
@@ -33,7 +34,8 @@ export const RepositoryHub = {
     audit: AuditRepository,
     ads: AdRepository,
     credentials: CredentialsRepository,
-    payments: PaymentRepository, // <-- Adicionado
+    payments: PaymentRepository,
+    notifications: NotificationRepository, // Adicionado
     query: query,
 
     // Métodos administrativos legados ou utilitários globais
