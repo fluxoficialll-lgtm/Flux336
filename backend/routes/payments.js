@@ -79,4 +79,32 @@ router.post('/process-sale-success', async (req, res) => {
     }
 });
 
+// Rota para desconectar um provedor de pagamento e apagar as credenciais
+router.post('/disconnect-provider', async (req, res) => {
+    try {
+        const { provider } = req.body;
+        // Assume-se que um middleware de autenticação preenche `req.user`
+        const userId = req.user?.id; 
+
+        if (!userId) {
+            return res.status(401).json({ error: 'Usuário não autenticado.' });
+        }
+
+        if (!provider) {
+            return res.status(400).json({ error: 'É necessário especificar o provedor.' });
+        }
+
+        // A lógica de remoção segura deve estar encapsulada no dbManager.
+        // Esta função deve remover/anular as credenciais do provedor para o usuário.
+        await dbManager.users.clearProviderConnection(userId, provider);
+
+        res.status(200).json({ success: true, message: 'Provedor desconectado com sucesso.' });
+
+    } catch (error) {
+        console.error('Erro ao desconectar o provedor:', error);
+        res.status(500).json({ error: 'Falha ao desconectar o provedor.' });
+    }
+});
+
+
 export default router;
