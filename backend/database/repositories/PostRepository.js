@@ -27,16 +27,18 @@ export const PostRepository = {
     },
 
     async list(limit = 50, cursor = null) {
+        const params = [];
         let sql = 'SELECT * FROM posts ';
-        const params = [limit];
-        
+        let placeholderCount = 1;
+
         if (cursor) {
-            sql += 'WHERE created_at < $2 ';
+            sql += `WHERE created_at < $${placeholderCount++} `;
             params.push(cursor);
         }
-        
-        sql += 'ORDER BY created_at DESC LIMIT $1';
-        
+
+        sql += `ORDER BY created_at DESC LIMIT $${placeholderCount++}`;
+        params.push(limit);
+
         const res = await query(sql, params);
         return res.rows.map(mapRowToPost);
     },

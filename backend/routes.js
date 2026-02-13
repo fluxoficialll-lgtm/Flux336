@@ -10,7 +10,7 @@ import socialRoutes from './routes/social.js';
 import eventRoutes from './routes/events.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import postsRoutes from './routes/posts.js';
-import reelsRoutes from './routes/reels.js'; // Importando a rota de Reels
+import reelsRoutes from './routes/reels.js';
 import adsRoutes from './routes/ads.js';
 import screensRoutes from './routes/screens.js';
 import moderationRoutes from './routes/moderation.js';
@@ -21,7 +21,8 @@ import fluxmapRoutes from './routes/fluxmap.js';
 import credentialsRoutes from './routes/credentials.js';
 import userRoutes from './routes/user.js';
 import notificationRoutes from './routes/notifications.js';
-import { commentRoutes } from './routes/commentRoutes.js'; // Importando as novas rotas de comentários
+import { commentRoutes } from './routes/commentRoutes.js';
+import logsRoutes from './routes/logs.js'; // Importando a nova rota de logs
 
 // Gateway specific routes
 import syncpayRoutes from './routes/gateways/syncpay.js';
@@ -45,7 +46,7 @@ router.use('/admin', adminRoutes);
 router.use('/events', eventRoutes);
 router.use('/marketplace', marketplaceRoutes);
 router.use('/posts', postsRoutes);
-router.use('/reels', reelsRoutes); // Usando a rota de Reels
+router.use('/reels', reelsRoutes);
 router.use('/ads', adsRoutes);
 router.use('/moderation', moderationRoutes);
 router.use('/tracking', trackingRoutes);
@@ -55,6 +56,7 @@ router.use('/fluxmap', fluxmapRoutes);
 router.use('/credentials', credentialsRoutes);
 router.use('/user', userRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/logs', logsRoutes); // Registrando a rota de logs
 
 // Mounting Gateways
 router.use('/syncpay', syncpayRoutes);

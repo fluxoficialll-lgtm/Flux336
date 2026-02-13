@@ -35,6 +35,11 @@ services:
         limits:
           cpus: '1.0'
           memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # 1. Dados Relacionais (PostgreSQL)
   postgres:
@@ -66,6 +71,50 @@ services:
     command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
       - redisdata:/data
+    networks:
+      - flux_network
+
+  # --- STACK DE OBSERVABILIDADE (Loki + Grafana) ---
+
+  # 3. Coleta de Logs (Promtail)
+  promtail:
+    image: grafana/promtail:2.8.0
+    container_name: flux_promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail-config.yaml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - flux_network
+    depends_on:
+      - app
+
+  # 4. Armazenamento de Logs (Loki)
+  loki:
+    image: grafana/loki:2.8.0
+    container_name: flux_loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - flux_network
+
+  # 5. Visualização e Dashboards (Grafana)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: flux_grafana
+    ports:
+      - "4000:3000" # Acessível em http://localhost:4000
+    volumes:
+      - ./grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - loki
     networks:
       - flux_network
 
