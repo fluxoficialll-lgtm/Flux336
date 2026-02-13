@@ -17,8 +17,8 @@ export const Footer: React.FC<FooterProps> = ({ visible = true }) => {
 
     useEffect(() => {
         const updateCounts = () => {
-            setUnreadNotifs(notificationService.getUnreadCount());
-            setUnreadMsgs(chatService.getUnreadCount());
+            setUnreadNotifs(notificationService.getUnreadNotificationsCount());
+            setUnreadMsgs(chatService.getUnreadMessagesCount());
         };
         updateCounts();
         
@@ -56,8 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ visible = true }) => {
             
             <button 
                 onClick={() => navigate('/notifications')} 
-                className={`text-[22px] p-2 relative transition-all hover:text-white ${isActive('/notifications') ? 'text-white' : 'text-[#00c2ff]'}`}
-            >
+                className={`text-[22px] p-2 relative transition-all hover:text-white ${isActive('/notifications') ? 'text-white' : 'text-[#00c2ff]'}`}>
                 <i className="fa-solid fa-bell"></i>
                 {unreadNotifs > 0 && (
                     <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-[#ff4d4d] rounded-full border border-[#0c0f14]"></div>
@@ -66,8 +65,7 @@ export const Footer: React.FC<FooterProps> = ({ visible = true }) => {
             
             <button 
                 onClick={() => navigate('/profile')} 
-                className={`text-[22px] p-2 transition-all hover:text-white ${isActive('/profile') ? 'text-white' : 'text-[#00c2ff]'}`}
-            >
+                className={`text-[22px] p-2 transition-all hover:text-white ${isActive('/profile') ? 'text-white' : 'text-[#00c2ff]'}`}>
                 <i className="fa-solid fa-user"></i>
             </button>
         </footer>
