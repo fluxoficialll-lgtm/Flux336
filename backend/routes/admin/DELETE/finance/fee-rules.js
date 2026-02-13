@@ -1,5 +1,5 @@
 
-import { dbManager } from '../../../../databaseManager.js.js';
+import { dbManager } from '../../../../databaseManager.js';
 
 /**
  * DELETE /api/admin/execute/finance/fee-rules

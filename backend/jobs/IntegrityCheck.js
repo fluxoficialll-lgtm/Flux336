@@ -1,4 +1,4 @@
-import { query } from '../database/pool.js.js';
+import { query } from '../database/pool.js';
 
 /**
  * IntegrityCheck: Garante que os contadores de ranking reflitam a realidade física do banco.

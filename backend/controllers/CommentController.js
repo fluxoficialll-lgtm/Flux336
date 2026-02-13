@@ -1,5 +1,5 @@
 
-import { commentService } from '../services/CommentService.js.js';
+import { commentService } from '../services/CommentService.js';
 import { AppError } from '../utils/errors.js';
 
 /**

@@ -1,5 +1,5 @@
 
-import { query } from '../pool.js.js';
+import { query } from '../pool.js';
 
 export const RelationshipRepository = {
     async create({ followerId, followingId, ...data }) {

@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { paypalService } from '../../services/paypalService.js.js';
+import { paypalService } from '../../services/paypalService.js';
 
 const router = express.Router();
 

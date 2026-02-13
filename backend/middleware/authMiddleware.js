@@ -1,6 +1,6 @@
 
 import jwt from 'jsonwebtoken';
-import { UserRepository } from '../database/repositories/UserRepository.js.js';
+import { UserRepository } from '../database/repositories/UserRepository.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-default-secret-key';
 

@@ -1,6 +1,6 @@
 
 import { EventEmitter } from 'events';
-import { dbManager } from '../databaseManager.js.js';
+import { dbManager } from '../databaseManager.js';
 
 class EventProcessor extends EventEmitter {
     constructor() {

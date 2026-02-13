@@ -1,6 +1,6 @@
 
-import { dbManager } from '../../../../databaseManager.js.js';
-import { FinancialAuditLogger } from '../../../../services/audit/FinancialAuditLogger.js.js';
+import { dbManager } from '../../../../databaseManager.js';
+import { FinancialAuditLogger } from '../../../../services/audit/FinancialAuditLogger.js';
 
 /**
  * POST /api/admin/execute/finance/fee-rules

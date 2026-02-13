@@ -1,8 +1,8 @@
 
-import financial from './financial.js.js';
-import content from './content.js.js';
-import security from './security.js.js';
-import users from './users.js.js';
+import financial from './financial.js';
+import content from './content.js';
+import security from './security.js';
+import users from './users.js';
 
 /**
  * GET /api/admin/execute/stats/dashboard

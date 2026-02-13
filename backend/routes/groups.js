@@ -1,7 +1,7 @@
 
 import express from 'express';
-import { dbManager } from '../databaseManager.js.js';
-import { RankingHub } from '../database/repositories/ranking/index.js.js';
+import { dbManager } from '../databaseManager.js';
+import { RankingHub } from '../database/repositories/ranking/index.js';
 
 const router = express.Router();
 

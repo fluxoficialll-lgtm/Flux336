@@ -1,5 +1,5 @@
 
-import { dbManager } from '../../../../databaseManager.js.js';
+import { dbManager } from '../../../../databaseManager.js';
 
 /**
  * GET /api/admin/execute/finance/fees-revenue

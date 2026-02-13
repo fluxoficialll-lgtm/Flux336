@@ -1,5 +1,5 @@
 
-import { query } from '../pool.js.js';
+import { query } from '../pool.js';
 
 const mapRowToItem = (row) => {
     if (!row) return null;

@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { syncPayService } from '../../services/syncpayService.js.js';
+import { syncPayService } from '../../services/syncpayService.js';
 
 const router = express.Router();
 

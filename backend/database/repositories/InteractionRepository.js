@@ -1,4 +1,4 @@
-import { query } from '../pool.js.js';
+import { query } from '../pool.js';
 
 export const InteractionRepository = {
     /**

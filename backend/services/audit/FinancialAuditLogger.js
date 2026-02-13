@@ -1,4 +1,4 @@
-import { FeeAuditOrchestrator } from './fees/index.js.js';
+import { FeeAuditOrchestrator } from './fees/index.js';
 
 /**
  * FinancialAuditLogger

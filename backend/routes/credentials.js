@@ -1,8 +1,8 @@
 
 import express from 'express';
-import { RepositoryHub } from '../database/RepositoryHub.js.js';
+import { RepositoryHub } from '../database/RepositoryHub.js';
 import { z } from 'zod';
-import { cryptoService } from '../services/cryptoService.js.js';
+import { cryptoService } from '../services/cryptoService.js';
 
 const router = express.Router();
 

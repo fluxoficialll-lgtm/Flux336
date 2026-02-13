@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { dbManager } from '../databaseManager.js.js';
+import { dbManager } from '../databaseManager.js';
 
 const router = express.Router();
 

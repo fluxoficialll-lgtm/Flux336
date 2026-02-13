@@ -1,5 +1,5 @@
 
-import { FeeRepository } from '../../database/repositories/financial/FeeRepository.js.js';
+import { FeeRepository } from '../../database/repositories/financial/FeeRepository.js';
 
 /**
  * MOTOR DE TAXAS E CONVERSÃO (Global Profit Engine)

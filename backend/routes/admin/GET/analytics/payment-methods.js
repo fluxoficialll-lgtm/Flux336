@@ -1,5 +1,5 @@
 
-import { FinancialAnalyticsRepository } from '../../../../database/repositories/FinancialAnalyticsRepository.js.js';
+import { FinancialAnalyticsRepository } from '../../../../database/repositories/FinancialAnalyticsRepository.js';
 
 /**
  * GET /api/admin/execute/analytics/payment-methods

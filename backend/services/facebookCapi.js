@@ -1,6 +1,6 @@
 
 import crypto from 'crypto';
-import { dbManager } from '../databaseManager.js.js'; 
+import { dbManager } from '../databaseManager.js'; 
 
 const FB_API_VERSION = 'v19.0';
 

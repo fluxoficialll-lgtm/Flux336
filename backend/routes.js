@@ -1,32 +1,32 @@
 
 import express from 'express';
-import authRoutes from './routes/auth.js.js';
-import usersRoutes from './routes/users.js.js';
-import groupsRoutes from './routes/groups.js.js';
-import messagesRoutes from './routes/messages.js.js';
-import adminRoutes from './routes/admin.js.js';
-import paymentRoutes from './routes/payments.js.js';
-import socialRoutes from './routes/social.js.js';
-import eventRoutes from './routes/events.js.js';
-import marketplaceRoutes from './routes/marketplace.js.js';
-import postsRoutes from './routes/posts.js.js';
-import reelsRoutes from './routes/reels.js.js'; // Importando a rota de Reels
-import adsRoutes from './routes/ads.js.js';
-import screensRoutes from './routes/screens.js.js';
-import moderationRoutes from './routes/moderation.js.js';
-import trackingRoutes from './routes/tracking.js.js';
-import rankingRoutes from './routes/ranking.js.js';
-import profileRoutes from './routes/profile.js.js';
-import fluxmapRoutes from './routes/fluxmap.js.js';
-import credentialsRoutes from './routes/credentials.js.js';
-import userRoutes from './routes/user.js.js';
-import notificationRoutes from './routes/notifications.js.js';
-import { commentRoutes } from './routes/commentRoutes.js.js'; // Importando as novas rotas de comentários
+import authRoutes from './routes/auth.js';
+import usersRoutes from './routes/users.js';
+import groupsRoutes from './routes/groups.js';
+import messagesRoutes from './routes/messages.js';
+import adminRoutes from './routes/admin.js';
+import paymentRoutes from './routes/payments.js';
+import socialRoutes from './routes/social.js';
+import eventRoutes from './routes/events.js';
+import marketplaceRoutes from './routes/marketplace.js';
+import postsRoutes from './routes/posts.js';
+import reelsRoutes from './routes/reels.js'; // Importando a rota de Reels
+import adsRoutes from './routes/ads.js';
+import screensRoutes from './routes/screens.js';
+import moderationRoutes from './routes/moderation.js';
+import trackingRoutes from './routes/tracking.js';
+import rankingRoutes from './routes/ranking.js';
+import profileRoutes from './routes/profile.js';
+import fluxmapRoutes from './routes/fluxmap.js';
+import credentialsRoutes from './routes/credentials.js';
+import userRoutes from './routes/user.js';
+import notificationRoutes from './routes/notifications.js';
+import { commentRoutes } from './routes/commentRoutes.js'; // Importando as novas rotas de comentários
 
 // Gateway specific routes
-import syncpayRoutes from './routes/gateways/syncpay.js.js';
-import stripeRoutes from './routes/gateways/stripe.js.js';
-import paypalRoutes from './routes/gateways/paypal.js.js';
+import syncpayRoutes from './routes/gateways/syncpay.js';
+import stripeRoutes from './routes/gateways/stripe.js';
+import paypalRoutes from './routes/gateways/paypal.js';
 
 const router = express.Router();
 

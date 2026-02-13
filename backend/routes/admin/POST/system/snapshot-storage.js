@@ -1,5 +1,5 @@
 
-import { AdminInfrastructureRepository } from '../../../../database/repositories/admin/AdminInfrastructureRepository.js.js';
+import { AdminInfrastructureRepository } from '../../../../database/repositories/admin/AdminInfrastructureRepository.js';
 
 /**
  * POST /api/admin/execute/system/snapshot-storage
