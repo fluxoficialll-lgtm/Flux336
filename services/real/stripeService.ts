@@ -6,10 +6,6 @@ import { connectionHub } from '../connections/connectionHub';
 const PROXY_BASE = `${API_BASE}/api/stripe`;
 
 export const stripeService = {
-    authenticate: async (secretKey: string) => {
-        return stripeService.verifyCredentials(secretKey);
-    },
-
     verifyCredentials: async (secretKey: string) => {
         const response = await connectionHub.gateways.request<any>(
             `${PROXY_BASE}/auth-token`,
@@ -79,15 +75,5 @@ export const stripeService = {
 
         if (!response.success) throw new Error(response.error);
         return response.data;
-    },
-
-    disconnect: async (): Promise<boolean> => {
-        const response = await connectionHub.gateways.request<any>(
-            `${PROXY_BASE}/disconnect`,
-            { method: 'POST' },
-            'Stripe'
-        );
-        if (!response.success) throw new Error(response.error);
-        return true;
     }
 };

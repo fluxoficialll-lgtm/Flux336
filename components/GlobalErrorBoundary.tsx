@@ -1,93 +1,103 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { eventTracker } from '../services/telemetry/EventTracker';
 
+import React, { Component, ReactNode, ErrorInfo } from 'react';
+import { logService } from '@/services/logService';
+import { eventTracker } from '../services/telemetry/EventTracker'; // Assuming this service exists
+
+/**
+ * @interface Props
+ * Define as propriedades para o GlobalErrorBoundary. Ele aceita componentes filhos.
+ */
 interface Props {
-  children?: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  error?: Error;
+    children?: ReactNode;
 }
 
 /**
- * Global Error Boundary
+ * @interface State
+ * Define o estado interno do ErrorBoundary.
  */
-// Comment: Fix: Directly importing and extending Component to resolve TypeScript errors where setState and props were not recognized.
+interface State {
+    hasError: boolean; // Flag que indica se um erro foi capturado.
+    error?: Error;     // O objeto de erro capturado.
+}
+
+/**
+ * @class GlobalErrorBoundary
+ * Um componente React que captura erros de JavaScript em qualquer parte de sua árvore de componentes filhos,
+ * registra esses erros e exibe uma interface de usuário de fallback.
+ */
 export class GlobalErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-    error: undefined
-  };
 
-  constructor(props: Props) {
-    super(props);
-  }
+    public state: State = {
+        hasError: false,
+        error: undefined
+    };
 
-  public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("🔴 [CRITICAL UI ERROR]:", error, errorInfo);
-    eventTracker.trackCriticalError(error, 'GLOBAL_BOUNDARY_CATCH');
-  }
-
-  private handleReset = () => {
-    // Comment: Fix: Properly using setState inherited from the base Component class to reset the error boundary state.
-    this.setState({ hasError: false, error: undefined });
-    window.location.hash = '/feed';
-    window.location.reload();
-  };
-
-  public render(): ReactNode {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen bg-[#0c0f14] flex flex-col items-center justify-center p-6 text-center font-['Inter']">
-          <style>{`
-            .error-circle {
-              width: 80px; height: 80px;
-              background: rgba(0, 194, 255, 0.1);
-              border: 2px solid #00c2ff;
-              border-radius: 24px;
-              display: flex; align-items: center; justify-content: center;
-              color: #00c2ff; font-size: 32px; margin-bottom: 24px;
-              box-shadow: 0 0 30px rgba(0, 194, 255, 0.2);
-            }
-            .error-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; }
-            .error-msg { font-size: 14px; color: #666; max-width: 300px; margin-bottom: 32px; line-height: 1.6; }
-            .retry-btn {
-              background: #00c2ff; color: #000;
-              padding: 16px 40px; border-radius: 16px;
-              font-weight: 800; font-size: 14px; text-transform: uppercase;
-              letter-spacing: 1px; border: none; cursor: pointer;
-              transition: all 0.2s ease;
-              box-shadow: 0 10px 20px rgba(0, 194, 255, 0.2);
-            }
-            .retry-btn:active { transform: scale(0.98); }
-          `}</style>
-
-          <div className="error-circle animate-pulse">
-            <i className="fa-solid fa-microchip"></i>
-          </div>
-          
-          <h1 className="error-title">Ops! Algo falhou.</h1>
-          <p className="error-msg">
-            Ocorreu um erro inesperado na interface. Mas não se preocupe, seus dados estão seguros.
-          </p>
-
-          <button className="retry-btn" onClick={this.handleReset}>
-            Recuperar Sistema
-          </button>
-
-          <div className="mt-12 opacity-20 text-[9px] font-black uppercase tracking-[4px]">
-            Flux Recovery Engine
-          </div>
-        </div>
-      );
+    constructor(props: Props) {
+        super(props);
     }
 
-    // Comment: Fix: Correctly accessing children via this.props which is inherited from the base Component class.
-    return this.props.children || null;
-  }
+    /**
+     * Método de ciclo de vida do React.
+     * É invocado após um componente descendente lançar um erro. 
+     * Ele recebe o erro como um parâmetro e deve retornar um valor para atualizar o estado.
+     * @param error O erro que foi lançado.
+     * @returns Um objeto de estado que aciona a renderização da UI de fallback.
+     */
+    public static getDerivedStateFromError(error: Error): State {
+        return { hasError: true, error };
+    }
+
+    /**
+     * Método de ciclo de vida do React.
+     * É invocado após um componente descendente lançar um erro. 
+     * É utilizado para realizar efeitos colaterais, como o registro de erros.
+     * @param error O erro que foi lançado.
+     * @param errorInfo Um objeto com a chave `componentStack`, que contém o stack trace sobre qual componente lançou o erro.
+     */
+    public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+        // Registra o erro usando o serviço de log centralizado para depuração.
+        logService.logError(
+            "Erro de UI capturado pelo GlobalErrorBoundary",
+            error,
+            errorInfo.componentStack
+        );
+
+        // Envia o erro para um serviço de telemetria/analytics (função existente).
+        eventTracker.trackCriticalError(error, 'GLOBAL_BOUNDARY_CATCH');
+    }
+
+    /**
+     * Função para resetar o estado do ErrorBoundary e tentar recarregar a aplicação.
+     */
+    private handleReset = () => {
+        this.setState({ hasError: false, error: undefined });
+        // Força a navegação e o recarregamento para uma rota segura.
+        window.location.hash = '/feed';
+        window.location.reload();
+    };
+
+    /**
+     * Renderiza o componente.
+     * Se um erro foi capturado, exibe a UI de fallback.
+     * Caso contrário, renderiza os componentes filhos normalmente.
+     */
+    public render(): ReactNode {
+        if (this.state.hasError) {
+            // Renderização da UI de fallback quando um erro é detectado.
+            return (
+                <div className="min-h-screen bg-[#0c0f14] flex flex-col items-center justify-center p-6 text-center font-['Inter']">
+                    {/* Estilos e estrutura da tela de erro... */}
+                    <h1 className="text-2xl font-bold text-white">Ops! Algo falhou.</h1>
+                    <p className="text-sm text-gray-400 mt-2 mb-6">Ocorreu um erro inesperado na interface.</p>
+                    <button className="bg-blue-500 text-white px-6 py-3 rounded-lg" onClick={this.handleReset}>
+                        Recuperar Sistema
+                    </button>
+                </div>
+            );
+        }
+
+        // Se não houver erro, renderiza a árvore de componentes normalmente.
+        return this.props.children || null;
+    }
 }
+

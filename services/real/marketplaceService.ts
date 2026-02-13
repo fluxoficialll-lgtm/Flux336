@@ -1,9 +1,11 @@
+
 import { MarketplaceItem, Comment, User } from '../../types';
 import { db } from '@/database';
 import { DiscoveryHub } from '../discovery/DiscoveryHub';
 import { API_BASE } from '../../apiConfig';
 import { authService } from '../authService';
 import { sqlite } from '../../database/engine';
+import { ContentDnaService } from '../ai/core/ContentDnaService'; // Importa o nosso novo serviço
 
 const API_URL = `${API_BASE}/api/marketplace`;
 
@@ -42,6 +44,9 @@ export const marketplaceService = {
   },
   
   createItem: async (item: MarketplaceItem) => {
+    // Gera o DNA do conteúdo antes de salvar
+    item.dna = await ContentDnaService.generateDna(item);
+
     db.marketplace.add(item);
     try {
         await fetch(`${API_URL}/create`, {

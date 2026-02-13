@@ -1,53 +1,60 @@
 
 import express from 'express';
-import { dbManager } from '../databaseManager.js';
 
 const router = express.Router();
 
-router.get('/sync', async (req, res) => {
+/**
+ * @route   POST /api/users/update-location
+ * @desc    Atualiza a localização geográfica do usuário logado.
+ * @access  Private
+ */
+router.post('/update-location', async (req, res) => {
     try {
-        const users = await dbManager.users.getAll();
-        res.json({ users });
-    } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-router.get('/search', async (req, res) => {
-    try {
-        const { q } = req.query;
-        if (!q) return res.json([]);
-        const users = await dbManager.users.getAll();
-        const filtered = users.filter(u => 
-            u.profile?.name?.toLowerCase().includes(q.toLowerCase()) || 
-            u.profile?.nickname?.toLowerCase().includes(q.toLowerCase())
-        );
-        res.json(filtered);
-    } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-// Novo handler GET para suportar SystemSyncWorker e verificação de status
-router.get('/update', async (req, res) => {
-    try {
-        const { email } = req.query;
-        if (!email) return res.status(400).json({ error: 'Email é obrigatório' });
-        const user = await dbManager.users.findByEmail(email);
-        if (user) {
-            res.json({ user });
-        } else {
-            res.status(404).json({ error: 'Usuário não encontrado' });
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ error: 'Usuário não autenticado.' });
         }
-    } catch (e) { res.status(500).json({ error: e.message }); }
+
+        const { latitude, longitude } = req.body;
+        if (latitude === undefined || longitude === undefined) {
+            return res.status(400).json({ error: 'Latitude e longitude são obrigatórias.' });
+        }
+
+        await req.hub.users.updateLocation(userId, latitude, longitude);
+
+        res.json({ success: true, message: 'Localização atualizada com sucesso.' });
+
+    } catch (error) {
+        console.error('[API] Erro ao atualizar localização:', error);
+        res.status(500).json({ error: 'Falha ao atualizar a localização.' });
+    }
 });
 
-router.put('/update', async (req, res) => {
+/**
+ * @route   GET /api/users/nearby
+ * @desc    Encontra usuários próximos a um determinado ponto geográfico.
+ * @access  Public (ou Private, dependendo da regra de negócio)
+ */
+router.get('/nearby', async (req, res) => {
     try {
-        const { email, updates } = req.body;
-        const user = await dbManager.users.findByEmail(email);
-        if (user) {
-            const updated = { ...user, ...updates };
-            await dbManager.users.update(updated);
-            res.json({ user: updated });
-        } else res.status(404).json({ error: 'Usuário não encontrado' });
-    } catch (e) { res.status(500).json({ error: e.message }); }
+        const { lat, lon, radius } = req.query;
+
+        const latitude = parseFloat(lat);
+        const longitude = parseFloat(lon);
+        const radiusInMeters = radius ? parseInt(radius) : 50000; // Raio de 50km por padrão
+
+        if (isNaN(latitude) || isNaN(longitude)) {
+            return res.status(400).json({ error: 'Parâmetros de latitude e longitude inválidos.' });
+        }
+
+        const users = await req.hub.users.findNearby(latitude, longitude, radiusInMeters);
+
+        res.json(users);
+
+    } catch (error) {
+        console.error('[API] Erro ao buscar usuários próximos:', error);
+        res.status(500).json({ error: 'Falha ao buscar usuários próximos.' });
+    }
 });
 
 export default router;

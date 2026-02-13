@@ -1,23 +1,56 @@
+
 import { Post } from '../../types';
 import { db } from '@/database';
 import { recommendationService } from '../recommendationService';
 import { chatService } from '../chatService';
-import { adService } from '../adService';
-import { postService } from '../postService';
 import { PostMetricsService } from './PostMetricsService';
-import { API_BASE } from '../../apiConfig';
+import { apiClient } from '../apiClient'; // Usando o apiClient central
 import { sqlite } from '../../database/engine';
 
+/**
+ * Definição da estrutura dos dados para a criação de um Reel.
+ */
+interface CreateReelData {
+    description: string;
+    video: File;
+    // Adicionar outros campos que o backend espera, como title, location, etc.
+    // Por exemplo: title?: string;
+}
+
 export const reelsService = {
+  /**
+   * Cria um novo Reel enviando os dados para a API do backend.
+   * @param reelData - Objeto contendo o arquivo de vídeo e a descrição.
+   * @returns A postagem do Reel criada, retornada pelo backend.
+   */
+  createReel: async (reelData: CreateReelData): Promise<Post> => {
+    const formData = new FormData();
+    formData.append('video', reelData.video);
+    formData.append('description', reelData.description);
+
+    try {
+      // apiClient.post já deve estar configurado para lidar com multipart/form-data
+      const response = await apiClient.post<Post>('/reels', formData);
+      
+      // Opcional: Hidratar o cache local com a resposta
+      if (response) {
+        sqlite.upsertItems('posts', [response]);
+      }
+      
+      return response;
+    } catch (error) {
+      console.error("Erro ao criar o Reel:", error);
+      // Lançar o erro permite que o componente de UI o capture e mostre uma mensagem
+      throw new Error('Falha ao publicar o Reel. Tente novamente.');
+    }
+  },
+
   fetchReels: async (): Promise<void> => {
     try {
-        const response = await fetch(`${API_BASE}/api/posts?limit=50&type=video`);
-        if (response.ok) {
-            const data = await response.json();
-            const posts = data.data || [];
-            const videos = posts.filter((p: any) => p.type === 'video');
+        const response = await apiClient.get<{ data: Post[] }>('/posts?limit=50&type=video');
+        if (response && response.data) {
+            const videos = response.data.filter((p: any) => p.type === 'video');
             
-            // HYDRATION: Save reels to cache
             if (videos.length > 0) {
                 sqlite.upsertItems('posts', videos);
             }
@@ -70,15 +103,6 @@ export const reelsService = {
           }
           return true;
       });
-  },
-
-  uploadVideo: async (file: File): Promise<string> => {
-      // Mock/Real upload implementation
-      return URL.createObjectURL(file);
-  },
-
-  addReel: async (reel: Post) => {
-    await postService.addPost(reel);
   },
 
   toggleLike: async (reelId: string): Promise<Post | undefined> => {

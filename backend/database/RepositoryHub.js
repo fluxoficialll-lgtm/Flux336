@@ -11,6 +11,8 @@ import { InteractionRepository } from './repositories/InteractionRepository.js';
 import { ReportRepository } from './repositories/ReportRepository.js';
 import { AuditRepository } from './repositories/AuditRepository.js';
 import { AdRepository } from './repositories/AdRepository.js';
+import { CredentialsRepository } from './repositories/CredentialsRepository.js';
+import { PaymentRepository } from './repositories/PaymentRepository.js'; // <-- Adicionado
 import { query } from './pool.js';
 
 /**
@@ -30,6 +32,8 @@ export const RepositoryHub = {
     fees: FeeRepository,
     audit: AuditRepository,
     ads: AdRepository,
+    credentials: CredentialsRepository,
+    payments: PaymentRepository, // <-- Adicionado
     query: query,
 
     // Métodos administrativos legados ou utilitários globais

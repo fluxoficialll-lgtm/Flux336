@@ -1,291 +1,64 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '../services/groupService';
-import { authService } from '../services/authService';
-import { postService } from '../services/postService';
-import { Group, VipMediaItem } from '../types';
+import { useCreateVipGroupForm } from '../features/groups/hooks/useCreateVipGroupForm';
+import { CreateVipGroupHeader } from '../features/groups/components/createVip/CreateVipGroupHeader';
+import { GroupBasicInfo } from '../features/groups/components/createVip/GroupBasicInfo';
+import { VipDoorGallery } from '../features/groups/components/createVip/VipDoorGallery';
+import { GroupPricing } from '../features/groups/components/createVip/GroupPricing';
+import { GroupMarketing } from '../features/groups/components/createVip/GroupMarketing';
 import { PixelSettingsModal } from '../components/groups/PixelSettingsModal';
 import { AccessTypeModal } from '../components/groups/AccessTypeModal';
-import { CurrencySelectorModal, CurrencyType } from '../components/groups/CurrencySelectorModal';
+import { CurrencySelectorModal } from '../components/groups/CurrencySelectorModal';
 import { ProviderSelectorModal } from '../components/groups/ProviderSelectorModal';
 import { ImageCropModal } from '../components/ui/ImageCropModal';
-import { GATEWAY_CURRENCIES, DEFAULT_CURRENCY_FOR_GATEWAY } from '../services/gatewayConfig';
 import { UploadProgressCard } from '../features/groups/components/platform/UploadProgressCard';
 
 export const CreateVipGroup: React.FC = () => {
   const navigate = useNavigate();
-  
-  // Form States
-  const [groupName, setGroupName] = useState('');
-  const [description, setDescription] = useState('');
-  const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
-  const [selectedCoverFile, setSelectedCoverFile] = useState<File | null>(null);
-  
-  // VIP Door States
-  const [vipMediaItems, setVipMediaItems] = useState<{file?: File, url: string, type: 'image' | 'video'}[]>([]);
-  const [vipDoorText, setVipDoorText] = useState('');
-  const [vipButtonText, setVipButtonText] = useState(''); 
-
-  // Price & Access States
-  const [price, setPrice] = useState('');
-  const [currency, setCurrency] = useState<CurrencyType>('BRL');
-  const [accessType, setAccessType] = useState<'lifetime' | 'temporary' | 'one_time'>('lifetime');
-  const [accessConfig, setAccessConfig] = useState<any>(null);
-  
-  // Provider State
-  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
-  const [isProviderModalOpen, setIsProviderModalOpen] = useState(false);
-
-  // Advanced Marketing
-  const [pixelId, setPixelId] = useState('');
-  const [pixelToken, setPixelToken] = useState('');
-  const [isPixelModalOpen, setIsPixelModalOpen] = useState(false);
-  const [isAccessModalOpen, setIsAccessModalOpen] = useState(false);
-  const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
-  
-  // Crop states
-  const [isCropOpen, setIsCropOpen] = useState(false);
-  const [rawImage, setRawImage] = useState<string>('');
-
-  const [isCreating, setIsCreating] = useState(false);
-  const [hasProvider, setHasProvider] = useState(false);
-
-  // Upload Progress States
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadCurrent, setUploadCurrent] = useState(0);
-  const [uploadTotal, setUploadTotal] = useState(0);
-
-  useEffect(() => {
-      const user = authService.getCurrentUser();
-      const connected = !!user?.paymentConfig?.isConnected || !!Object.values(user?.paymentConfigs || {}).some(c => c.isConnected);
-      setHasProvider(connected);
-      
-      if (user?.paymentConfig?.isConnected) {
-          setSelectedProviderId(user.paymentConfig.providerId);
-      } else if (user?.paymentConfigs) {
-          const firstConnected = Object.values(user.paymentConfigs).find(c => c.isConnected);
-          if (firstConnected) setSelectedProviderId(firstConnected.providerId);
-      }
-  }, []);
-
-  const allowedCurrencies = useMemo(() => {
-      if (!selectedProviderId) return [];
-      const supported = GATEWAY_CURRENCIES[selectedProviderId] || ['BRL'];
-      return supported.filter(c => ['BRL', 'USD', 'EUR'].includes(c));
-  }, [selectedProviderId]);
-
-  const handleProviderSelect = (pid: string) => {
-      setSelectedProviderId(pid);
-      const supported = GATEWAY_CURRENCIES[pid] || ['BRL'];
-      const filteredSupported = supported.filter(c => ['BRL', 'USD', 'EUR'].includes(c));
-      if (!filteredSupported.includes(currency)) {
-          setCurrency((DEFAULT_CURRENCY_FOR_GATEWAY[pid] || filteredSupported[0] || 'BRL') as CurrencyType);
-      }
-  };
-
-  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setRawImage(ev.target?.result as string);
-        setIsCropOpen(true);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleCroppedImage = (croppedBase64: string) => {
-    setCoverImage(croppedBase64);
-    fetch(croppedBase64)
-      .then(res => res.blob())
-      .then(blob => {
-          const file = new File([blob], "group_cover.jpg", { type: "image/jpeg" });
-          setSelectedCoverFile(file);
-      });
-  };
-
-  const handleVipMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-    const fileArray = Array.from(files) as File[];
-    if (vipMediaItems.length + fileArray.length > 10) {
-        alert("Máximo de 10 itens na galeria.");
-        return;
-    }
-    const newEntries = fileArray.map(file => ({
-        file: file,
-        url: URL.createObjectURL(file),
-        type: file.type.startsWith('video/') ? 'video' as const : 'image' as const
-    }));
-    setVipMediaItems(prev => [...prev, ...newEntries]);
-  };
-
-  const moveVipMediaItem = (index: number, direction: 'left' | 'right') => {
-    const newItems = [...vipMediaItems];
-    const targetIndex = direction === 'left' ? index - 1 : index + 1;
-
-    if (targetIndex < 0 || targetIndex >= newItems.length) return;
-
-    // Swap position in array
-    [newItems[index], newItems[targetIndex]] = [newItems[targetIndex], newItems[index]];
-    setVipMediaItems(newItems);
-  };
-
-  const removeMediaItem = (index: number) => {
-      setVipMediaItems(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let value = e.target.value;
-      value = value.replace(/\D/g, "");
-      if (value === "") { setPrice(""); return; }
-      const numericValue = parseFloat(value) / 100;
-      setPrice(numericValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 }));
-  };
-
-  const handleSavePixel = (data: { pixelId: string, pixelToken: string }) => {
-      setPixelId(data.pixelId);
-      setPixelToken(data.pixelToken);
-  };
+  const {
+    groupName, setGroupName,
+    description, setDescription,
+    coverImage, handleCoverChange, rawImage,
+    vipMediaItems, vipDoorText, setVipDoorText, vipButtonText, setVipButtonText, 
+    handleVipMediaChange, moveVipMediaItem, removeMediaItem,
+    price, currency, accessType, accessConfig, selectedProviderId, handlePriceChange,
+    pixelId, handleSavePixel,
+    isCreating, isUploading, uploadProgress, uploadCurrent, uploadTotal, hasProvider,
+    isProviderModalOpen, setIsProviderModalOpen, isPixelModalOpen, setIsPixelModalOpen, 
+    isAccessModalOpen, setIsAccessModalOpen, isCurrencyModalOpen, setIsCurrencyModalOpen, 
+    isCropOpen, setIsCropOpen, handleCroppedImage,
+    handleProviderSelect, handleSubmit, handleBack, allowedCurrencies,
+    setAccessType, setAccessConfig, setCurrency
+  } = useCreateVipGroupForm();
 
   const getCurrencySymbol = () => {
-    switch (currency) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      default: return 'R$';
-    }
+    if (currency === 'USD') return '$';
+    if (currency === 'EUR') return '€';
+    return 'R$';
   };
 
   const getAccessTypeLabel = () => {
-      if (accessType === 'lifetime') return 'Vitalício';
-      if (accessType === 'temporary' && accessConfig) return `Renova a cada ${accessConfig.interval} dias (Máx 2x)`;
-      if (accessType === 'one_time' && accessConfig) return `Expira em ${accessConfig.days}d ${accessConfig.hours}h`;
-      return 'Escolher';
+    if (accessType === 'lifetime') return 'Vitalício';
+    if (accessType === 'temporary' && accessConfig) return `Renova a cada ${accessConfig.interval} dias (Máx 2x)`;
+    if (accessType === 'one_time' && accessConfig) return `Expira em ${accessConfig.days}d ${accessConfig.hours}h`;
+    return 'Escolher';
   };
 
   const getProviderLabel = () => {
-      if (!selectedProviderId) return 'Escolher';
-      if (selectedProviderId === 'syncpay') return 'SyncPay (Pix)';
-      if (selectedProviderId === 'stripe') return 'Stripe';
-      if (selectedProviderId === 'paypal') return 'PayPal';
-      return selectedProviderId.toUpperCase();
-  };
-
-  const handleBack = () => {
-      navigate('/create-group', { replace: true });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isCreating || isUploading) return;
-
-    if (!selectedProviderId) {
-        alert("⚠️ Selecione um provedor de pagamento para continuar.");
-        setIsProviderModalOpen(true);
-        return;
-    }
-
-    const rawPrice = price.replace(/\./g, '').replace(',', '.');
-    const numericPrice = parseFloat(rawPrice);
-    if (isNaN(numericPrice) || numericPrice < 6.00) {
-        alert("⚠️ O preço mínimo para criar um grupo VIP é R$ 6,00.");
-        return;
-    }
-
-    setIsCreating(true);
-    setIsUploading(true);
-    
-    try {
-        const currentUserId = authService.getCurrentUserId();
-        const currentUserEmail = authService.getCurrentUserEmail();
-        
-        const totalToUpload = vipMediaItems.filter(i => i.file).length + (selectedCoverFile ? 1 : 0);
-        setUploadTotal(totalToUpload);
-        setUploadCurrent(0);
-        setUploadProgress(0);
-
-        // 1. Upload Capa
-        let finalCoverUrl = coverImage;
-        if (selectedCoverFile) {
-            setUploadCurrent(prev => prev + 1);
-            finalCoverUrl = await postService.uploadMedia(selectedCoverFile, 'avatars');
-            setUploadProgress(Math.round((1 / totalToUpload) * 100));
-        }
-
-        // 2. Upload Galeria sequencial para progresso preciso
-        const uploadedVipMedia: VipMediaItem[] = [];
-        const filesToUpload = vipMediaItems.filter(i => i.file);
-        const staticItems = vipMediaItems.filter(i => !i.file);
-
-        let uploadedCount = selectedCoverFile ? 1 : 0;
-
-        for (const item of filesToUpload) {
-            uploadedCount++;
-            setUploadCurrent(uploadedCount);
-            const url = await postService.uploadMedia(item.file!, 'vips_doors');
-            uploadedVipMedia.push({ url, type: item.type });
-            setUploadProgress(Math.round((uploadedCount / totalToUpload) * 100));
-        }
-
-        const finalMediaGallery = [...staticItems.map(i => ({ url: i.url, type: i.type })), ...uploadedVipMedia];
-
-        let expirationValue = undefined;
-        if (accessType === 'temporary') expirationValue = accessConfig?.interval;
-        else if (accessType === 'one_time') expirationValue = `${accessConfig?.days}d${accessConfig?.hours}h`;
-
-        const newGroup: Group = {
-          ...({} as any), // Base object
-          id: Date.now().toString(),
-          name: groupName,
-          description: description,
-          coverImage: finalCoverUrl,
-          isVip: true,
-          price: numericPrice.toString(),
-          currency: currency as any,
-          accessType: accessType,
-          selectedProviderId: selectedProviderId,
-          expirationDate: expirationValue,
-          vipDoor: {
-            mediaItems: finalMediaGallery,
-            text: vipDoorText || "Bem-vindo ao VIP!",
-            buttonText: vipButtonText
-          },
-          lastMessage: "Grupo criado. Configure os conteúdos.",
-          time: "Agora",
-          creatorId: currentUserId || '',
-          creatorEmail: currentUserEmail || undefined,
-          memberIds: currentUserId ? [currentUserId] : [],
-          adminIds: currentUserId ? [currentUserId] : [],
-          status: 'active',
-          pixelId: pixelId || undefined,
-          pixelToken: pixelToken || undefined
-        };
-        await groupService.createGroup(newGroup);
-        
-        setTimeout(() => {
-            setIsUploading(false);
-            navigate('/groups', { replace: true });
-        }, 800);
-        
-    } catch (e) {
-        alert("Erro ao criar grupo VIP.");
-        setIsCreating(false);
-        setIsUploading(false);
-    }
+    if (!selectedProviderId) return 'Escolher';
+    if (selectedProviderId === 'syncpay') return 'SyncPay (Pix)';
+    if (selectedProviderId === 'stripe') return 'Stripe';
+    if (selectedProviderId === 'paypal') return 'PayPal';
+    return selectedProviderId.toUpperCase();
   };
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#0c0f14,_#0a0c10)] text-white font-['Inter'] flex flex-col overflow-x-hidden">
       <style>{`
+        /* Seus estilos permanecem aqui, inalterados */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-        header {
-            display:flex; align-items:center; justify-content:space-between; padding:16px 32px;
-            background: #0c0f14; position:fixed; width:100%; z-index:10; border-bottom:1px solid rgba(255,255,255,0.1);
-            top: 0; left:0; height: 80px;
-        }
+        header { display:flex; align-items:center; justify-content:space-between; padding:16px 32px; background: #0c0f14; position:fixed; width:100%; z-index:10; border-bottom:1px solid rgba(255,255,255,0.1); top: 0; left:0; height: 80px; }
         header button { background:none; border:none; color:#00c2ff; font-size:18px; cursor:pointer; transition:0.3s; }
         header button:hover { color:#fff; }
         main { flex-grow:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; width:100%; padding-top: 100px; padding-bottom: 150px; }
@@ -304,21 +77,15 @@ export const CreateVipGroup: React.FC = () => {
         .form-group textarea { resize: vertical; min-height: 100px; }
         .vip-door-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 10px; }
         .section-title { font-size: 16px; color: #FFD700; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        
         .media-preview-item { width: 80px; height: 100px; flex-shrink: 0; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255, 215, 0, 0.2); background: #000; }
         .media-preview-item img, .media-preview-item video { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Controls Overlay */
         .media-controls-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 6px; opacity: 0; transition: 0.2s; }
         .media-preview-item:hover .media-controls-overlay { opacity: 1; }
-        
         .reorder-btn { width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; }
         .reorder-btn:hover { background: #00c2ff; color: #000; border-color: #00c2ff; }
         .reorder-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-        
         .remove-media-btn-new { width: 22px; height: 22px; border-radius: 6px; background: rgba(255, 77, 77, 0.2); border: 1px solid rgba(255, 77, 77, 0.4); color: #ff4d4d; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; }
         .remove-media-btn-new:hover { background: #ff4d4d; color: #fff; }
-
         .add-media-btn { width: 80px; height: 100px; flex-shrink: 0; border-radius: 12px; border: 1px dashed #FFD700; background: rgba(255, 215, 0, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #FFD700; cursor: pointer; gap: 5px; }
         .add-media-btn:hover { background: rgba(255, 215, 0, 0.1); }
         .add-media-btn span { font-size: 10px; font-weight: 600; text-align: center; }
@@ -331,39 +98,16 @@ export const CreateVipGroup: React.FC = () => {
         .price-input-container { display: flex; align-items: center; background: #1e2531; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; overflow: hidden; margin-bottom: 5px; }
         .price-input-container span { padding: 12px; background: #28303f; color: #aaa; font-size: 16px; font-weight: 700; min-width: 50px; text-align: center; }
         .price-input-container input { flex-grow: 1; border: none; background: none; padding: 12px; text-align: right; color: #fff; font-weight: 700; }
-        
-        .selector-trigger {
-            width: 100%;
-            background: #1e2531;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 5px;
-        }
-        .selector-trigger:hover {
-            border-color: #FFD700;
-            background: rgba(255, 215, 0, 0.05);
-        }
+        .selector-trigger { width: 100%; background: #1e2531; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.3s; margin-bottom: 5px; }
+        .selector-trigger:hover { border-color: #FFD700; background: rgba(255, 215, 0, 0.05); }
         .selector-trigger .label { font-size: 13px; color: #888; font-weight: 500; }
         .selector-trigger .value { font-size: 14px; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 10px; text-align: right; }
         .selector-trigger .value span.curr-sym { width: 32px; text-align: center; color: #FFD700; font-weight: 900; }
-
         .add-pixel-btn { width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.05); border: 1px dashed #FFD700; border-radius: 12px; color: #FFD700; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .add-pixel-btn:hover { background: rgba(255, 215, 0, 0.1); }
       `}</style>
 
-      <header>
-        <button onClick={handleBack}><i className="fa-solid fa-arrow-left"></i></button>
-        <div className="absolute left-1/2 -translate-x-1/2 w-[60px] h-[60px] bg-white/5 rounded-2xl flex justify-center items-center z-20 cursor-pointer shadow-[0_0_20px_rgba(0,194,255,0.3),inset_0_0_20px_rgba(0,194,255,0.08)]" onClick={() => navigate('/feed')}>
-             <div className="absolute w-[40px] h-[22px] rounded-[50%] border-[3px] border-[#00c2ff] rotate-[25deg]"></div>
-             <div className="absolute w-[40px] h-[22px] rounded-[50%] border-[3px] border-[#00c2ff] -rotate-[25deg]"></div>
-        </div>
-      </header>
+      <CreateVipGroupHeader onBack={handleBack} />
 
       <main>
         <form id="groupCreationForm" onSubmit={handleSubmit}>
@@ -376,130 +120,45 @@ export const CreateVipGroup: React.FC = () => {
                 </div>
             )}
 
-            <div className="cover-upload-container">
-                <label htmlFor="coverImageInput" className="cover-preview">
-                    {coverImage ? <img src={coverImage} alt="Cover" /> : <i className="fa-solid fa-crown cover-icon"></i>}
-                </label>
-                <label htmlFor="coverImageInput" className="cover-label">Capa Principal</label>
-                <input type="file" id="coverImageInput" accept="image/*" style={{display: 'none'}} onChange={handleCoverChange} />
-            </div>
+            <GroupBasicInfo 
+                groupName={groupName}
+                setGroupName={setGroupName}
+                description={description}
+                setDescription={setDescription}
+                coverImage={coverImage}
+                handleCoverChange={handleCoverChange}
+            />
 
-            <div className="form-group">
-                <label htmlFor="groupName">Nome do Grupo</label>
-                <input type="text" id="groupName" value={groupName} onChange={(e) => setGroupName(e.target.value)} placeholder="Ex: Comunidade Flux Pro" required />
-            </div>
+            <VipDoorGallery 
+                vipMediaItems={vipMediaItems}
+                vipDoorText={vipDoorText}
+                setVipDoorText={setVipDoorText}
+                vipButtonText={vipButtonText}
+                setVipButtonText={setVipButtonText}
+                handleVipMediaChange={handleVipMediaChange}
+                moveVipMediaItem={moveVipMediaItem}
+                removeMediaItem={removeMediaItem}
+            />
             
-            <div className="form-group">
-                <label htmlFor="groupDescription">Descrição</label>
-                <textarea id="groupDescription" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Sobre o que é este grupo?"></textarea>
-            </div>
+            <GroupPricing 
+                price={price}
+                currency={currency}
+                accessType={accessType}
+                accessConfig={accessConfig}
+                selectedProviderId={selectedProviderId}
+                handlePriceChange={handlePriceChange}
+                setIsProviderModalOpen={setIsProviderModalOpen}
+                setIsAccessModalOpen={setIsAccessModalOpen}
+                setIsCurrencyModalOpen={setIsCurrencyModalOpen}
+                getProviderLabel={getProviderLabel}
+                getAccessTypeLabel={getAccessTypeLabel}
+                getCurrencySymbol={getCurrencySymbol}
+            />
 
-            <div className="vip-door-section">
-                <div className="section-title"><i className="fa-solid fa-door-open"></i> Galeria da Porta VIP</div>
-                <div className="flex flex-wrap gap-2.5 mb-4">
-                    {vipMediaItems.map((item, idx) => (
-                        <div key={idx} className="media-preview-item animate-fade-in">
-                            {item.type === 'video' ? <video src={item.url} /> : <img src={item.url} alt={`Preview ${idx}`} />}
-                            
-                            <div className="media-controls-overlay">
-                                <div className="flex gap-1">
-                                    <button 
-                                        type="button"
-                                        onClick={() => moveVipMediaItem(idx, 'left')}
-                                        disabled={idx === 0}
-                                        className="reorder-btn"
-                                    >
-                                        <i className="fa-solid fa-chevron-left"></i>
-                                    </button>
-                                    <button 
-                                        type="button"
-                                        onClick={() => moveVipMediaItem(idx, 'right')}
-                                        disabled={idx === vipMediaItems.length - 1}
-                                        className="reorder-btn"
-                                    >
-                                        <i className="fa-solid fa-chevron-right"></i>
-                                    </button>
-                                </div>
-                                <button type="button" className="remove-media-btn-new" onClick={() => removeMediaItem(idx)}>
-                                    <i className="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-
-                            <div className="absolute bottom-1 left-1 bg-black/60 text-[7px] font-black text-white px-1 py-0.5 rounded border border-white/5">
-                                #{idx + 1}
-                            </div>
-                        </div>
-                    ))}
-                    {vipMediaItems.length < 10 && (
-                        <label htmlFor="vipMediaInput" className="add-media-btn">
-                            <i className="fa-solid fa-plus"></i>
-                            <span>Adicionar</span>
-                        </label>
-                    )}
-                    <input type="file" id="vipMediaInput" accept="image/*,video/*" multiple style={{display:'none'}} onChange={handleVipMediaChange} />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="vipCopyright">Texto de Venda</label>
-                    <textarea id="vipCopyright" value={vipDoorText} onChange={(e) => setVipDoorText(e.target.value)} placeholder="Copy persuasiva..."></textarea>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="vipButtonText">Texto do Botão (Opcional)</label>
-                    <input type="text" id="vipButtonText" value={vipButtonText} onChange={(e) => setVipButtonText(e.target.value)} placeholder="Ex: Assinar (Padrão: COMPRAR AGORA)" maxLength={20} />
-                </div>
-            </div>
-            
-            <div className="price-group">
-                <label>Venda e Acesso</label>
-
-                <div className="selector-trigger" onClick={() => setIsProviderModalOpen(true)}>
-                    <div className="flex flex-col text-left">
-                        <span className="label">Escolher provedor:</span>
-                        <span className="value">
-                            <i className="fa-solid fa-wallet"></i>
-                            {getProviderLabel()}
-                        </span>
-                    </div>
-                    <i className="fa-solid fa-chevron-right text-[#FFD700]"></i>
-                </div>
-                
-                <div className="selector-trigger" onClick={() => setIsAccessModalOpen(true)}>
-                    <div className="flex flex-col text-left">
-                        <span className="label">Tipo de acesso:</span>
-                        <span className="value">
-                            <i className={`fa-solid ${accessType === 'lifetime' ? 'fa-infinity' : accessType === 'temporary' ? 'fa-calendar-days' : 'fa-ticket'}`}></i>
-                            {getAccessTypeLabel()}
-                        </span>
-                    </div>
-                    <i className="fa-solid fa-chevron-right text-[#FFD700]"></i>
-                </div>
-
-                <div className="selector-trigger" onClick={() => setIsCurrencyModalOpen(true)}>
-                    <div className="flex flex-col text-left">
-                        <span className="label">Moeda para cobrança:</span>
-                        <span className="value">
-                            <span className="curr-sym">{getCurrencySymbol()}</span>
-                            {currency}
-                        </span>
-                    </div>
-                    <i className="fa-solid fa-chevron-right text-[#FFD700]"></i>
-                </div>
-
-                <div className="price-input-container">
-                    <span>{getCurrencySymbol()}</span>
-                    <input type="text" value={price} onChange={handlePriceChange} placeholder="0,00" required />
-                </div>
-            </div>
-
-            <div className="vip-door-section">
-                <div className="section-title"><i className="fa-solid fa-rocket"></i> Marketing Avançado</div>
-                <button type="button" className="add-pixel-btn" onClick={() => setIsPixelModalOpen(true)}>
-                    <i className="fa-solid fa-plus-circle"></i>
-                    {pixelId ? 'PIXEL CONFIGURADO' : 'ADICIONAR PIXEL'}
-                </button>
-                {pixelId && <p className="text-[10px] text-[#00ff82] text-center mt-2 font-bold uppercase tracking-widest"><i className="fa-solid fa-check"></i> Meta Pixel Ativo</p>}
-            </div>
+            <GroupMarketing 
+                pixelId={pixelId}
+                setIsPixelModalOpen={setIsPixelModalOpen}
+            />
 
             <button type="submit" className="common-button" disabled={isCreating || isUploading}>
                 {isCreating || isUploading ? <i className="fa-solid fa-circle-notch fa-spin mr-2"></i> : "Criar Grupo"}
@@ -524,7 +183,7 @@ export const CreateVipGroup: React.FC = () => {
       <PixelSettingsModal 
         isOpen={isPixelModalOpen}
         onClose={() => setIsPixelModalOpen(false)}
-        initialData={{ metaId: pixelId, metaToken: pixelToken }}
+        initialData={{ metaId: pixelId, metaToken: '' }}
         onSave={(platform, data) => handleSavePixel(data)}
       />
 

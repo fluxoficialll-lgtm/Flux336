@@ -1,7 +1,8 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { LocationFilter, Coordinates, AddressProfile } from '../types/location.types';
 import { LocationIntelligence } from '../services/geo/LocationIntelligence';
+import { apiClient } from '../services/apiClient'; // CORREÇÃO: Importação nomeada
 
 const STORAGE_KEY = 'flux_user_geo_filter';
 
@@ -21,6 +22,13 @@ export const usePreciseLocation = () => {
         setLoading(true);
         try {
             const coords = await LocationIntelligence.getCurrentPosition();
+
+            // Usando a importação nomeada 'apiClient'
+            apiClient.post('/users/update-location', { 
+                latitude: coords.latitude, 
+                longitude: coords.longitude 
+            }).catch(err => console.error("Falha ao salvar localização no backend:", err));
+            
             const address = await LocationIntelligence.reverseGeocode(coords);
             
             const newFilter: LocationFilter = {
@@ -40,6 +48,23 @@ export const usePreciseLocation = () => {
         }
     };
 
+    const findNearbyUsers = async (coords: Coordinates, radius: number) => {
+        try {
+            // Usando a importação nomeada 'apiClient'
+            const response = await apiClient.get('/users/nearby', {
+                params: {
+                    lat: coords.latitude,
+                    lon: coords.longitude,
+                    radius: radius * 1000 // Convertendo km para metros
+                }
+            });
+            return response.data; 
+        } catch (error) {
+            console.error("Falha ao buscar usuários próximos:", error);
+            return [];
+        }    
+    };
+
     const clearFilter = () => {
         const filter: LocationFilter = { type: 'global' };
         updateFilter(filter);
@@ -50,6 +75,7 @@ export const usePreciseLocation = () => {
         loading,
         captureGps,
         updateFilter,
-        clearFilter
+        clearFilter,
+        findNearbyUsers
     };
 };

@@ -1,6 +1,21 @@
 
 import { query } from '../pool.js';
 
+/**
+ * @namespace AdRepository
+ * @description
+ * Repositório para gerenciar os dados de Anúncios (Ads) e seus eventos.
+ * Funciona como a camada de acesso a dados para tudo relacionado à publicidade,
+ * interagindo diretamente com as tabelas 'ads' e 'ad_events'.
+ * 
+ * Principais responsabilidades:
+ * - CRUD (Create, Read, Update, Delete) de anúncios.
+ * - Manipulação de orçamentos de campanhas.
+ * - Busca de anúncios para serem processados pelo AdService.
+ * 
+ * Abstrai a lógica SQL, garantindo que o resto da aplicação manipule os dados
+ * de anúncios de forma segura, performática e consistente.
+ */
 export const AdRepository = {
     async create(ad) {
         const { id, ownerId, ...data } = ad;
@@ -22,7 +37,6 @@ export const AdRepository = {
     },
 
     async addBudget(id, amount) {
-        // Como o budget está dentro do JSONB data, precisamos extrair, somar e salvar de volta
         await query(`
             UPDATE ads 
             SET data = jsonb_set(data, '{budget}', (COALESCE(data->>'budget', '0')::numeric + $2)::text::jsonb)
@@ -45,5 +59,14 @@ export const AdRepository = {
             ownerId: row.owner_id,
             ...(typeof row.data === 'string' ? JSON.parse(row.data) : row.data)
         };
+    },
+
+    async findAll() {
+        const res = await query('SELECT * FROM ads');
+        return res.rows.map(row => ({
+            id: row.id,
+            ownerId: row.owner_id,
+            ...(typeof row.data === 'string' ? JSON.parse(row.data) : row.data)
+        }));
     }
 };

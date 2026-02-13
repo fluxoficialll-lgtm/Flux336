@@ -91,76 +91,61 @@ export const CreateReel: React.FC = () => {
     }
   };
 
-  const handlePublish = (e: React.MouseEvent) => {
+  const handlePublish = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (isPublishDisabled || !videoFile) return;
     setIsProcessing(true);
 
-    setTimeout(async () => {
-        try {
-            const uploadedVideoUrl = await reelsService.uploadVideo(videoFile);
-            
-            const textToCheck = `${title} ${caption}`;
-            const analysis = await contentSafetyService.analyzeContent(textToCheck, [{url: uploadedVideoUrl, type: 'video'}]);
-            let finalAdultStatus = false;
-            if (analysis.isAdult) finalAdultStatus = true;
+    try {
+        // 1. Chamar o novo serviço para criar o Reel no backend
+        const newReel = await reelsService.createReel({ 
+            video: videoFile, 
+            description: caption 
+            // Adicionar outros campos se necessário, ex: title
+        });
 
-            const username = currentUser?.profile?.name ? `@${currentUser.profile.name}` : '@usuario';
-            const avatar = currentUser?.profile?.photoUrl;
-
-            const newReel: Post = {
-                id: Date.now().toString(),
-                type: 'video',
-                authorId: currentUser?.id || '',
-                username: username,
-                avatar: avatar,
-                title: title, 
-                text: caption, 
-                video: uploadedVideoUrl,
-                time: 'Agora',
-                timestamp: Date.now(),
-                isPublic: true,
-                isAdultContent: finalAdultStatus,
-                views: 0,
-                likes: 0,
-                comments: 0,
-                liked: false,
-                location: displayLocation === 'Global' ? undefined : displayLocation,
-                relatedGroupId: selectedGroup?.id
-            };
-
-            await reelsService.addReel(newReel);
-            
-            if (selectedGroup?.isVip && autoSalesEnabled && !isAd) {
-                await adService.createCampaign({
-                    id: Date.now().toString(),
-                    ownerId: currentUser?.id || '',
-                    name: `Auto-Boost (Reel): ${selectedGroup.name}`,
-                    ownerEmail: currentUser?.email || '',
-                    scheduleType: 'continuous',
-                    budget: 0,
-                    pricingModel: 'commission',
-                    trafficObjective: 'conversions',
-                    creative: { text: caption || title, mediaUrl: uploadedVideoUrl, mediaType: 'video' },
-                    campaignObjective: 'group_joins',
-                    destinationType: 'group',
-                    targetGroupId: selectedGroup.id,
-                    optimizationGoal: 'group_joins',
-                    placements: ['feed', 'reels', 'marketplace'],
-                    ctaButton: 'Entrar',
-                    status: 'active',
-                    timestamp: Date.now()
-                });
-            }
-
-            navigate('/reels'); 
-        } catch (error: any) {
-            console.error("Erro ao publicar:", error);
-            alert("Erro ao publicar.");
-        } finally {
-            setIsProcessing(false);
+        // 2. (Opcional) Análise de conteúdo - pode ser movida para o backend no futuro
+        const analysis = await contentSafetyService.analyzeContent(
+            `${title} ${caption}`, 
+            [{url: newReel.video || '', type: 'video'}]
+        );
+        if (analysis.isAdult) {
+            // Opcional: Lidar com conteúdo adulto, talvez atualizar o post
+            console.warn('Conteúdo potencialmente adulto detectado.');
         }
-    }, 50);
+
+        // 3. Lógica de negócio pós-criação (Ex: Auto-Boost de anúncios)
+        if (selectedGroup?.isVip && autoSalesEnabled && !isAd) {
+            await adService.createCampaign({
+                id: Date.now().toString(),
+                ownerId: currentUser?.id || '',
+                name: `Auto-Boost (Reel): ${selectedGroup.name}`,
+                ownerEmail: currentUser?.email || '',
+                scheduleType: 'continuous',
+                budget: 0,
+                pricingModel: 'commission',
+                trafficObjective: 'conversions',
+                creative: { text: newReel.text || '', mediaUrl: newReel.video || '', mediaType: 'video' },
+                campaignObjective: 'group_joins',
+                destinationType: 'group',
+                targetGroupId: selectedGroup.id,
+                optimizationGoal: 'group_joins',
+                placements: ['feed', 'reels', 'marketplace'],
+                ctaButton: 'Entrar',
+                status: 'active',
+                timestamp: Date.now()
+            });
+        }
+
+        // 4. Redirecionar para a página de Reels
+        navigate('/reels');
+
+    } catch (error: any) {
+        console.error("Erro ao publicar:", error);
+        alert(error.message || "Erro ao publicar.");
+    } finally {
+        setIsProcessing(false);
+    }
   };
 
   // Location Helpers

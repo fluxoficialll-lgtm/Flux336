@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import { postService } from '../services/postService';
 import { AuthError, UserProfile } from '../types';
-import { db } from '@/database';
 import { ImageCropModal } from '../components/ui/ImageCropModal';
 
-export const EditProfile: React.FC = () => {
+const EditProfile: React.FC = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -122,25 +121,6 @@ export const EditProfile: React.FC = () => {
 
               await authService.completeProfile(email, updatedProfile);
               
-              // Sincronização de metadados em posts
-              const newHandle = `@${formData.name}`;
-              const allPosts = db.posts.getAll();
-              
-              allPosts.forEach(post => {
-                  let postChanged = false;
-                  if (post.authorId === currentUser.id) {
-                      if (post.username !== newHandle) {
-                          post.username = newHandle;
-                          postChanged = true;
-                      }
-                      if (finalPhotoUrl && post.avatar !== finalPhotoUrl) {
-                          post.avatar = finalPhotoUrl;
-                          postChanged = true;
-                      }
-                  }
-                  if (postChanged) db.posts.update(post);
-              });
-
               alert('Perfil atualizado com sucesso!');
               // Correção de Navegação: Usa replace para limpar o formulário do histórico
               navigate('/profile', { replace: true });
@@ -215,3 +195,5 @@ export const EditProfile: React.FC = () => {
     </div>
   );
 };
+
+export default EditProfile;

@@ -3,6 +3,7 @@ import { Post } from '../../../types';
 import { API_BASE } from '../../../apiConfig';
 import { db } from '../../../database';
 import { PostUtils } from './PostUtils';
+import { ContentDnaService } from '../../ai/core/ContentDnaService'; // Importa o nosso novo serviço
 
 const API_URL = `${API_BASE}/api/posts`;
 
@@ -18,6 +19,9 @@ export const PostActionService = {
 
     async addPost(post: Post): Promise<void> {
         try {
+            // Gera o DNA do conteúdo antes de salvar
+            post.dna = await ContentDnaService.generateDna(post);
+
             const res = await fetch(`${API_URL}/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -28,6 +32,7 @@ export const PostActionService = {
                 if (data.post) post = data.post;
             }
         } catch (e) {}
+        // Salva o post no banco de dados local com o DNA já incluído
         db.posts.add(PostUtils.sanitizePost(post));
     },
 

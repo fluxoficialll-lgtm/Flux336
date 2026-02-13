@@ -14,11 +14,6 @@ const safeFetch = async (url: string, options: RequestInit = {}) => {
 };
 
 export const paypalService = {
-    // Alias para o formulário
-    authenticate: async (clientId: string, clientSecret: string) => {
-        return paypalService.verifyCredentials(clientId, clientSecret);
-    },
-
     verifyCredentials: async (clientId: string, clientSecret: string) => {
         return safeFetch(`${PROXY_BASE}/auth-token`, {
             method: 'POST',
@@ -46,10 +41,5 @@ export const paypalService = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ orderId, ownerEmail })
         });
-    },
-
-    disconnect: async (): Promise<boolean> => {
-        await safeFetch(`${PROXY_BASE}/disconnect`, { method: 'POST' });
-        return true;
     }
 };

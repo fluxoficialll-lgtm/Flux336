@@ -1,4 +1,6 @@
 
+import { ContentDNA } from "./dna.types";
+
 export interface Post {
   id: string;
   type: 'photo' | 'poll' | 'text' | 'video';
@@ -12,12 +14,12 @@ export interface Post {
   avatar?: string;
   isPublic: boolean;
   isAdultContent?: boolean;
-  time: string; 
+  time: string;
   timestamp: number;
   views: number;
-  viewedByIds?: string[]; 
+  viewedByIds?: string[];
   likes: number;
-  likedByIds?: string[]; 
+  likedByIds?: string[];
   comments: number;
   liked: boolean;
   pollOptions?: PollOption[];
@@ -30,6 +32,7 @@ export interface Post {
   adCampaignId?: string;
   ctaText?: string;
   ctaLink?: string;
+  dna?: ContentDNA | null;
 }
 
 export interface PollOption {
@@ -47,7 +50,7 @@ export interface Comment {
   likes?: number;
   likedByMe?: boolean;
   replies?: Comment[];
-  replyToUsername?: string; 
+  replyToUsername?: string;
 }
 
 export interface NotificationItem {
@@ -95,8 +98,13 @@ export interface ChatMessage {
     senderName?: string;
     senderAvatar?: string;
     senderEmail?: string;
-    // Comment: Novo campo para gerenciar quem excluiu esta mensagem específica (Deleção Lógica Granular)
     deletedBy?: string[];
+    replyTo?: { messageId: number; messageText: string, senderName: string };
+    isForwarded?: boolean;
+    isReported?: boolean;
+    reportReason?: string;
+    reportComments?: string;
+    reactions?: { [emoji: string]: string[] };
 }
 
 export interface ChatData {
@@ -106,4 +114,7 @@ export interface ChatData {
     isBlocked: boolean;
     messages: ChatMessage[];
     deletedBy?: string[];
+    pinnedMessageId?: number | null;
+    isMuted?: boolean;
+    isPinned?: boolean;
 }

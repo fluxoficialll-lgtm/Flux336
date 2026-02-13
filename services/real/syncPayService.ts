@@ -28,14 +28,6 @@ const generateValidCpf = (): string => {
 };
 
 export const syncPayService = {
-    authenticate: async (clientId: string, clientSecret: string) => {
-        return safeFetch(`${PROXY_BASE}/auth-token`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ clientId, clientSecret })
-        });
-    },
-
     createPayment: async (user: User, group: Group, method: 'pix' | 'boleto' = 'pix') => {
         const groupId = group.id;
         // Prioriza o e-mail ou o ID do criador para identificação no proxy
@@ -126,10 +118,5 @@ export const syncPayService = {
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify({ amount, pix_key: pixKey, pix_key_type: pixKeyType })
         });
-    },
-    
-    disconnect: async (): Promise<boolean> => {
-        await safeFetch(`${PROXY_BASE}/disconnect`, { method: 'POST' });
-        return true;
     }
 };

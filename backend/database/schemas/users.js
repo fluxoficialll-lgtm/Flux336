@@ -1,5 +1,9 @@
 
 export const usersSchema = `
+    -- Habilita a extensão PostGIS se ainda não estiver habilitada.
+    -- Essencial para armazenar e consultar dados de geolocalização de forma eficiente.
+    CREATE EXTENSION IF NOT EXISTS postgis;
+
     CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
         email TEXT UNIQUE NOT NULL, 
@@ -13,12 +17,20 @@ export const usersSchema = `
         strikes INTEGER DEFAULT 0,
         data JSONB,
         referred_by_id UUID REFERENCES users(id),
-        created_at TIMESTAMP DEFAULT NOW()
+        created_at TIMESTAMP DEFAULT NOW(),
+
+        -- Campos de Geolocalização
+        latitude DOUBLE PRECISION,
+        longitude DOUBLE PRECISION,
+        location GEOGRAPHY(Point, 4326) -- O tipo de dado otimizado para PostGIS.
     );
     
-    -- Índice para garantir que João@gmail.com seja igual a joao@gmail.com
+    -- Índices existentes
     CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_lower ON users (LOWER(email));
-
     CREATE INDEX IF NOT EXISTS idx_users_handle_lower ON users (LOWER(handle));
     CREATE INDEX IF NOT EXISTS idx_users_google ON users(google_id);
+
+    -- Índice Espacial (GIST - Generalized Search Tree)
+    -- Este é o segredo para buscas de geolocalização extremamente rápidas.
+    CREATE INDEX IF NOT EXISTS idx_users_location ON users USING GIST(location);
 `;

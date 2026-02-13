@@ -10,6 +10,7 @@ import { MainHeader } from '../components/layout/MainHeader';
 import { MessageListItem } from '../components/chat/MessageListItem';
 import { MessagesEmptyState } from '../components/chat/MessagesEmptyState';
 import { MessagesFooter } from '../components/chat/MessagesFooter';
+import { useModal } from '../components/ModalSystem';
 
 interface Contact {
   id: string;
@@ -22,13 +23,13 @@ interface Contact {
   status: 'online' | string;
   isOnline: boolean;
   unreadCount: number;
+  isMuted?: boolean;
+  isPinned?: boolean;
 }
 
 export const Messages: React.FC = () => {
   const navigate = useNavigate();
-  const [uiVisible, setUiVisible] = useState(true);
-  const mainScrollRef = useRef<HTMLDivElement>(null);
-  
+  const { showConfirm } = useModal();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -41,161 +42,127 @@ export const Messages: React.FC = () => {
       if (!timestamp) return "Offline";
       const diff = Date.now() - timestamp;
       if (diff < 2 * 60 * 1000) return "online"; 
-      const date = new Date(timestamp);
-      return `Visto por último às ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+      return `Visto por último`;
   };
 
   const loadChats = useCallback(() => {
-      const rawUserEmail = authService.getCurrentUserEmail();
-      if (!rawUserEmail) return;
-      const currentUserEmail = rawUserEmail.toLowerCase();
+      const currentUserEmail = authService.getCurrentUserEmail()?.toLowerCase();
+      if (!currentUserEmail) return;
+      
       const rawChats = chatService.getAllChats();
       
       const formatted: Contact[] = Object.values(rawChats).map((chat): Contact | null => {
           const chatIdStr = chat.id.toString().toLowerCase();
-          if (!chatIdStr.includes('@') || !chatIdStr.includes(currentUserEmail)) return null;
+          if (!chatIdStr.includes('@')) return null;
 
-          const unreadCount = chat.messages.filter(m => {
-              const sender = (m.senderEmail || m.senderId || '').toLowerCase();
-              return sender !== currentUserEmail && m.status !== 'read';
-          }).length;
-          
-          const lastMsg = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
-          if (!lastMsg) return null; 
+          const lastMsg = chat.messages[chat.messages.length - 1];
+          if (!lastMsg) return null;
 
-          const sender = lastMsg.senderEmail?.toLowerCase() || lastMsg.senderId?.toLowerCase();
-          const isMe = sender === currentUserEmail;
-          const previewText = (isMe ? 'Você: ' : '') + (lastMsg.contentType === 'text' ? lastMsg.text : 'Mídia');
-
-          const parts = chatIdStr.split('_');
-          const otherEmail = parts.find(p => p.toLowerCase() !== currentUserEmail);
-          
-          let displayName = chat.contactName;
-          let handle = '';
-          let avatarUrl = undefined;
-          let targetUser = undefined;
-
-          if (otherEmail) {
-              targetUser = Object.values(db.users.getAll()).find(u => u.email.toLowerCase() === otherEmail.toLowerCase());
-              if (targetUser) {
-                  displayName = targetUser.profile?.nickname || targetUser.profile?.name || 'Usuário';
-                  handle = targetUser.profile?.name || '';
-                  avatarUrl = targetUser.profile?.photoUrl;
-              }
-          }
+          const otherEmail = chatIdStr.split('_').find(p => p !== currentUserEmail);
+          const user = otherEmail ? Object.values(db.users.getAll()).find(u => u.email.toLowerCase() === otherEmail) : undefined;
 
           return {
               id: chat.id.toString(),
-              name: displayName,
-              handle: handle,
-              avatar: avatarUrl,
-              lastMessage: previewText,
-              lastMessageTime: lastMsg.id, 
+              name: user?.profile?.nickname || user?.profile?.name || chat.contactName,
+              handle: user?.profile?.name || '',
+              avatar: user?.profile?.photoUrl,
+              lastMessage: (lastMsg.senderEmail?.toLowerCase() === currentUserEmail ? 'Você: ' : '') + (lastMsg.text || 'Mídia'),
+              lastMessageTime: lastMsg.id,
               time: lastMsg.timestamp,
-              status: formatLastSeen(targetUser?.lastSeen),
-              isOnline: formatLastSeen(targetUser?.lastSeen) === 'online',
-              unreadCount: unreadCount
+              status: formatLastSeen(user?.lastSeen),
+              isOnline: (Date.now() - (user?.lastSeen || 0)) < 2 * 60 * 1000,
+              unreadCount: chatService.getUnreadCount(chat.id),
+              isMuted: chat.isMuted,
+              isPinned: chat.isPinned,
           };
-      }).filter((c): c is Contact => c !== null).sort((a, b) => b.lastMessageTime - a.lastMessageTime);
+      }).filter((c): c is Contact => c !== null)
+        .sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            return b.lastMessageTime - a.lastMessageTime;
+        });
 
       setContacts(formatted);
   }, []);
 
   useEffect(() => {
     loadChats();
-    const unsubscribeChats = db.subscribe('chats', loadChats);
-    const unsubscribeUsers = db.subscribe('users', loadChats);
-    return () => { unsubscribeChats(); unsubscribeUsers(); };
+    const unsubChats = db.subscribe('chats', loadChats);
+    const unsubUsers = db.subscribe('users', loadChats);
+    return () => { unsubChats(); unsubUsers(); };
   }, [loadChats]);
 
-  useEffect(() => {
-      const updateCounts = () => {
-          setUnreadNotifs(notificationService.getUnreadCount());
-          setUnreadMsgs(chatService.getUnreadCount());
-      };
-      updateCounts();
-      const unsubNotif = db.subscribe('notifications', updateCounts);
-      const unsubChat = db.subscribe('chats', updateCounts);
-      return () => { unsubNotif(); unsubChat(); };
-  }, []);
+  const handleSelectionAction = async (action: 'delete' | 'mute' | 'pin') => {
+    if (selectedIds.length === 0) return;
+    
+    const confirmText = {
+        delete: `Você tem certeza que quer apagar ${selectedIds.length} conversa(s)? Esta ação não pode ser desfeita.`,
+        mute: `Você quer silenciar ${selectedIds.length} conversa(s)?`,
+        pin: `Você quer fixar ${selectedIds.length} conversa(s)?`
+    };
 
-  const handleMarkAllRead = () => {
-      chatService.markAllAsRead();
-      loadChats();
+    const confirmed = await showConfirm(`Confirmar Ação`, confirmText[action]);
+    if (confirmed) {
+        selectedIds.forEach(id => {
+            if (action === 'delete') chatService.deleteMessages(id, [], 'me');
+            if (action === 'mute') chatService.toggleMuteChat(id);
+            if (action === 'pin') chatService.togglePinChat(id);
+        });
+        setSelectedIds([]);
+        setIsSelectionMode(false);
+        loadChats(); // Recarrega para refletir as mudanças
+    }
   };
 
-  const handleContactClick = (contact: Contact) => {
+  const handleContactClick = (contactId: string) => {
       if (isSelectionMode) {
-          setSelectedIds(prev => 
-            prev.includes(contact.id) 
-              ? prev.filter(i => i !== contact.id) 
-              : [...prev, contact.id]
-          );
+          setSelectedIds(prev => prev.includes(contactId) ? prev.filter(id => id !== contactId) : [...prev, contactId]);
       } else {
-          navigate(`/chat/${contact.id}`);
+          navigate(`/chat/${contactId}`);
       }
   };
 
-  const handleProfileNavigate = (e: React.MouseEvent, handle: string) => {
-      e.stopPropagation();
-      if (handle) navigate(`/user/${handle.replace('@', '')}`);
-  };
-
   return (
-    <div className="h-[100dvh] bg-[radial-gradient(circle_at_top_left,_#0c0f14,_#0a0c10)] text-white font-['Inter'] flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-gray-900 text-white flex flex-col overflow-hidden">
         <MainHeader 
-            leftContent={isSelectionMode ? (
-                <button onClick={() => { setIsSelectionMode(false); setSelectedIds([]); }} className="text-[#00c2ff] text-lg"><i className="fa-solid fa-xmark"></i></button>
-            ) : (
-                <button onClick={() => setIsMenuModalOpen(true)} className="text-[#00c2ff] text-lg"><i className="fa-solid fa-sliders"></i></button>
-            )}
-            rightContent={isSelectionMode ? (
-                <button 
-                  onClick={() => { if(window.confirm('Apagar?')) { setIsSelectionMode(false); setSelectedIds([]); } }} 
-                  disabled={selectedIds.length === 0} 
-                  className="text-[#ff4d4d] text-lg disabled:opacity-30"
-                >
-                  <i className="fa-solid fa-trash"></i>
+            leftContent={
+                <button onClick={() => isSelectionMode ? (setIsSelectionMode(false), setSelectedIds([])) : setIsMenuModalOpen(true)} className="text-blue-400 text-xl w-8 h-8">
+                    <i className={`fa-solid ${isSelectionMode ? 'fa-xmark' : 'fa-sliders'}`}></i>
                 </button>
-            ) : (
-                <button onClick={() => navigate('/groups')} className="text-[#00c2ff] text-lg"><i className="fa-solid fa-users"></i></button>
-            )}
+            }
+            title={isSelectionMode ? `${selectedIds.length} selecionada(s)` : "Mensagens"}
+            rightContent={
+              isSelectionMode ? (
+                <div className="flex items-center gap-4 text-blue-400 text-xl">
+                  <button onClick={() => handleSelectionAction('pin')} disabled={selectedIds.length === 0} className="disabled:opacity-30"><i className="fa-solid fa-thumbtack"></i></button>
+                  <button onClick={() => handleSelectionAction('mute')} disabled={selectedIds.length === 0} className="disabled:opacity-30"><i className="fa-solid fa-bell-slash"></i></button>
+                  <button onClick={() => handleSelectionAction('delete')} disabled={selectedIds.length === 0} className="text-red-500 disabled:opacity-30"><i className="fa-solid fa-trash"></i></button>
+                </div>
+              ) : (
+                <button onClick={() => navigate('/groups')} className="text-blue-400 text-xl w-8 h-8"><i className="fa-solid fa-users"></i></button>
+              )
+            }
         />
 
-        <main ref={mainScrollRef} className="flex-grow pt-[80px] pb-[100px] overflow-y-auto no-scrollbar">
-            {isSelectionMode && (
-              <div className="w-full text-center py-2 bg-[#0f2b38] font-bold text-xs sticky top-0 z-10">
-                {selectedIds.length} selecionada(s)
-              </div>
-            )}
-            
-            <div className="w-full">
-                {contacts.length > 0 ? contacts.map(contact => (
-                    <MessageListItem 
-                      key={contact.id}
-                      contact={contact}
-                      isSelected={selectedIds.includes(contact.id)}
-                      isSelectionMode={isSelectionMode}
-                      onClick={() => handleContactClick(contact)}
-                      onAvatarClick={(e) => handleProfileNavigate(e, contact.handle)}
-                    />
-                )) : (
-                    <MessagesEmptyState />
-                )}
-            </div>
+        <main className="flex-grow pt-[60px] pb-[70px] overflow-y-auto no-scrollbar">
+            {contacts.length > 0 ? contacts.map(contact => (
+                <MessageListItem 
+                  key={contact.id}
+                  contact={contact}
+                  isSelected={selectedIds.includes(contact.id)}
+                  onClick={() => handleContactClick(contact.id)}
+                  onAvatarClick={(e) => { e.stopPropagation(); navigate(`/user/${contact.handle}`); }}
+                />
+            )) : <MessagesEmptyState />}
         </main>
 
-        <MessagesFooter 
-          uiVisible={uiVisible}
-          unreadMsgs={unreadMsgs}
-          unreadNotifs={unreadNotifs}
-        />
+        <MessagesFooter uiVisible={true} unreadMsgs={unreadMsgs} unreadNotifs={unreadNotifs} />
 
         <MessagesMenuModal 
             isOpen={isMenuModalOpen}
             onClose={() => setIsMenuModalOpen(false)}
             onSelectMode={() => setIsSelectionMode(true)}
-            onMarkAllRead={handleMarkAllRead}
+            onMarkAllRead={() => chatService.markAllAsRead().then(loadChats)}
             onViewBlocked={() => navigate('/blocked-users')}
         />
     </div>

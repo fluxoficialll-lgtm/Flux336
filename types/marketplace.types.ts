@@ -1,4 +1,6 @@
+
 import { Comment } from './social.types';
+import { ContentDNA } from "./dna.types";
 
 export interface MarketplaceItem {
   id: string;
@@ -20,4 +22,5 @@ export interface MarketplaceItem {
   soldCount?: number;
   images?: string[];
   video?: string;
+  dna?: ContentDNA | null;
 }

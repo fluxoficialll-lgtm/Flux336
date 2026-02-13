@@ -20,8 +20,8 @@ import { VisitorBlockedState, VisitorPrivateState } from '../features/user-profi
 
 // Componentes reaproveitados do perfil
 import { ProfileTabNav } from '../features/profile/components/ProfileTabNav';
-import { ProfileReelsGrid } from '../features/profile/components/tabs/ProfileReelsGrid';
-import { ProfileProductsGrid } from '../features/profile/components/tabs/ProfileProductsGrid';
+import { ProfileReelsGrid } from '../features/profile/components/ProfileReelsGrid';
+import { ProfileProductsGrid } from '../features/profile/components/ProfileProductsGrid';
 
 export const UserProfile: React.FC = () => {
   const navigate = useNavigate();

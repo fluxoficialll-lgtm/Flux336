@@ -4,13 +4,13 @@ import { Post, Group } from '../../../types';
 import { ReelPlayer } from './ReelPlayer';
 import { ReelActions } from './ReelActions';
 import { ReelInfo } from './ReelInfo';
+import { CommentSheetContainer } from '../../../components/ui/comments/CommentSheetContainer'; // Importando o container
 
 interface ReelItemProps {
     reel: Post;
     isActive: boolean;
     isOwner: boolean;
     onLike: () => void;
-    onComment: () => void;
     onShare: () => void;
     onDelete: () => void;
     onUserClick: () => void;
@@ -24,15 +24,21 @@ interface ReelItemProps {
 }
 
 export const ReelItem: React.FC<ReelItemProps> = ({ 
-    reel, isActive, isOwner, onLike, onComment, onShare, onDelete, onUserClick, 
+    reel, isActive, isOwner, onLike, onShare, onDelete, onUserClick, 
     getDisplayName, getUserAvatar, isExpanded, onToggleExpand, reportWatchTime, 
     onCtaClick, onGroupClick 
 }) => {
     const [isMuted, setIsMuted] = useState(false);
+    const [isCommentSheetOpen, setIsCommentSheetOpen] = useState(false); // Estado para o painel de comentários
 
     const toggleMute = (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsMuted(!isMuted);
+    };
+
+    // Abre o painel de comentários
+    const handleCommentClick = () => {
+        setIsCommentSheetOpen(true);
     };
 
     return (
@@ -43,7 +49,7 @@ export const ReelItem: React.FC<ReelItemProps> = ({
                 reportWatchTime={reportWatchTime}
                 isMuted={isMuted}
                 onToggleMute={toggleMute}
-                onVideoClick={() => {}} // Lógica interna do player já lida com clique
+                onVideoClick={() => {}} 
             />
 
             <ReelActions 
@@ -51,7 +57,7 @@ export const ReelItem: React.FC<ReelItemProps> = ({
                 isOwner={isOwner}
                 isMuted={isMuted}
                 onLike={onLike}
-                onComment={onComment}
+                onComment={handleCommentClick} // Passa a função para abrir o painel
                 onShare={onShare}
                 onDelete={onDelete}
                 onToggleMute={toggleMute}
@@ -67,6 +73,17 @@ export const ReelItem: React.FC<ReelItemProps> = ({
                 isExpanded={isExpanded}
                 onToggleExpand={onToggleExpand}
             />
+
+            {/* Renderiza o painel de comentários se estiver aberto */}
+            {isCommentSheetOpen && (
+                <CommentSheetContainer
+                    isOpen={isCommentSheetOpen}
+                    onClose={() => setIsCommentSheetOpen(false)}
+                    commentableType="reels" // Tipo de conteúdo
+                    commentableId={reel.id}   // ID do conteúdo
+                    title={`Comentários do Reel`}
+                />
+            )}
         </div>
     );
 };
