@@ -1,4 +1,5 @@
 import express from 'express';
+import { dbManager } from '../databaseManager.js';
 
 const router = express.Router();
 
@@ -72,9 +73,28 @@ router.get('/update', async (req, res) => {
  * @access  Private
  */
 router.put('/update', async (req, res) => {
-    // A lógica de atualização real será implementada aqui.
-    console.log('Corpo da requisição de atualização de perfil:', req.body);
-    res.json({ success: true, message: 'Endpoint PUT /api/users/update acessado com sucesso.' });
+    try {
+        const { email, updates } = req.body;
+        if (!email || !updates) {
+            return res.status(400).json({ error: 'Email e atualizações são obrigatórios.' });
+        }
+        const user = await dbManager.users.findByEmail(email);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+        const updatedUser = { ...user };
+        if (updates.isProfileCompleted !== undefined) {
+            updatedUser.isProfileCompleted = updates.isProfileCompleted;
+        }
+        if (updates.profile) {
+            updatedUser.profile = { ...user.profile, ...updates.profile };
+        }
+        await dbManager.users.update(updatedUser);
+        res.json({ success: true, user: updatedUser });
+    } catch (error) {
+        console.error('[API] Erro ao atualizar perfil do usuário:', error);
+        res.status(500).json({ error: 'Falha ao atualizar o perfil do usuário.' });
+    }
 });
 
 export default router;
