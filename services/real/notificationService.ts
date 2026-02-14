@@ -12,6 +12,12 @@ export const notificationService = {
 
     const stored = db.notifications.getAll();
 
+    // FIX: Ensure stored is an array before filtering
+    if (!Array.isArray(stored)) {
+        console.warn('[notificationService] Stored notifications is not an array. Returning empty array.');
+        return [];
+    }
+
     if (USE_MOCKS) {
         return stored.sort((a, b) => b.timestamp - a.timestamp);
     }
@@ -42,6 +48,11 @@ export const notificationService = {
 
   getUnreadCount: (): number => {
     const notifs = notificationService.getNotifications();
+    // FIX: Ensure notifs is an array before filtering
+    if (!Array.isArray(notifs)) {
+        console.warn('[notificationService] getNotifications did not return an array. Returning 0.');
+        return 0;
+    }
     return notifs.filter(n => !n.read).length;
   },
 
@@ -64,6 +75,11 @@ export const notificationService = {
 
   markAllAsRead: () => {
      const all = notificationService.getNotifications();
+     // FIX: Ensure all is an array before using forEach
+     if (!Array.isArray(all)) {
+        console.warn('[notificationService] getNotifications did not return an array for markAllAsRead.');
+        return;
+     }
      all.forEach(n => {
          if(!n.read) {
              const updated = { ...n, read: true };

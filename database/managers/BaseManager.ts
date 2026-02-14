@@ -7,6 +7,13 @@ import { sqlite } from '../engine';
 export class BaseManager {
     protected queryAll<T>(table: string): T[] {
         const data = sqlite.getTableData(table);
+
+        // FIX: Ensure data is an array before calling .map
+        if (!Array.isArray(data)) {
+            console.warn(`[BaseManager] Data for table '${table}' is not an array. Returning empty array.`);
+            return [];
+        }
+
         return data.map(item => {
             // Se for string (legado do SQLite), tenta parsear, senão retorna o objeto
             if (typeof item.data === 'string') {
