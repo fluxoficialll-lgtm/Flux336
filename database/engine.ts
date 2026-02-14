@@ -1,3 +1,4 @@
+
 /**
  * Local JSON Database Engine
  * Acts as a high-performance local cache with broadcast synchronization.
@@ -28,14 +29,25 @@ export class JSONEngine {
 
             tables.forEach(table => {
                 const saved = localStorage.getItem(`${STORAGE_PREFIX}${table}`);
-                this.data[table] = saved ? JSON.parse(saved) : [];
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        // FIX: Ensure the parsed data is an array before assigning it.
+                        this.data[table] = Array.isArray(parsed) ? parsed : [];
+                    } catch {
+                        // If parsing fails, default to an empty array.
+                        this.data[table] = [];
+                    }
+                } else {
+                    this.data[table] = [];
+                }
             });
 
             this.isReady = true;
             console.log("⚡ Local Storage: JSON Cache Engine initialized");
         } catch (err) {
             console.error("❌ Local Storage: Failed to initialize JSON store", err);
-            this.isReady = true;
+            this.isReady = true; // Still ready, just with empty/partial data
         }
     }
 
@@ -45,8 +57,13 @@ export class JSONEngine {
                 const table = e.data.table;
                 const saved = localStorage.getItem(`${STORAGE_PREFIX}${table}`);
                 if (saved) {
-                    this.data[table] = JSON.parse(saved);
-                    this.notify(table);
+                    try {
+                        const parsed = JSON.parse(saved);
+                        this.data[table] = Array.isArray(parsed) ? parsed : [];
+                        this.notify(table);
+                    } catch {
+                        // Ignore corrupted broadcast data
+                    }
                 }
             }
         };
@@ -56,9 +73,6 @@ export class JSONEngine {
         return this.data[table] || [];
     }
 
-    /**
-     * Saves table data with an intelligent merge to avoid overwriting newer local changes.
-     */
     public saveTableData(table: string, items: any[]) {
         this.data[table] = items;
         localStorage.setItem(`${STORAGE_PREFIX}${table}`, JSON.stringify(items));
@@ -66,9 +80,6 @@ export class JSONEngine {
         this.notify(table);
     }
 
-    /**
-     * Atomically adds or updates items in a table, preserving the rest of the data.
-     */
     public upsertItems(table: string, newItems: any[]) {
         const current = this.getTableData(table);
         const itemMap = new Map(current.map(item => [String(item.id), item]));
