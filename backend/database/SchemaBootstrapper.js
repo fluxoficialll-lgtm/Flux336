@@ -20,6 +20,11 @@ import { paymentsSchema } from './schemas/payments.js';
 import { reelsSchema } from './schemas/reels.js';
 import { up as paymentProviderCredentialsSchema } from './schemas/PaymentProviderCredentialsSchema.js'; 
 
+// Definições de tipos ENUM como constantes SQL
+const createEnumProductCondition = `CREATE TYPE product_condition AS ENUM ('new', 'used', 'refurbished')`;
+const createEnumRelationshipStatus = `CREATE TYPE relationship_status AS ENUM ('following', 'follower', 'friends', 'blocked')`;
+const createEnumTransactionType = `CREATE TYPE transaction_type AS ENUM ('deposit', 'withdrawal', 'transfer', 'purchase', 'refund')`;
+
 export const SchemaBootstrapper = {
     /**
      * Executa a sequência de bootstrapping do banco de dados.
@@ -28,69 +33,56 @@ export const SchemaBootstrapper = {
         console.log("🔄 DB: Inicializando Motor de Migração...");
         
         try {
-            // 1. Requisitos de Sistema
-            await query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+            // 1. Requisitos de Sistema e Tipos
+            const setupSQL = [
+                `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`,
+                createEnumProductCondition,
+                createEnumRelationshipStatus,
+                createEnumTransactionType
+            ];
 
-            // 2. Tipos ENUM (devem ser criados antes das tabelas que os utilizam)
-            await this.createEnumTypes();
-
-            // 3. Registro de Tabelas em Ordem de Dependência
-            const schemas = [
-                // Nível 0: Tabelas fundamentais sem dependências externas
+            // 2. Registro de Tabelas em Ordem de Dependência
+            const tableSchemas = [
                 usersSchema, 
-
-                // Nível 1: Tabelas que dependem de `users`
                 groupsSchema, 
                 postsSchema,
                 chatsSchema, 
                 marketplaceSchema, 
                 reelsSchema,
-
-                // Nível 2: Tabelas de junção e relacionamento
                 relationshipsSchema,
-                interactionsSchema, // Depende de users e (posts ou reels)
-                vipSchema, // Depende de users e groups
-                
-                // Nível 3: Módulos de suporte e financeiros
+                interactionsSchema, 
+                vipSchema,
                 financialSchema, 
                 adsSchema,
                 feesSchema,
-                paymentsSchema, // Depende de users e financial
+                paymentsSchema, 
                 paymentProviderCredentialsSchema,
-
-                // Nível 4: Logs, auditoria e configurações
-                reportsSchema, // Depende de users e (posts, comments, etc)
+                reportsSchema, 
                 auditSchema,
                 settingsSchema
             ];
 
-            for (const sql of schemas) { 
+            // Concatena todas as queries SQL na ordem correta
+            const allQueries = [...setupSQL, ...tableSchemas];
+
+            for (const sql of allQueries) { 
                 try {
                     await query(sql); 
                 } catch (schemaError) {
-                    // Apenas avisa, não para a execução, para que outras migrações possam continuar
+                    // Apenas avisa sobre erros de schema (ex: tipo já existe) e continua
                     console.warn(`⚠️ [Bootstrapper] Aviso em schema: ${schemaError.message.substring(0, 120)}...`);
                 }
             }
 
-            // 4. Integridade e Triggers Complexas (após todas as tabelas existirem)
+            // 3. Integridade e Triggers Complexas
             await this.setupTriggers();
             
             console.log("✅ DB: Estrutura física e lógica verificada.");
         } catch (e) {
             console.error("❌ DB: Falha Crítica no Bootstrapper:", e.message);
-            throw e;
+            // Lançar o erro aqui é importante para parar a inicialização se algo crítico falhar.
+            throw e; 
         }
-    },
-
-    /**
-     * Cria os tipos ENUM necessários para o sistema.
-     * A cláusula `IF NOT EXISTS` previne erros em reinicializações.
-     */
-    async createEnumTypes() {
-        await query(`CREATE TYPE product_condition IF NOT EXISTS AS ENUM ('new', 'used', 'refurbished');`);
-        await query(`CREATE TYPE relationship_status IF NOT EXISTS AS ENUM ('following', 'follower', 'friends', 'blocked');`);
-        await query(`CREATE TYPE transaction_type IF NOT EXISTS AS ENUM ('deposit', 'withdrawal', 'transfer', 'purchase', 'refund');`);
     },
 
     async setupTriggers() {
