@@ -1,4 +1,4 @@
-export const notificationsMock = [
+export const MOCK_NOTIFICATIONS = [
     {
       id: 1,
       type: 'system',
@@ -6,7 +6,7 @@ export const notificationsMock = [
       username: 'System',
       recipientId: 'u-creator-002',
       recipientEmail: 'creator@test.com',
-      text: 'O build da sua aplicação foi forçado para limpar o cache. Esta é uma notificação de teste.',
+      text: 'Seu post "Tendências de UI/UX para 2024" recebeu 15 novas curtidas.',
       time: '1s',
       timestamp: Date.now() - 1000,
       avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Flux',
@@ -79,8 +79,8 @@ export const notificationsMock = [
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Eduardo',
       read: true
     }
-];
-
-export const getUnreadCount = (notifications) => {
-  return notifications.filter(n => !n.read).length;
-};
+  ];
+  
+  export const getUnreadCount = (notifications) => {
+    return notifications.filter(n => !n.read).length;
+  };
