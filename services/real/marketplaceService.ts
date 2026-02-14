@@ -26,21 +26,28 @@ export const marketplaceService = {
           const response = await fetch(API_URL);
           if (response.ok) {
               const data = await response.json();
+              // Blindando contra respostas inesperadas da API
               if (data && Array.isArray(data.data)) {
                   sqlite.upsertItems('marketplace', data.data);
+              } else {
+                  console.warn('API do Marketplace não retornou um array de dados válido.', data);
               }
           }
       } catch(e) {
-          console.warn("Marketplace offline mode");
+          console.warn("Falha ao buscar itens do marketplace. Operando em modo offline.", e);
       }
   },
 
   getItems: (): MarketplaceItem[] => {
-    return db.marketplace.getAll().sort((a, b) => (Number(b.timestamp) || 0) - (Number(a.timestamp) || 0));
+    // BLINDADO: Garante que sempre retorne um array, mesmo que o banco de dados esteja vazio.
+    const items = db.marketplace.getAll() || [];
+    return items.sort((a, b) => (Number(b.timestamp) || 0) - (Number(a.timestamp) || 0));
   },
 
   getItemById: (id: string): MarketplaceItem | undefined => {
-    return db.marketplace.getAll().find(item => item.id === id);
+    // BLINDADO: Garante que a busca seja feita em um array.
+    const items = db.marketplace.getAll() || [];
+    return items.find(item => item.id === id);
   },
   
   createItem: async (item: MarketplaceItem) => {
