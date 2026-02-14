@@ -5,6 +5,7 @@ import { db } from '../../../database';
 import { PostUtils } from './PostUtils';
 import { ContentDnaService } from '../../ai/core/ContentDnaService';
 import { logService } from '../../logService';
+import { authService } from '../../authService'; // Importa o authService
 
 const API_URL = `${API_BASE}/api/posts`;
 
@@ -22,6 +23,13 @@ export const PostActionService = {
 
     async addPost(post: Post): Promise<void> {
         try {
+            // Adiciona o ID do usuário ao post antes de qualquer outra coisa
+            const userId = authService.getCurrentUserId();
+            if (!userId) {
+                throw new Error('Usuário não autenticado. Não é possível criar o post.');
+            }
+            post.userId = userId;
+
             post.dna = await ContentDnaService.generateDna(post);
 
             const res = await fetch(`${API_URL}/create`, {
@@ -29,19 +37,27 @@ export const PostActionService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(post)
             });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.post) post = data.post;
-            }
-        } catch (e) {}
-        
-        const sanitizedPost = PostUtils.sanitizePost(post);
-        db.posts.add(sanitizedPost);
 
-        if (sanitizedPost.groupId) {
-            logService.logEvent('PostgreSQL Group Post Metadados Adicionados. ✅', { postId: sanitizedPost.id, groupId: sanitizedPost.groupId });
-        } else {
-            logService.logEvent('PostgreSQL Feed Metadados Adicionados. ✅', { postId: sanitizedPost.id });
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Falha ao criar o post no servidor.');
+            }
+
+            const data = await res.json();
+            const serverPost = data.post;
+
+            const sanitizedPost = PostUtils.sanitizePost(serverPost);
+            db.posts.add(sanitizedPost);
+
+            if (sanitizedPost.groupId) {
+                logService.logEvent('PostgreSQL Group Post Metadados Adicionados. ✅', { postId: sanitizedPost.id, groupId: sanitizedPost.groupId });
+            } else {
+                logService.logEvent('PostgreSQL Feed Metadados Adicionados. ✅', { postId: sanitizedPost.id });
+            }
+        } catch (error) {
+            console.error("Falha ao adicionar post:", error);
+            logService.logEvent('Falha ao adicionar post. ❌', { error: error.message });
+            throw error; // Propaga o erro para que a interface possa reagir
         }
     },
 

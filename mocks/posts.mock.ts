@@ -4,11 +4,12 @@ import { Post } from '../types';
 /**
  * MOCK_POSTS otimizado para o fluxo de "Impulsionar Existente".
  * Contém uma mistura de posts orgânicos e anúncios para o usuário 'u-creator-002'.
+ * IDs foram corrigidos para usar o formato UUID.
  */
 export const MOCK_POSTS: Post[] = [
     // --- ADS GLOBAIS (APARECEM NO FEED DE TODOS) ---
     {
-        id: 'ad-mock-image-1',
+        id: 'd2f9b8a0-3e7b-4b1e-9d4f-1a2b3c4d5e6f', // Corrigido
         authorId: 'u-creator-002',
         username: '@flux_ads',
         text: 'Domine o mercado digital com as ferramentas certas. Conheça nossa nova suíte de automação para criadores de conteúdo! 🚀',
@@ -29,7 +30,7 @@ export const MOCK_POSTS: Post[] = [
 
     // --- CONTEÚDOS EXISTENTES DO USUÁRIO (PARA IMPULSIONAR) ---
     {
-        id: 'user-post-photo-1',
+        id: 'e3a0b8d4-5c1e-4f9a-8d2b-1c2d3e4f5a6b', // Corrigido
         authorId: 'u-creator-002',
         username: '@pixel_master',
         text: 'Estratégias de escala para 2024. O tráfego pago mudou e você precisa se adaptar! 🔥 #Marketing #ROI',
@@ -46,7 +47,7 @@ export const MOCK_POSTS: Post[] = [
         location: 'São Paulo, SP'
     },
     {
-        id: 'user-post-carousel-1',
+        id: 'f4b1c9e5-6d2f-4a8b-9e3c-2d3e4f5a6b7c', // Corrigido
         authorId: 'u-creator-002',
         username: '@pixel_master',
         text: '3 Passos para criar uma oferta irresistível no seu Grupo VIP. Arraste para o lado! ➡️',
@@ -66,7 +67,7 @@ export const MOCK_POSTS: Post[] = [
         isAd: false
     },
     {
-        id: 'user-reel-1',
+        id: 'a5c2d0f6-7e3a-4b9c-8f4d-3e4f5a6b7c8d', // Corrigido
         authorId: 'u-creator-002',
         username: '@pixel_master',
         text: 'Minha rotina de análise de métricas matinal. ☕📈 #DataScience #Ads',
@@ -82,7 +83,7 @@ export const MOCK_POSTS: Post[] = [
         isAd: false
     },
     {
-        id: 'user-reel-2',
+        id: 'b6d3e1a7-8f4b-4c8d-9a5e-4f5a6b7c8d9e', // Corrigido
         authorId: 'u-creator-002',
         username: '@pixel_master',
         text: 'Como sair do zero no Flux Marketplace hoje mesmo!',
@@ -98,7 +99,7 @@ export const MOCK_POSTS: Post[] = [
         isAd: false
     },
     {
-        id: 'user-post-text-1',
+        id: 'c7e4f2b8-9a5c-4d7e-8b6f-5a6b7c8d9e0f', // Corrigido
         authorId: 'u-creator-002',
         username: '@pixel_master',
         text: 'Pergunta rápida: Qual rede social está dando mais ROI para vocês neste mês? 💸',
@@ -120,7 +121,7 @@ export const MOCK_POSTS: Post[] = [
 
     // --- OUTROS POSTS DO FEED ---
     {
-        id: 'post-1',
+        id: 'd8f5a3c9-0b6d-4e6f-9c7a-6b7c8d9e0f1a', // Corrigido
         authorId: 'u-admin-001',
         username: '@flux_official',
         text: 'Bem-vindo ao Flux! 🚀 Esta é a sua nova plataforma de conexão e monetização de comunidades.',
@@ -136,7 +137,7 @@ export const MOCK_POSTS: Post[] = [
         location: 'Sede Global'
     },
     {
-        id: 'post-3',
+        id: 'e9a6b4da-1c7e-4f5a-8d8b-7c8d9e0f1a2b', // Corrigido
         authorId: 'u-star-004',
         username: '@julia_vendas',
         text: 'Confira os resultados da nossa última mentoria de escala. O time está voando! 📈',
