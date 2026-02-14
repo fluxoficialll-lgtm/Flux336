@@ -52,6 +52,18 @@ export const UserRepository = {
         return mapRowToUser(res.rows[0]);
     },
 
+    async searchByTerm(term) {
+        if (!term || term.trim() === '') {
+            return [];
+        }
+        const searchTerm = `%${term.toLowerCase().trim()}%`;
+        const res = await query(
+            'SELECT id, email, handle, data, is_profile_completed FROM users WHERE handle ILIKE $1 OR email ILIKE $1 ORDER BY handle ASC LIMIT 25',
+            [searchTerm]
+        );
+        return res.rows.map(mapRowToUser);
+    },
+
     async create(user) {
         const { email, password, googleId, referredById, profile, ...otherData } = user;
         const handle = profile?.name?.toLowerCase().trim();

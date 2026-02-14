@@ -58,6 +58,38 @@ router.get('/nearby', async (req, res) => {
 });
 
 /**
+ * @route   GET /api/users/search
+ * @desc    Busca por usuários por nome de usuário (handle) ou email.
+ * @access  Public
+ */
+router.get('/search', async (req, res) => {
+    try {
+        const { term } = req.query;
+        if (!term) {
+            return res.status(400).json({ error: 'O termo de busca é obrigatório.' });
+        }
+
+        const users = await req.hub.users.searchByTerm(term);
+
+        // Filtrar dados para expor apenas o necessário publicamente
+        const publicUsers = users.map(user => ({
+            id: user.id,
+            handle: user.handle,
+            profile: { // Exemplo de como expor dados de perfil aninhados
+                name: user.profile?.name,
+                avatar: user.profile?.avatar
+            }
+        }));
+
+        res.json(publicUsers);
+
+    } catch (error) {
+        console.error('[API] Erro ao buscar usuários:', error);
+        res.status(500).json({ error: 'Falha ao buscar usuários.' });
+    }
+});
+
+/**
  * @route   GET /api/users/update
  * @desc    Endpoint de verificação para a rota de atualização.
  * @access  Private
