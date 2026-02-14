@@ -1,24 +1,32 @@
 
 export const feesSchema = `
-    CREATE TABLE IF NOT EXISTS platform_fee_rules (
+    -- 📝 Tabela para definir e gerenciar as taxas da plataforma (ex: taxa de transação, taxa de serviço).
+    CREATE TABLE IF NOT EXISTS fees (
+        -- 📝 ID único para o registro de taxa.
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        provider TEXT NOT NULL,         -- 'syncpay', 'stripe', 'paypal'
-        method TEXT NOT NULL,           -- 'pix', 'credit_card', 'bank_debit', 'wallet'
-        country_code TEXT DEFAULT 'ALL', -- 'BR', 'US', 'DE', 'ALL'
-        currency TEXT DEFAULT 'BRL',     -- Moeda da taxa fixa
-        fixed_fee NUMERIC(10,2) DEFAULT 0.00,
-        percent_fee NUMERIC(5,2) DEFAULT 0.00,
-        is_active BOOLEAN DEFAULT TRUE,
-        priority INTEGER DEFAULT 0,
-        updated_at TIMESTAMP DEFAULT NOW(),
-        UNIQUE(provider, method, country_code)
+        -- 📝 Nome ou tipo da taxa para identificação.
+        name TEXT UNIQUE NOT NULL,
+        -- 📝 Descrição do que a taxa representa.
+        description TEXT,
+        -- 📝 Tipo de cálculo da taxa: 'percentage' (percentual) ou 'fixed' (valor fixo).
+        type TEXT NOT NULL CHECK (type IN ('percentage', 'fixed')),
+        -- 📝 O valor da taxa. Se for percentual, armazena a porcentagem (ex: 2.5 para 2.5%). Se for fixo, o valor monetário.
+        value NUMERIC(10, 4) NOT NULL,
+        -- 📝 Data e hora de criação do registro da taxa.
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        -- 📝 Data e hora da última atualização do registro da taxa.
+        updated_at TIMESTAMPTZ DEFAULT NOW()
     );
 
-    INSERT INTO platform_fee_rules (provider, method, country_code, currency, percent_fee, fixed_fee)
-    VALUES 
-    ('stripe', 'card', 'BR', 'BRL', 4.99, 0.50),
-    ('stripe', 'card', 'US', 'USD', 3.99, 0.30),
-    ('stripe', 'card', 'DE', 'EUR', 3.99, 0.25),
-    ('stripe', 'card', 'ALL', 'USD', 5.00, 0.50)
-    ON CONFLICT DO NOTHING;
+    -- 📝 Insere as taxas padrão na plataforma se ainda não existirem.
+    
+    -- 📝 Taxa de plataforma sobre vendas VIP.
+    INSERT INTO fees (name, description, type, value) 
+    VALUES ('vip_platform_fee', 'Taxa da plataforma sobre vendas de acesso VIP', 'percentage', 20.00)
+    ON CONFLICT (name) DO NOTHING;
+
+    -- 📝 Taxa de processamento de pagamento para saques (withdrawals).
+    INSERT INTO fees (name, description, type, value) 
+    VALUES ('withdrawal_processing_fee', 'Taxa de processamento para saques da carteira', 'fixed', 3.00)
+    ON CONFLICT (name) DO NOTHING;
 `;

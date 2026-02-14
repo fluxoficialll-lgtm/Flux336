@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useCallback, Suspense, lazy } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../services/authService';
@@ -9,8 +8,6 @@ import { db } from '@/database';
 import { useModal } from '../components/ModalSystem';
 import { Footer } from '../components/layout/Footer';
 import { MainHeader } from '../components/layout/MainHeader';
-
-// Novos Componentes Isolados
 import { JoinViaLinkBtn } from '../components/groups/list/JoinViaLinkBtn';
 import { GroupListItem } from '../components/groups/list/GroupListItem';
 import { CreateGroupFAB } from '../components/groups/list/CreateGroupFAB';
@@ -21,81 +18,117 @@ export const Groups: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { showAlert, showConfirm, showPrompt } = useModal();
-  
+
   const [uiVisible, setUiVisible] = useState(true);
   const [groups, setGroups] = useState<Group[]>([]);
   const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
-  
+
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const [selectedGroupForTracking, setSelectedGroupForTracking] = useState<Group | null>(null);
-  
-  const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(0);
-  const LIMIT = 10; 
-  
-  const lastScrollY = useRef(0);
-  const observerRef = useRef<HTMLDivElement>(null);
 
-  const loadLocalGroups = useCallback((currentOffset: number, reset: boolean = false) => {
-      const { groups: newGroups, hasMore: moreAvailable } = groupService.getGroupsPaginated(currentOffset, LIMIT);
-      if (reset) {
-          setGroups(newGroups);
-          setOffset(LIMIT);
-      } else {
-          setGroups(prev => {
-              const ids = new Set(prev.map(g => g.id));
-              const unique = newGroups.filter(g => !ids.has(g.id));
-              return [...prev, ...unique];
-          });
-          setOffset(prev => prev + LIMIT);
-      }
-      setHasMore(moreAvailable);
-      setLoading(false);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [nextCursor, setNextCursor] = useState<number | undefined>(undefined);
+  const LIMIT = 15;
+
+  const lastScrollY = useRef(0);
+  const isFetchingRef = useRef(false);
+  const hasLoadedInitialRef = useRef(false);
+  const loaderRef = useRef<HTMLDivElement>(null);
+
+  const mergeGroups = useCallback((newGroups: Group[], reset: boolean = false) => {
+    if (!newGroups) return;
+    setGroups(prev => {
+        const combined = reset ? newGroups : [...prev, ...newGroups];
+        const uniqueMap = new Map<string, Group>();
+        combined.forEach(g => {
+            if (g && g.id && !uniqueMap.has(g.id)) {
+                uniqueMap.set(g.id, g);
+            }
+        });
+        return Array.from(uniqueMap.values());
+    });
   }, []);
 
+  const fetchGroups = useCallback(async (cursor?: number, reset = false) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    if (!cursor) setLoading(true);
+
+    try {
+        const response = await groupService.getGroupsPaginated(cursor || 0, LIMIT);
+        const fetched = response.groups || [];
+
+        if (reset) {
+            mergeGroups(fetched, true);
+        } else if (fetched.length > 0) {
+            mergeGroups(fetched, false);
+        }
+
+        setNextCursor(response.nextCursor);
+        setHasMore(!!response.nextCursor && fetched.length > 0);
+    } catch (error) {
+        console.error("Erro ao buscar grupos:", error);
+        if (!cursor) setHasMore(false);
+    } finally {
+        setLoading(false);
+        isFetchingRef.current = false;
+    }
+  }, [LIMIT, mergeGroups]);
+
+  const loadInitialGroups = useCallback(async () => {
+    if (hasLoadedInitialRef.current) return;
+    hasLoadedInitialRef.current = true;
+
+    const localGroups = db.groups.getAll();
+    if (localGroups && localGroups.length > 0) {
+        mergeGroups(localGroups, true);
+    }
+
+    await fetchGroups(undefined, localGroups.length === 0);
+  }, [fetchGroups, mergeGroups]);
+
   useEffect(() => {
-    const userEmail = authService.getCurrentUserEmail();
-    const userId = authService.getCurrentUserId();
-    if (!userEmail) { navigate('/'); return; }
-    setCurrentUserEmail(userEmail);
-    setCurrentUserId(userId);
-    loadLocalGroups(0, true);
-    groupService.fetchGroups();
+    const user = authService.getCurrentUser();
+    if (!user?.email) { navigate('/'); return; }
+    setCurrentUserEmail(user.email);
+    setCurrentUserId(user.id);
+
+    loadInitialGroups();
+
+    const unsubscribe = db.subscribe('groups', () => {
+        setGroups(currentGroups => {
+            let changed = false;
+            const nextGroups = currentGroups.map(g => {
+                const latest = db.groups.findById(g.id);
+                if (latest && JSON.stringify(latest) !== JSON.stringify(g)) {
+                    changed = true;
+                    return { ...g, ...latest };
+                }
+                return g;
+            });
+            return changed ? nextGroups : currentGroups;
+        });
+    });
+
     const params = new URLSearchParams(location.search);
     const joinCode = params.get('join');
     if (joinCode) { handleJoinByLink(joinCode); navigate('/groups', { replace: true }); }
-    
-    // Inscreve-se em grupos E chats para garantir que a última mensagem seja atualizada na lista
-    const unsubscribeGroups = db.subscribe('groups', () => { loadLocalGroups(0, true); });
-    const unsubscribeChats = db.subscribe('chats', () => { loadLocalGroups(0, true); });
-    
-    const handleScroll = () => {
-      const currentScroll = window.scrollY;
-      setUiVisible(currentScroll <= lastScrollY.current || currentScroll <= 80);
-      lastScrollY.current = currentScroll;
-    };
-    const handleClickOutside = () => setActiveMenuId(null);
-    
-    window.addEventListener("scroll", handleScroll);
-    document.addEventListener("click", handleClickOutside);
-    return () => { 
-        unsubscribeGroups(); 
-        unsubscribeChats();
-        window.removeEventListener("scroll", handleScroll); 
-        document.removeEventListener("click", handleClickOutside); 
-    };
-  }, [navigate, location.search, loadLocalGroups]);
+
+    return () => unsubscribe();
+  }, [navigate, location.search, loadInitialGroups]);
 
   useEffect(() => {
-      const observer = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting && hasMore && !loading) { loadLocalGroups(offset); }
-      }, { threshold: 0.5 });
-      if (observerRef.current) observer.observe(observerRef.current);
-      return () => observer.disconnect();
-  }, [hasMore, loading, offset, loadLocalGroups]);
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading && !isFetchingRef.current && nextCursor) {
+            fetchGroups(nextCursor);
+        }
+    }, { threshold: 0.5 });
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, loading, nextCursor, fetchGroups]);
 
   const handleGroupClick = (group: Group) => {
       const isCreator = group.creatorEmail === currentUserEmail;
@@ -112,7 +145,6 @@ export const Groups: React.FC = () => {
                if (!hasAccess) { navigate(`/vip-group-sales/${group.id}`); return; }
           }
           
-          // Lógica de Canais: Só exibe hub se houver mais de 1 canal
           const hasMultipleChannels = group.channels && group.channels.length > 0;
           if (hasMultipleChannels) {
               navigate(`/group/${group.id}/channels`);
@@ -138,7 +170,7 @@ export const Groups: React.FC = () => {
                   navigate(`/group-chat/${result.groupId}`);
               }
           }
-          else loadLocalGroups(0, true); 
+          else loadInitialGroups(); 
       }
       else { showAlert("Ops!", result.message); }
   };
@@ -201,7 +233,7 @@ export const Groups: React.FC = () => {
             ) : (
                 <div className="text-center text-gray-500 mt-10">Você não participa de nenhum grupo.</div>
             )}
-            <div ref={observerRef} className="h-10"></div>
+            <div ref={loaderRef} className="h-10"></div>
         </div>
       </main>
 

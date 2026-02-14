@@ -5,6 +5,7 @@ import { db } from '@/database';
 import { USE_MOCKS } from '../../mocks';
 import { sqlite } from '../../database/engine';
 import { API_BASE } from '../../apiConfig';
+import { logService } from '../logService'; // Importando o serviço de log
 
 export const notificationService = {
   getNotifications: (): NotificationItem[] => {
@@ -13,7 +14,6 @@ export const notificationService = {
 
     const stored = db.notifications.getAll();
 
-    // FIX: Ensure stored is an array before filtering
     if (!Array.isArray(stored)) {
         console.warn('[notificationService] Stored notifications is not an array. Returning empty array.');
         return [];
@@ -27,9 +27,6 @@ export const notificationService = {
     return myNotifications.sort((a, b) => b.timestamp - a.timestamp);
   },
 
-  /**
-   * Syncs notifications from the server and populates the local cache.
-   */
   syncNotifications: async () => {
     const email = authService.getCurrentUserEmail();
     if (!email) return;
@@ -49,7 +46,6 @@ export const notificationService = {
 
   getUnreadCount: (): number => {
     const notifs = notificationService.getNotifications();
-    // FIX: Ensure notifs is an array before filtering
     if (!Array.isArray(notifs)) {
         console.warn('[notificationService] getNotifications did not return an array. Returning 0.');
         return 0;
@@ -67,16 +63,16 @@ export const notificationService = {
     };
 
     db.notifications.add(newNotif);
+    logService.logEvent('PostgreSQL Notificações Metadados Adicionados. ✅', { notificationId: newNotif.id });
   },
 
   removeNotification: (id: number) => {
     db.notifications.delete(id);
-    // Future: Call server to delete notification too
+    logService.logEvent('PostgreSQL Notificações Metadados Apagados. 🗑️', { notificationId: id });
   },
 
   markAllAsRead: () => {
      const all = notificationService.getNotifications();
-     // FIX: Ensure all is an array before using forEach
      if (!Array.isArray(all)) {
         console.warn('[notificationService] getNotifications did not return an array for markAllAsRead.');
         return;
@@ -87,6 +83,5 @@ export const notificationService = {
              db.notifications.add(updated);
          }
      });
-     // Future: Notify server that all notifications are read
   }
 };

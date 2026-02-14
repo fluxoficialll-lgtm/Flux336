@@ -1,29 +1,53 @@
-
 import { db } from '@/database';
-import { ChatMessage, ChatData } from '../../types';
+import { sqlite } from '@/database/engine';
+import { ChatMessage, ChatData, User } from '../../types';
 import { authService } from '../authService';
 import { API_BASE } from '../../apiConfig';
-import { ChatVisibilityManager } from '../chat/ChatVisibilityManager';
+import { apiClient } from '../apiClient';
 
 const API_URL = `${API_BASE}/api/messages`;
 
 export const chatService = {
+
+    // --- Novas Funções de Sincronização e Acesso a Dados ---
+
+    async syncChats(): Promise<void> {
+        try {
+            const chats = await apiClient.get<ChatData[]>(`/chats`);
+            if (chats && chats.length > 0) {
+                sqlite.upsertItems('chats', chats);
+            }
+        } catch (error) {
+            console.error("Falha ao sincronizar chats:", error);
+        }
+    },
+
+    getAllChats: (): ChatData[] => {
+        return db.chats.getAll();
+    },
+
+    getChatById: (chatId: string): ChatData | undefined => {
+        return db.chats.findById(chatId);
+    },
+    
+    // --- Funções Auxiliares e de Interação (Mantidas) ---
+
     reportMessage: (chatId: string, messageId: number, reason: string, comments: string) => {
-        const chat = db.chats.get(chatId);
+        const chat = db.chats.findById(chatId);
         if (chat) {
             const msgIndex = chat.messages.findIndex(m => m.id === messageId);
             if (msgIndex !== -1) {
                 chat.messages[msgIndex].isReported = true;
                 chat.messages[msgIndex].reportReason = reason;
                 chat.messages[msgIndex].reportComments = comments;
-                db.chats.set(chat);
+                sqlite.upsertItems('chats', [chat]);
                  console.log(`Reporting message ${messageId} in chat ${chatId} for: ${reason} with comments: ${comments}`);
             }
         }
     },
 
     reactToMessage: (chatId: string, messageId: number, reaction: string) => {
-        const chat = db.chats.get(chatId);
+        const chat = db.chats.findById(chatId);
         const currentUser = authService.getCurrentUser();
         if (!chat || !currentUser) return;
 
@@ -46,16 +70,30 @@ export const chatService = {
             message.reactions[reaction] = [...(message.reactions[reaction] || []), currentUser.id];
         }
 
-        db.chats.set(chat);
+        sqlite.upsertItems('chats', [chat]);
+    },
+
+    getGroupUnreadCount: (groupId: string): number => {
+        const chat = db.chats.findById(groupId);
+        if (!chat || !Array.isArray(chat.messages)) {
+            return 0;
+        }
+
+        const currentUser = authService.getCurrentUser();
+        if (!currentUser) return 0;
+
+        let unreadCount = 0;
+        chat.messages.forEach(message => {
+            if (message.senderId !== currentUser.id && !message.isRead) {
+                unreadCount++;
+            }
+        });
+        return unreadCount;
     },
 
     getUnreadCount: (): number => {
         const chats = db.chats.getAll();
-
-        if (!Array.isArray(chats)) {
-            console.warn('[chatService] Stored chats is not an array. Returning 0.');
-            return 0;
-        }
+        if (!Array.isArray(chats)) return 0;
 
         let unreadCount = 0;
         const currentUser = authService.getCurrentUser();

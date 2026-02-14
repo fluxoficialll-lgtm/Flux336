@@ -5,7 +5,8 @@ import { DiscoveryHub } from '../discovery/DiscoveryHub';
 import { API_BASE } from '../../apiConfig';
 import { authService } from '../authService';
 import { sqlite } from '../../database/engine';
-import { ContentDnaService } from '../ai/core/ContentDnaService'; // Importa o nosso novo serviço
+import { ContentDnaService } from '../ai/core/ContentDnaService';
+import { logService } from '../logService'; // Importando o serviço de log
 
 const API_URL = `${API_BASE}/api/marketplace`;
 
@@ -26,7 +27,6 @@ export const marketplaceService = {
           if (response.ok) {
               const data = await response.json();
               if (data && Array.isArray(data.data)) {
-                  // Caching server data locally for persistence
                   sqlite.upsertItems('marketplace', data.data);
               }
           }
@@ -44,10 +44,11 @@ export const marketplaceService = {
   },
   
   createItem: async (item: MarketplaceItem) => {
-    // Gera o DNA do conteúdo antes de salvar
     item.dna = await ContentDnaService.generateDna(item);
 
     db.marketplace.add(item);
+    logService.logEvent('PostgreSQL Marketplace Metadados Adicionados. ✅', { itemId: item.id });
+
     try {
         await fetch(`${API_URL}/create`, {
             method: 'POST',
@@ -59,6 +60,8 @@ export const marketplaceService = {
   
   deleteItem: async (id: string) => {
     db.marketplace.delete(id);
+    logService.logEvent('PostgreSQL Marketplace Metadados Apagados. 🗑️', { itemId: id });
+
     try {
         await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
     } catch (e) {}

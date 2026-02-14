@@ -3,6 +3,7 @@ import { UserProfile, User } from '../../../types';
 import { db } from '@/database';
 import { API_BASE } from '../../../apiConfig';
 import { UserDirectory } from './UserDirectory';
+import { logService } from '../../logService'; // Importando o serviço de log
 
 const API_USERS = `${API_BASE}/api/users`;
 
@@ -16,6 +17,8 @@ export const ProfileManager = {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Erro ao atualizar perfil.");
       
+      logService.logEvent('PostgreSQL Pessoas Metadados Atualizados. 🔁', { userId: result.user.id, email });
+
       db.users.set(result.user);
       localStorage.setItem('cached_user_profile', JSON.stringify(result.user));
       return result.user;

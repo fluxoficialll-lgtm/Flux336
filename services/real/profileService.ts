@@ -1,6 +1,6 @@
-
 import { UserProfile, User } from '../../types';
 import { db } from '@/database';
+import { sqlite } from '@/database/engine';
 import { API_BASE } from '../../apiConfig';
 import { userSearchService } from './userSearchService';
 import { apiClient } from '../apiClient';
@@ -8,21 +8,34 @@ import { apiClient } from '../apiClient';
 const API_USERS = `${API_BASE}/api/users`;
 
 export const profileService = {
-  /**
-   * Busca o perfil completo de um usuário no servidor.
-   * @param userId - O ID do usuário a ser buscado.
-   * @returns O objeto de usuário completo.
-   */
-  getUserProfile: async (userId: string): Promise<User> => {
+  
+  syncAllUsers: async (): Promise<void> => {
+    try {
+      const users = await apiClient.get<User[]>(`/users`);
+      if (users && users.length > 0) {
+        sqlite.upsertItems('users', users);
+      }
+    } catch (error) {
+      console.error("Falha ao sincronizar todos os usuários:", error);
+    }
+  },
+
+  getUserProfile: async (userId: string): Promise<User | null> => {
+    const localUser = db.users.findById(userId);
+    if (localUser) {
+      return localUser;
+    }
+
     try {
       const user = await apiClient.get<User>(`/profile/${userId}`);
       if (user) {
-        db.users.set(user); // Cache local
+        sqlite.upsertItems('users', [user]);
+        return user;
       }
-      return user;
+      return null;
     } catch (error) {
       console.error(`Falha ao buscar o perfil do usuário ${userId}:`, error);
-      throw new Error('Não foi possível carregar o perfil do usuário.');
+      return null;
     }
   },
 
@@ -35,7 +48,7 @@ export const profileService = {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Erro ao atualizar perfil.");
       
-      db.users.set(result.user);
+      sqlite.upsertItems('users', [result.user]);
       localStorage.setItem('cached_user_profile', JSON.stringify(result.user));
       return result.user;
   },

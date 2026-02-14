@@ -4,43 +4,33 @@ import { db } from '@/database';
 import { recommendationService } from '../recommendationService';
 import { chatService } from '../chatService';
 import { PostMetricsService } from './PostMetricsService';
-import { apiClient } from '../apiClient'; // Usando o apiClient central
+import { apiClient } from '../apiClient';
 import { sqlite } from '../../database/engine';
+import { logService } from '../logService'; // Importando o serviço de log
 
-/**
- * Definição da estrutura dos dados para a criação de um Reel.
- */
 interface CreateReelData {
     description: string;
     video: File;
-    // Adicionar outros campos que o backend espera, como title, location, etc.
-    // Por exemplo: title?: string;
 }
 
 export const reelsService = {
-  /**
-   * Cria um novo Reel enviando os dados para a API do backend.
-   * @param reelData - Objeto contendo o arquivo de vídeo e a descrição.
-   * @returns A postagem do Reel criada, retornada pelo backend.
-   */
   createReel: async (reelData: CreateReelData): Promise<Post> => {
     const formData = new FormData();
     formData.append('video', reelData.video);
     formData.append('description', reelData.description);
 
     try {
-      // apiClient.post já deve estar configurado para lidar com multipart/form-data
       const response = await apiClient.post<Post>('/reels', formData);
       
-      // Opcional: Hidratar o cache local com a resposta
       if (response) {
         sqlite.upsertItems('posts', [response]);
+        // Log da criação do Reel
+        logService.logEvent('PostgreSQL Reels Metadados Adicionados. ✅', { reelId: response.id });
       }
       
       return response;
     } catch (error) {
       console.error("Erro ao criar o Reel:", error);
-      // Lançar o erro permite que o componente de UI o capture e mostre uma mensagem
       throw new Error('Falha ao publicar o Reel. Tente novamente.');
     }
   },

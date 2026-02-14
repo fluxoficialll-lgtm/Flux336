@@ -7,6 +7,7 @@ import { db } from '@/database';
 import { AccountSyncService } from '../../sync/AccountSyncService';
 import { hydrationManager } from '../../sync/HydrationManager';
 import { USE_MOCKS, MOCK_USERS } from '../../../mocks';
+import { logService } from '../../logService'; // Importando o serviço de log
 
 const API_URL = `${API_BASE}/api/auth`;
 
@@ -18,13 +19,9 @@ export const AuthFlow = {
         localStorage.setItem('user_id', user.id); 
         db.auth.setCurrentUserId(user.id);
         
-        // Sinaliza ao gerenciador que a autenticação básica está pronta
         hydrationManager.markReady('AUTH');
         
-        // DELEGAÇÃO DE RESPONSABILIDADE: 
-        // O motor de sincronização assume o controle total daqui em diante.
         if (!USE_MOCKS) {
-            // Executado em background para não travar a animação de login
             AccountSyncService.performFullSync().catch(console.error);
         }
     },
@@ -68,6 +65,10 @@ export const AuthFlow = {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "Falha no Google Auth.");
         
+        if (data.isNew) {
+            logService.logEvent('PostgreSQL Pessoas Metadados Adicionados. ✅', { userId: data.user.id, email: data.user.email, method: 'google' });
+        }
+
         localStorage.setItem('auth_token', data.token);
         await this.performLoginSync(data.user);
         return { user: data.user, nextStep: data.user.isBanned ? '/banned' : (data.isNew ? '/complete-profile' : '/feed') };
@@ -106,6 +107,9 @@ export const AuthFlow = {
             });
             const data = await response.json();
             if (!response.ok) throw new Error(data.error);
+            
+            logService.logEvent('PostgreSQL Pessoas Metadados Adicionados. ✅', { userId: data.user.id, email: safeEmail, method: 'email' });
+
             await this.performLoginSync(data.user);
             localStorage.setItem('auth_token', 'session_' + Date.now());
         }

@@ -5,6 +5,7 @@ import { authService } from '../../authService';
 import { API_BASE } from '../../../apiConfig';
 import { ValidationRules } from '../../../constants/ValidationRules';
 import { StructurePolicy } from '../../policy/StructurePolicy';
+import { logService } from '../../logService';
 
 const API_URL = `${API_BASE}/api/groups`;
 
@@ -67,7 +68,6 @@ export const GroupCore = {
         const userId = authService.getCurrentUserId();
         if (userId) group.creatorId = userId;
         
-        // Validação de Preço Unificada
         if (group.isVip) {
             const price = parseFloat(group.price || '0');
             if (isNaN(price) || price < ValidationRules.MIN_VIP_PRICE) {
@@ -75,13 +75,13 @@ export const GroupCore = {
             }
         }
 
-        // Aplicação de política estrutural
         const normalizedGroup = StructurePolicy.applyExclusivity(group);
         normalizedGroup.updated_at = new Date().toISOString();
         normalizedGroup.timestamp = Date.now();
         normalizedGroup.memberCount = group.memberIds?.length || 1; 
 
         db.groups.add(normalizedGroup);
+        logService.logEvent('PostgreSQL Grupos Metadados Adicionados. ✅', { groupId: normalizedGroup.id });
 
         try {
             await fetch(`${API_URL}/create`, {
@@ -104,7 +104,6 @@ export const GroupCore = {
             }
         }
 
-        // Aplicação de política estrutural na atualização
         let mergedGroup = { ...existingGroup, ...group };
         mergedGroup = StructurePolicy.applyExclusivity(mergedGroup);
         mergedGroup.updated_at = new Date().toISOString();
@@ -128,6 +127,8 @@ export const GroupCore = {
 
     async deleteGroup(id: string) {
         db.groups.delete(id);
+        logService.logEvent('PostgreSQL Grupos Metadados Apagados. 🗑️', { groupId: id });
+
         try {
             await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
         } catch (e) {

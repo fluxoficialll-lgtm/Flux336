@@ -134,6 +134,8 @@ export const syncPayService = {
         if (!user) {
             throw new Error("Usuário não autenticado.");
         }
+        
+        // A lógica de log foi movida para o preferenceService para centralização.
         await safeFetch(`${PROXY_BASE}/disconnect`, { 
             method: 'POST',
             body: JSON.stringify({ email: user.email })

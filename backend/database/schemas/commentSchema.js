@@ -1,40 +1,27 @@
 
-/**
- * @fileoverview Schema para a tabela de comentários, utilizando uma associação polimórfica.
- * Isso permite que comentários sejam associados a diferentes tipos de conteúdo (Reels, Posts, Produtos).
- */
-
-/**
- * @typedef {object} Comment
- * @property {number} id - O ID único do comentário (primary key).
- * @property {string} content - O conteúdo textual do comentário.
- * @property {string} author_id - O ID do usuário que postou o comentário (foreign key para a tabela 'users').
- * @property {number} commentable_id - O ID do item pai que está sendo comentado.
- * @property {'post' | 'reel' | 'product'} commentable_type - O tipo do item pai.
- * @property {string} created_at - Timestamp de quando o comentário foi criado.
- * @property {string} updated_at - Timestamp da última atualização do comentário.
- */
-
 export const commentSchema = `
-  CREATE TABLE IF NOT EXISTS comments (
-    id SERIAL PRIMARY KEY,
-    content TEXT NOT NULL,
-    author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    commentable_id INTEGER NOT NULL,
-    commentable_type VARCHAR(20) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  );
+    -- 📝 Tabela para armazenar comentários em diferentes tipos de conteúdo (posts, reels, etc.).
+    CREATE TABLE IF NOT EXISTS comments (
+        -- 📝 ID único para o comentário.
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        -- 📝 ID do usuário que fez o comentário.
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        -- 📝 ID do conteúdo que está sendo comentado.
+        parent_id UUID NOT NULL,
+        -- 📝 Tipo do conteúdo que está sendo comentado (ex: 'post', 'reel').
+        parent_type TEXT NOT NULL, 
+        -- 📝 ID do comentário pai (se for uma resposta a outro comentário).
+        reply_to_comment_id UUID REFERENCES comments(id) ON DELETE CASCADE,
+        -- 📝 O texto do comentário.
+        content TEXT NOT NULL,
+        -- 📝 Contagem de "likes" ou reações positivas no comentário.
+        like_count INTEGER DEFAULT 0,
+        -- 📝 Data e hora de criação do comentário.
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        -- 📝 Data e hora da última edição do comentário.
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
 
-  -- Índices para otimizar a busca de comentários por item.
-  CREATE INDEX IF NOT EXISTS idx_comments_on_commentable ON comments (commentable_id, commentable_type);
-`;
-
-// Gatilho para atualizar o timestamp 'updated_at' em cada atualização.
-// A função 'update_updated_at_column' precisa já existir no banco de dados.
-export const commentTriggers = `
-  CREATE TRIGGER set_timestamp
-  BEFORE UPDATE ON comments
-  FOR EACH ROW
-  EXECUTE PROCEDURE update_updated_at_column();
+    -- 📝 Cria um índice combinado em 'parent_type' e 'parent_id' para buscar todos os comentários de um item específico rapidamente.
+    CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent_type, parent_id);
 `;

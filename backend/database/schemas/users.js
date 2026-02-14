@@ -1,45 +1,42 @@
 
 export const usersSchema = `
-    -- Habilita a extensão PostGIS se ainda não estiver habilitada.
-    CREATE EXTENSION IF NOT EXISTS postgis;
-    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
+    -- 📝 Tabela principal para armazenar os dados dos usuários.
     CREATE TABLE IF NOT EXISTS users (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        email TEXT UNIQUE NOT NULL, 
-        password TEXT, 
-        handle TEXT UNIQUE,
-        google_id TEXT UNIQUE,
-        wallet_balance NUMERIC(15,2) DEFAULT 0.00,
-        is_banned BOOLEAN DEFAULT FALSE,
-        is_profile_completed BOOLEAN DEFAULT FALSE,
-        trust_score INTEGER DEFAULT 500,
-        strikes INTEGER DEFAULT 0,
-        data JSONB,
-        referred_by_id UUID REFERENCES users(id),
-        created_at TIMESTAMP DEFAULT NOW()
+        -- 📝 ID único do usuário, também usado para autenticação no Supabase.
+        id UUID PRIMARY KEY,
+        -- 📝 Nome de usuário único, usado para login e identificação pública.
+        username TEXT UNIQUE NOT NULL,
+        -- 📝 Nome completo do usuário.
+        full_name TEXT,
+        -- 📝 URL da foto de perfil do usuário.
+        avatar_url TEXT,
+        -- 📝 URL da imagem de capa do perfil do usuário.
+        cover_photo_url TEXT,
+        -- 📝 Biografia ou descrição curta do usuário.
+        bio TEXT,
+        -- 📝 Website ou link externo do usuário.
+        website TEXT,
+        -- 📝 Localização do usuário.
+        location TEXT,
+        -- 📝 Data de nascimento do usuário.
+        date_of_birth DATE,
+        -- 📝 Data e hora em que a conta do usuário foi criada.
+        created_at TIMESTAMPTZ DEFAULT NOW()
     );
-    
-    -- Adiciona colunas de geolocalização se não existirem
-    DO $$
-    BEGIN
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='latitude') THEN
-            ALTER TABLE users ADD COLUMN latitude DOUBLE PRECISION;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='longitude') THEN
-            ALTER TABLE users ADD COLUMN longitude DOUBLE PRECISION;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='location') THEN
-            ALTER TABLE users ADD COLUMN location GEOGRAPHY(Point, 4326);
-        END IF;
-    END;
-    $$;
 
-    -- Índices existentes
-    CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_lower ON users (LOWER(email));
-    CREATE INDEX IF NOT EXISTS idx_users_handle_lower ON users (LOWER(handle));
-    CREATE INDEX IF NOT EXISTS idx_users_google ON users(google_id);
-
-    -- Índice Espacial (GIST - Generalized Search Tree)
-    CREATE INDEX IF NOT EXISTS idx_users_location ON users USING GIST(location);
+    -- 📝 Tabela para configurações específicas do usuário.
+    CREATE TABLE IF NOT EXISTS user_settings (
+        -- 📝 ID único da configuração, vinculado ao ID do usuário.
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        -- 📝 Configuração de privacidade do perfil (ex: public, private).
+        profile_privacy TEXT DEFAULT 'public',
+        -- 📝 Preferências de notificação em formato JSON.
+        notification_preferences JSONB,
+        -- 📝 Preferência de idioma do usuário (ex: 'pt-BR', 'en-US').
+        language VARCHAR(10) DEFAULT 'pt-BR',
+        -- 📝 Preferência de tema da interface (ex: 'light', 'dark').
+        theme TEXT DEFAULT 'light',
+        -- 📝 Data e hora da última atualização das configurações.
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
 `;
