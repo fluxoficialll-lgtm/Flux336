@@ -5,6 +5,8 @@ import path from 'path';
 import fs from 'fs';
 import http from 'http';
 import { fileURLToPath } from 'url';
+import pg from 'pg';
+import { S3Client, ListBucketsCommand } from "@aws-sdk/client-s3";
 
 // Configurações Modulares
 import { initSocket } from './backend/config/socket.js';
@@ -48,6 +50,42 @@ dbManager.init()
         }, 1000 * 60 * 60);
     })
     .catch(err => console.error("❌ [System] DB Boot Error:", err));
+
+// Rota de Health Check
+app.get('/health', async (req, res) => {
+    const checks = {};
+
+    // Verifica o PostgreSQL
+    try {
+        const client = new pg.Client({
+            connectionString: process.env.DATABASE_URL,
+            ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+        });
+        await client.connect();
+        checks.postgresql = 'ok';
+        await client.end();
+    } catch (e) {
+        checks.postgresql = 'error';
+    }
+
+    // Verifica o Cloudflare R2
+    try {
+        const r2Client = new S3Client({
+            region: "auto",
+            endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+            credentials: {
+                accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+            },
+        });
+        await r2Client.send(new ListBucketsCommand({}));
+        checks.r2 = 'ok';
+    } catch (e) {
+        checks.r2 = 'error';
+    }
+
+    res.status(checks.postgresql === 'ok' && checks.r2 === 'ok' ? 200 : 500).json(checks);
+});
 
 // --- ROTAS DE API ---
 app.use('/api', apiRoutes);

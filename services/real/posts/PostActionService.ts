@@ -3,7 +3,8 @@ import { Post } from '../../../types';
 import { API_BASE } from '../../../apiConfig';
 import { db } from '../../../database';
 import { PostUtils } from './PostUtils';
-import { ContentDnaService } from '../../ai/core/ContentDnaService'; // Importa o nosso novo serviço
+import { ContentDnaService } from '../../ai/core/ContentDnaService';
+import { logService } from '../../logService'; // Importando o serviço de log
 
 const API_URL = `${API_BASE}/api/posts`;
 
@@ -14,7 +15,9 @@ export const PostActionService = {
         formData.append('folder', folder);
         const res = await fetch(`${API_BASE}/api/upload`, { method: 'POST', body: formData });
         const data = await res.json();
-        return data.files[0].url;
+        const fileUrl = data.files[0].url;
+        logService.logEvent('Cloudflare Feed Mídia Adicionadas. ✅', { fileUrl });
+        return fileUrl;
     },
 
     async addPost(post: Post): Promise<void> {
@@ -33,13 +36,25 @@ export const PostActionService = {
             }
         } catch (e) {}
         // Salva o post no banco de dados local com o DNA já incluído
-        db.posts.add(PostUtils.sanitizePost(post));
+        const sanitizedPost = PostUtils.sanitizePost(post);
+        db.posts.add(sanitizedPost);
+
+        // Registra o evento de adição de post
+        logService.logEvent('PostgreSQL Feed Metadados Adicionados. ✅', { postId: sanitizedPost.id });
     },
 
     async deletePost(id: string): Promise<void> {
+        const post = await db.posts.get(id);
         db.posts.delete(id);
-        try { 
-            await fetch(`${API_URL}/${id}`, { method: 'DELETE' }); 
+
+        // Registra o evento de exclusão de post
+        logService.logEvent('PostgreSQL Feed Metadados Apagados. 🗑️', { postId: id });
+        if (post && post.media) {
+            logService.logEvent('Cloudflare Feed Mídia Apagadas. 🗑️', { postId: id });
+        }
+
+        try {
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
         } catch(e) {}
     }
 };

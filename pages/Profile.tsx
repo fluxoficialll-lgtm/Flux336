@@ -10,19 +10,21 @@ import { User } from '@/types';
 
 export const Profile: React.FC = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState<User | null>(authService.getCurrentUser());
+    const [user, setUser] = useState<User | null>(null);
     const [activeTab, setActiveTab] = useState('reels');
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!user?.id) {
+        const currentUser = authService.getCurrentUser();
+        if (!currentUser?.id) {
             navigate('/login');
             return;
         }
 
         const fetchProfile = async () => {
             try {
-                const fullProfile = await userService.getUserProfile(user.id);
+                await userService.syncAllUsers(); // Garante que os dados do usuário estejam atualizados
+                const fullProfile = await userService.getUserProfile(currentUser.id);
                 setUser(fullProfile);
             } catch (err) {
                 console.error("Falha ao buscar o perfil:", err);
@@ -31,7 +33,7 @@ export const Profile: React.FC = () => {
         };
 
         fetchProfile();
-    }, [user?.id, navigate]);
+    }, [navigate]);
 
     const handleLogout = () => {
         authService.logout();
@@ -41,7 +43,7 @@ export const Profile: React.FC = () => {
     if (!user) {
         return (
             <div className="flex flex-col justify-center items-center h-screen bg-black text-white">
-                <p className="mb-4">Usuário não encontrado. Redirecionando para o login...</p>
+                <p className="mb-4">Carregando perfil...</p>
             </div>
         );
     }
