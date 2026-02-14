@@ -64,23 +64,39 @@ export const UserRepository = {
         return res.rows.map(mapRowToUser);
     },
 
-    async create(user) {
-        const { email, googleId, referredById, profile, ...otherData } = user;
-        const handle = profile?.name?.toLowerCase().trim();
+    async create(userData) {
+        const { email, password_hash, googleId, handle, ...otherData } = userData;
+
+        const columns = ['email'];
+        const values = [email.toLowerCase().trim()];
+
+        if (password_hash) {
+            columns.push('password_hash');
+            values.push(password_hash);
+        }
+
+        if (googleId) {
+            columns.push('google_id');
+            values.push(googleId);
+        }
+
+        if (handle) {
+            columns.push('handle');
+            values.push(handle.toLowerCase().trim());
+        }
         
-        const metadata = { ...otherData, profile };
+        const dataString = JSON.stringify(otherData);
+        if (dataString !== '{}') {
+            columns.push('data');
+            values.push(dataString);
+        }
+
+        const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+        const columnNames = columns.join(', ');
 
         const res = await query(
-            `INSERT INTO users (email, handle, google_id, referred_by_id, data, is_profile_completed) 
-             VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-            [
-                email.toLowerCase().trim(),
-                handle || null,
-                googleId || null,
-                toUuid(referredById),
-                JSON.stringify(metadata),
-                !!user.isProfileCompleted
-            ]
+            `INSERT INTO users (${columnNames}) VALUES (${placeholders}) RETURNING id`,
+            values
         );
         return res.rows[0].id;
     },

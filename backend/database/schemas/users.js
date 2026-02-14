@@ -2,28 +2,20 @@
 export const usersSchema = `
     -- 📝 Tabela principal para armazenar os dados dos usuários.
     CREATE TABLE IF NOT EXISTS users (
-        -- 📝 ID único do usuário, também usado para autenticação no Supabase.
-        id UUID PRIMARY KEY,
-        -- 📝 Nome de usuário único, usado para login e identificação pública.
-        username TEXT UNIQUE NOT NULL,
+        -- 📝 ID único do usuário.
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         -- 📝 Endereço de e-mail único do usuário. Essencial para comunicação e recuperação.
-        email TEXT UNIQUE,
+        email TEXT UNIQUE NOT NULL,
+        -- 📝 "Apelido" ou nome de usuário público.
+        handle TEXT UNIQUE,
+        -- 📝 Hash da senha para autenticação via e-mail.
+        password_hash TEXT,
         -- 📝 ID do Google, para login social.
         google_id TEXT UNIQUE,
-        -- 📝 Nome completo do usuário.
-        full_name TEXT,
-        -- 📝 URL da foto de perfil do usuário.
-        avatar_url TEXT,
-        -- 📝 URL da imagem de capa do perfil do usuário.
-        cover_photo_url TEXT,
-        -- 📝 Biografia ou descrição curta do usuário.
-        bio TEXT,
-        -- 📝 Website ou link externo do usuário.
-        website TEXT,
-        -- 📝 Localização do usuário.
-        location TEXT,
-        -- 📝 Data de nascimento do usuário.
-        date_of_birth DATE,
+        -- 📝 Blob JSON para dados de perfil flexíveis (nome, bio, avatar, etc.).
+        data JSONB,
+        -- 📝 Flag para indicar se o perfil do usuário está completo.
+        is_profile_completed BOOLEAN DEFAULT FALSE,
         -- 📝 Data e hora em que a conta do usuário foi criada.
         created_at TIMESTAMPTZ DEFAULT NOW()
     );
