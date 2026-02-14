@@ -1,39 +1,60 @@
 
 import { query } from '../pool.js';
 
+// Mapeia uma linha do banco de dados para um objeto de relacionamento mais limpo.
+const mapRowToRelationship = (row) => {
+    if (!row) return null;
+    return {
+        followerId: row.follower_id,
+        followingId: row.following_id,
+        status: row.status,
+        createdAt: row.created_at
+    };
+};
+
 export const RelationshipRepository = {
-    async create({ followerId, followingId, ...data }) {
-        const id = `${followerId}_${followingId}`;
+    // Cria ou atualiza um relacionamento (seguir).
+    async upsert({ followerId, followingId, status = 'accepted' }) {
         await query(`
-            INSERT INTO relationships (id, follower_id, following_id, data)
-            VALUES ($1, $2, $3, $4)
-            ON CONFLICT (id) DO NOTHING
-        `, [id, followerId, followingId, JSON.stringify(data)]);
+            INSERT INTO follows (follower_id, following_id, status)
+            VALUES ($1, $2, $3)
+            ON CONFLICT (follower_id, following_id) DO UPDATE SET status = $3
+        `, [followerId, followingId, status]);
     },
 
+    // Deleta um relacionamento (deixar de seguir).
     async delete(followerId, followingId) {
-        const id = `${followerId}_${followingId}`;
-        await query('DELETE FROM relationships WHERE id = $1', [id]);
+        await query('DELETE FROM follows WHERE follower_id = $1 AND following_id = $2', [followerId, followingId]);
     },
 
-    async findByFollower(followerId) {
-        const res = await query('SELECT * FROM relationships WHERE follower_id = $1', [followerId]);
-        return res.rows.map(r => ({
-            id: r.id,
-            followerId: r.follower_id,
-            followingId: r.following_id,
-            ...(typeof r.data === 'string' ? JSON.parse(r.data) : (r.data || {}))
-        }));
+    // Encontra todos os usuários que um determinado usuário segue.
+    async findFollowing(followerId) {
+        const res = await query('SELECT * FROM follows WHERE follower_id = $1 AND status = \'accepted\'', [followerId]);
+        return res.rows.map(mapRowToRelationship);
+    },
+    
+    // Encontra todos os seguidores de um determinado usuário.
+    async findFollowers(followingId) {
+        const res = await query('SELECT * FROM follows WHERE following_id = $1 AND status = \'accepted\'', [followingId]);
+        return res.rows.map(mapRowToRelationship);
     },
 
+    // Obtém a contagem de seguidores para os principais criadores.
     async getTopCreators() {
         const res = await query(`
-            SELECT following_id, COUNT(*) as followers_count
-            FROM relationships
-            GROUP BY following_id
+            SELECT u.id, u.handle, u.data->>'avatar' as avatar, COUNT(f.follower_id) as followers_count
+            FROM follows f
+            JOIN users u ON f.following_id = u.id
+            WHERE f.status = 'accepted'
+            GROUP BY u.id, u.handle, u.data->>'avatar'
             ORDER BY followers_count DESC
             LIMIT 50
         `);
-        return res.rows;
+        return res.rows.map(row => ({
+            id: row.id,
+            handle: row.handle,
+            avatar: row.avatar,
+            followersCount: parseInt(row.followers_count, 10)
+        }));
     }
 };

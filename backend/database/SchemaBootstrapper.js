@@ -22,7 +22,7 @@ import { up as paymentProviderCredentialsSchema } from './schemas/PaymentProvide
 
 // Definições de tipos ENUM como constantes SQL
 const createEnumProductCondition = `CREATE TYPE product_condition AS ENUM ('new', 'used', 'refurbished')`;
-const createEnumRelationshipStatus = `CREATE TYPE relationship_status AS ENUM ('following', 'follower', 'friends', 'blocked')`;
+const createEnumRelationshipStatus = `CREATE TYPE relationship_status AS ENUM ('pending', 'accepted', 'blocked')`;
 const createEnumTransactionType = `CREATE TYPE transaction_type AS ENUM ('deposit', 'withdrawal', 'transfer', 'purchase', 'refund')`;
 
 export const SchemaBootstrapper = {
@@ -33,6 +33,11 @@ export const SchemaBootstrapper = {
         console.log("🔄 DB: Inicializando Motor de Migração...");
         
         try {
+            // Limpeza de schemas antigos ou conflitantes
+            await query("DROP TABLE IF EXISTS relationships CASCADE;");
+            await query("DROP TABLE IF EXISTS follows CASCADE;");
+            await query("DROP TYPE IF EXISTS relationship_status;");
+
             // 1. Requisitos de Sistema e Tipos
             const setupSQL = [
                 `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`,
@@ -49,7 +54,7 @@ export const SchemaBootstrapper = {
                 chatsSchema, 
                 marketplaceSchema, 
                 reelsSchema,
-                relationshipsSchema,
+                relationshipsSchema, // Agora cria a tabela 'follows'
                 interactionsSchema, 
                 vipSchema,
                 financialSchema, 
