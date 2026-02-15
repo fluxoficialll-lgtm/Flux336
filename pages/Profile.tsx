@@ -25,7 +25,6 @@ export const Profile: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // State from old design for modals
     const [followersCount, setFollowersCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
     const [followListType, setFollowListType] = useState<'followers' | 'following' | null>(null);
@@ -34,7 +33,6 @@ export const Profile: React.FC = () => {
     
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Using the new, more efficient data loading logic
     useEffect(() => {
         const currentUser = authService.getCurrentUser();
         if (!currentUser?.id) {
@@ -44,23 +42,19 @@ export const Profile: React.FC = () => {
 
         const fetchProfileData = async () => {
             try {
-                // The new logic fetches all necessary data
                 const fullProfile = await userService.getUserProfile(currentUser.id);
+                if (!fullProfile) throw new Error("Usuário não encontrado");
                 setUser(fullProfile);
 
-                // Sync relationships and then get the counts
                 await relationshipService.syncRelationships();
 
-                if (fullProfile.profile?.name) {
-                    const followers = relationshipService.getFollowers(fullProfile.profile.name);
-                    setFollowersCount(followers.length);
-                }
                 if (fullProfile.id) {
+                    const followers = relationshipService.getFollowers(fullProfile.id);
                     const following = relationshipService.getFollowing(fullProfile.id);
+                    setFollowersCount(followers.length);
                     setFollowingCount(following.length);
                 }
 
-                // Sync posts in the background
                 postService.syncUserPosts(currentUser.id);
 
             } catch (err) {
@@ -74,12 +68,11 @@ export const Profile: React.FC = () => {
         fetchProfileData();
     }, [navigate]);
     
-    // --- Handlers from the old design for modals and navigation ---
     const handleShowFollowList = (type: 'followers' | 'following') => {
-      if (!user) return;
+      if (!user?.id) return;
       let list: any[] = [];
-      if (type === 'followers' && user.profile?.name) { list = relationshipService.getFollowers(user.profile.name); }
-      else if (type === 'following' && user.id) { list = relationshipService.getFollowing(user.id); }
+      if (type === 'followers') { list = relationshipService.getFollowers(user.id); }
+      else { list = relationshipService.getFollowing(user.id); }
       setFollowListData(list);
       setFollowListType(type);
     };
@@ -92,7 +85,6 @@ export const Profile: React.FC = () => {
         navigate(`/user/${clean}`);
     };
 
-    // --- Loading and Error states ---
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen bg-black text-white">Carregando perfil...</div>;
     }
@@ -100,7 +92,6 @@ export const Profile: React.FC = () => {
         return <div className="flex justify-center items-center h-screen bg-black text-white">{error}</div>;
     }
 
-    // --- Derived data for the UI, using the loaded user state ---
     const postCount = user ? postService.getUserPosts(user.id).length : 0;
     const handleNickname = user?.profile?.nickname || user?.profile?.name || "Usuário";
     const handleUsername = user?.profile?.name ? `@${user.profile.name}` : "@usuario";
@@ -111,7 +102,6 @@ export const Profile: React.FC = () => {
 
     return (
         <div className="profile-page h-screen bg-[radial-gradient(circle_at_top_left,_#0c0f14,_#0a0c10)] text-white font-['Inter'] flex flex-col overflow-hidden">
-            {/* The exact style from the old page */}
             <style>{`
                 main { flex-grow: 1; overflow-y: auto; padding-top: 80px; padding-bottom: 100px; scroll-behavior: smooth; }
                 .profile-card-box { background: rgba(30, 35, 45, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 30px 20px; width: 90%; max-width: 400px; display: flex; flex-direction: column; align-items: center; margin: 0 auto 20px auto; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
