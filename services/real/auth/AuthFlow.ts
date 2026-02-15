@@ -60,7 +60,7 @@ export const AuthFlow = {
         const response = await fetch(`${API_URL}/google`, { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ googleToken, referredBy: referredBy || null }) 
+            body: JSON.stringify({ credential: googleToken, referredBy: referredBy || null }) 
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "Falha no Google Auth.");

@@ -21,7 +21,6 @@ import { dbManager } from './backend/databaseManager.js';
 import { storageService } from './backend/services/storageService.js';
 import { IntegrityCheck } from './backend/jobs/IntegrityCheck.js';
 import apiRoutes from './backend/routes.js';
-import authRoutes from './backend/routes/auth.js'; // Rota de autenticação adicionada
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -90,7 +89,6 @@ app.get('/health', async (req, res) => {
 
 // --- ROTAS DE API ---
 app.use('/api', apiRoutes);
-app.use('/auth', authRoutes); // Rota de autenticação registrada
 
 app.post('/api/upload', upload.single('file'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'Nenhum arquivo enviado' });
