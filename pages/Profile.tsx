@@ -48,7 +48,9 @@ export const Profile: React.FC = () => {
                 const fullProfile = await userService.getUserProfile(currentUser.id);
                 setUser(fullProfile);
 
-                // Fetch relationship counts from the dedicated service, as per old logic's needs
+                // Sync relationships and then get the counts
+                await relationshipService.syncRelationships();
+
                 if (fullProfile.profile?.name) {
                     const followers = relationshipService.getFollowers(fullProfile.profile.name);
                     setFollowersCount(followers.length);
