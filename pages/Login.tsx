@@ -85,20 +85,23 @@ export const Login: React.FC = () => {
         }
     };
 
-    // Google Init logic remains stable in the parent
+    // Google Init logic
     useEffect(() => {
-        if (showEmailForm) return; // Don't init if not on initial card
+        if (showEmailForm) return;
         
         let isMounted = true;
         const initGoogle = async () => {
             let clientId = "";
             try {
-                const res = await fetch(`${API_BASE}/api/auth/config`);
+                const res = await fetch(`${API_BASE}/auth/config`);
                 if (res.ok) {
                     const data = await res.json();
-                    clientId = data.clientId;
+                    // CORREÇÃO: A chave no JSON é 'googleClientId', não 'clientId'.
+                    clientId = data.googleClientId;
                 }
-            } catch (err) {}
+            } catch (err) {
+                console.error("Failed to fetch auth config:", err);
+            }
 
             if (!isMounted || !clientId || clientId.includes("CONFIGURADO")) return;
 
@@ -106,6 +109,9 @@ export const Login: React.FC = () => {
                 const btnDiv = document.getElementById(GOOGLE_BTN_ID);
                 if (typeof google !== 'undefined' && google.accounts && btnDiv) {
                     clearInterval(interval);
+                    if (buttonRendered.current) return;
+                    buttonRendered.current = true;
+
                     google.accounts.id.initialize({
                         client_id: clientId,
                         callback: handleCredentialResponse,
