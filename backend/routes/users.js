@@ -23,6 +23,27 @@ router.get('/', async (req, res) => {
     }
 });
 
+/**
+ * @route   GET /api/users/:id
+ * @desc    Busca um usuário específico pelo ID.
+ * @access  Public
+ */
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await dbManager.users.findById(id);
+
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+    } catch (error) {
+        console.error('[API] Erro ao buscar usuário por ID:', error);
+        res.status(500).json({ error: 'Falha ao buscar usuário.' });
+    }
+});
+
 
 /**
  * @route   POST /api/users/update-location
