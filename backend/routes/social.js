@@ -27,13 +27,18 @@ router.post('/relationships/unfollow', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// CORRIGIDO: Utiliza o ID do usuário autenticado (req.userId) em vez de esperar um parâmetro de consulta.
 router.get('/relationships/me', async (req, res) => {
     try {
-        const { followerId } = req.query;
-        if (!followerId) return res.status(400).json({ error: "followerId obrigatório" });
-        const rels = await dbManager.relationships.findByFollower(followerId);
+        const userId = req.userId; // O ID do usuário vem do middleware de autenticação.
+        if (!userId) return res.status(401).json({ error: "Usuário não autenticado." });
+        
+        const rels = await dbManager.relationships.findByFollower(userId);
         res.json({ relationships: rels });
-    } catch (e) { res.status(500).json({ error: e.message }); }
+    } catch (e) { 
+        console.error("Falha ao buscar relacionamentos para o usuário:", userId, e);
+        res.status(500).json({ error: e.message }); 
+    }
 });
 
 router.get('/rankings/top', async (req, res) => {
