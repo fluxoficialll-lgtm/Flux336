@@ -6,12 +6,9 @@ const mapRowToItem = (row) => {
 
     let metadata = {};
     try {
-        // Tenta analisar os metadados. Se falhar, registra um erro, mas não quebra a aplicação.
-        // Isso impede que um único item com JSON inválido derrube toda a listagem.
         metadata = typeof row.data === 'string' ? JSON.parse(row.data) : (row.data || {});
     } catch (error) {
         console.error(`Falha ao analisar JSON para o item do marketplace com id: ${row.id}`, error);
-        // Retorna null para que o item problemático possa ser filtrado posteriormente.
         return null;
     }
 
@@ -36,14 +33,17 @@ export const MarketplaceRepository = {
 
     async list() {
         const res = await query('SELECT * FROM marketplace ORDER BY created_at DESC');
-        // Mapeia as linhas e filtra quaisquer itens nulos que resultaram de erros de análise.
-        // Isso garante que a aplicação continue funcionando mesmo com dados corrompidos.
         return res.rows.map(mapRowToItem).filter(item => item !== null);
     },
 
     async findById(id) {
         const res = await query('SELECT * FROM marketplace WHERE id = $1', [id]);
         return mapRowToItem(res.rows[0]);
+    },
+
+    async findBySellerId(sellerId) {
+        const res = await query('SELECT * FROM marketplace WHERE seller_id = $1 ORDER BY created_at DESC', [sellerId]);
+        return res.rows.map(mapRowToItem).filter(item => item !== null);
     },
 
     async delete(id) {

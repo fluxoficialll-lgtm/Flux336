@@ -25,6 +25,16 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Rota para buscar produtos pelo ID do vendedor
+router.get('/user/:userId', async (req, res) => {
+    try {
+        const items = await dbManager.marketplace.findBySellerId(req.params.userId);
+        res.json({ data: items });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // Criar/Atualizar item
 router.post('/create', async (req, res) => {
     try {
