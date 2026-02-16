@@ -14,43 +14,47 @@ const log = (level, direction, details) => {
         direction, // 'inbound', 'outbound', 'system'
         ...details
     };
-    // Imprime o objeto JSON completo no console.
-    // Ferramentas como Loki/Grafana vão ler esta linha.
+    // Converte o objeto de log em uma string JSON e imprime no console.
+    // Ideal para sistemas de logging centralizado (Splunk, ELK, Datadog).
     console.log(JSON.stringify(logEntry));
 };
 
+/**
+ * O objeto trafficLogger encapsula os métodos de logging para manter a consistência.
+ * Ele utiliza o `traceId` injetado pelo `traceMiddleware`.
+ */
 export const trafficLogger = {
     logInbound: (req) => {
         const { method, path, headers, ip } = req;
-        const traceId = headers['x-flux-trace-id'] || 'no-trace';
-        const isHealthCheck = (path === '/' || path === '/api/ping') && (method === 'GET' || method === 'HEAD');
+        // O traceId é garantido pelo middleware que deve ser executado antes.
+        const traceId = req.traceId;
 
+        const isHealthCheck = (path === '/' || path === '/api/ping');
         if (isHealthCheck) {
-            // Ocultamos os health checks por padrão para não poluir os logs principais,
-            // mas eles podem ser ativados para depuração mudando o 'level' para 'info'.
-            log('debug', 'system', {
-                message: 'Batimento cardíaco do sistema (Health Check).',
-                details: { method, path, traceId }
-            });
+            // Ocultamos os health checks por padrão para não poluir os logs.
             return;
         }
 
         log('info', 'inbound', {
             message: `Requisição recebida: ${method} ${path}`,
-            source_ip: ip,
             trace_id: traceId,
             details: {
+                source_ip: ip,
                 method,
                 path,
-                size_bytes: headers['content-length'] || 0
+                // Log de headers essenciais e seguros, evitando tokens e cookies.
+                origin: headers['origin'],
+                user_agent: headers['user-agent'],
+                content_length: headers['content-length'] || 0
             }
         });
     },
 
     logOutbound: (req, res, duration) => {
-        const { method, path, headers } = req;
+        const { method, path } = req;
         const { statusCode } = res;
-        const traceId = headers['x-flux-trace-id'] || 'no-trace';
+        // O traceId é garantido pelo middleware.
+        const traceId = req.traceId;
 
         if ((path === '/' || path === '/api/ping')) return; // Silencia pings
 
@@ -72,12 +76,31 @@ export const trafficLogger = {
         });
     },
 
-    logCors: (req) => {
-        log('info', 'system', {
-            message: 'Requisição de pré-verificação (CORS Preflight) recebida.',
-            details: {
-                origin: req.headers.origin || 'unknown'
+    logError: (error, req, message = 'Erro inesperado no sistema') => {
+        // Garante o traceId mesmo em erros onde o middleware possa ter falhado.
+        const traceId = req.traceId || 'no-trace-in-error';
+        log('error', 'system', {
+            message,
+            trace_id: traceId,
+            error: {
+                message: error.message,
+                stack: error.stack,
+            },
+            request_context: {
+                method: req.method,
+                path: req.path
             }
         });
-    }
+    },
+
+    // Logger genérico para eventos internos do sistema (services, repos, etc.)
+    logSystem: (level, message, details) => {
+        log(level, 'system', {
+            message,
+            ...details
+        });
+    },
+    
+    // Exporta a função base para usos específicos se necessário.
+    log
 };

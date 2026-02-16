@@ -1,41 +1,32 @@
 
-import bcrypt from 'bcryptjs';
 import { dbManager } from '../databaseManager.js';
+import crypto from 'crypto';
+import { trafficLogger } from './audit/trafficLogger.js';
 
-const saltRounds = 10;
+async function authenticate(email, password, traceId) {
+    trafficLogger.logSystem('info', '[PasswordAuthService] Iniciando autenticação', { trace_id: traceId, email });
 
-async function hashPassword(password) {
-    if (!password) {
+    const user = await dbManager.users.findByEmail(email, traceId);
+
+    if (!user) {
+        trafficLogger.logSystem('warn', '[PasswordAuthService] Usuário não encontrado', { trace_id: traceId, email });
         return null;
     }
-    return await bcrypt.hash(password, saltRounds);
-}
 
-async function registerUser(userData) {
-    const { email, password, ...otherData } = userData;
+    // Em um sistema real, o hash da senha não estaria aqui.
+    // Isso seria tratado por um repositório ou serviço de usuário de forma segura.
+    const [salt, key] = user.password_hash.split(':');
+    const derivedKey = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
 
-    if (!email || !password) {
-        throw new Error('Email e senha são obrigatórios para o registro.');
+    if (derivedKey !== key) {
+        trafficLogger.logSystem('warn', '[PasswordAuthService] Senha inválida', { trace_id: traceId, email });
+        return null;
     }
-
-    const existingUser = await dbManager.users.findByEmail(email);
-    if (existingUser) {
-        throw new Error('Este e-mail já está em uso.');
-    }
-
-    const password_hash = await hashPassword(password);
-
-    const newUser = {
-        email,
-        password_hash,
-        ...otherData
-    };
-
-    const userId = await dbManager.users.create(newUser);
-    return await dbManager.users.findById(userId);
+    
+    trafficLogger.logSystem('info', '[PasswordAuthService] Autenticação bem-sucedida', { trace_id: traceId, userId: user.id });
+    return user;
 }
 
 export const passwordAuthService = {
-    hashPassword,
-    registerUser
+    authenticate
 };
