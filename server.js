@@ -14,7 +14,7 @@ import { setupMiddlewares } from './backend/config/middleware.js';
 import { upload } from './backend/config/storage.js';
 
 // Auditoria e Telemetria
-import { traceMiddleware } from './backend/services/audit/TraceMiddleware.js';
+import { traceMiddleware } from './backend/middleware/traceMiddleware.js';
 
 // Serviços e Rotas
 import { dbManager } from './backend/databaseManager.js';

@@ -1,9 +1,9 @@
 
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const { traceMiddleware } = require('../middleware/traceMiddleware');
-const { trafficLogger } = require('../services/audit/trafficLogger');
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import { traceMiddleware } from '../middleware/traceMiddleware.js';
+import { trafficLogger } from '../services/audit/trafficLogger.js';
 
 const router = express.Router();
 
@@ -14,14 +14,14 @@ router.use((req, res, next) => {
     next();
 });
 
-const routesDir = __dirname;
+const routesDir = path.dirname(import.meta.url).substring(7); // Remove 'file://'
 
 // Carrega dinamicamente os arquivos de rota do diretório atual
-fs.readdirSync(routesDir).forEach(file => {
+fs.readdirSync(routesDir).forEach(async (file) => {
     // Considera apenas arquivos .js que não sejam este (index.js) e não sejam diretórios
-    if (file.endsWith('.js') && file !== 'index.js') {
+    if (file.endsWith('.js') && file !== 'routes.js') {
         const fullPath = path.join(routesDir, file);
-        const routeModule = require(fullPath);
+        const routeModule = await import(fullPath);
         
         // Deriva o "mount path" do nome do arquivo
         const routeName = path.basename(file, '.js');
@@ -35,8 +35,8 @@ fs.readdirSync(routesDir).forEach(file => {
         }
 
         // Registra o módulo da rota no caminho derivado
-        router.use(mountPath, routeModule);
+        router.use(mountPath, routeModule.default);
     }
 });
 
-module.exports = router;
+export default router;
