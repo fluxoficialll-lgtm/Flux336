@@ -1,5 +1,5 @@
 
-const { performance } = require('perf_hooks');
+import { performance } from 'perf_hooks';
 
 /**
  * Cria um proxy para um repositório a fim de registrar todas as chamadas de método.
@@ -11,7 +11,7 @@ const { performance } = require('perf_hooks');
  * @param {string} repositoryName - O nome do repositório para identificação nos logs.
  * @returns {object} - O repositório "envelopado" com a lógica de logging.
  */
-const createRepositoryProxy = (repository, logger, repositoryName) => {
+export const createRepositoryProxy = (repository, logger, repositoryName) => {
     const proxy = {};
 
     // Itera sobre todos os métodos do repositório original.
@@ -69,5 +69,3 @@ const createRepositoryProxy = (repository, logger, repositoryName) => {
 
     return proxy;
 };
-
-module.exports = { createRepositoryProxy };

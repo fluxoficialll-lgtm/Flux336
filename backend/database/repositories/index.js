@@ -1,57 +1,82 @@
 
-const { createRepositoryProxy } = require('../../services/audit/repositoryLoggerProxy');
-const { trafficLogger } = require('../../services/audit/trafficLogger');
+import { createRepositoryProxy } from '../../services/audit/repositoryLoggerProxy.js';
+import { trafficLogger } from '../../services/audit/trafficLogger.js';
 
 // Importa os repositórios originais
-const AdAnalyticsRepository = require('./AdAnalyticsRepository');
-const AdRepository = require('./AdRepository');
-const AdminStatsRepository = require('./AdminStatsRepository');
-const AggregatorRepository = require('./AggregatorRepository');
-const AnalyticsRepository = require('./AnalyticsRepository');
-const AuditRepository = require('./AuditRepository');
-const ChatRepository = require('./ChatRepository');
-const CommentRepository = require('./CommentRepository');
-const CredentialsRepository = require('./CredentialsRepository');
-const FinancialAnalyticsRepository = require('./FinancialAnalyticsRepository');
-const FinancialRepository = require('./FinancialRepository');
-const GroupRepository = require('./GroupRepository');
-const InteractionRepository = require('./InteractionRepository');
-const MarketplaceRepository = require('./MarketplaceRepository');
-const NotificationRepository = require('./NotificationRepository');
-const PaymentRepository = require('./PaymentRepository');
-const PostRepository = require('./PostRepository');
-const ReelsRepository = require('./ReelsRepository');
-const RelationshipRepository = require('./RelationshipRepository');
-const ReportRepository = require('./ReportRepository');
-const UserAnalyticsRepository = require('./UserAnalyticsRepository');
-const UserRepository = require('./UserRepository');
-const FeeRepository = require('./financial/FeeRepository');
-const GroupRankingRepository = require('./ranking/GroupRankingRepository');
+import { AdAnalyticsRepository } from './AdAnalyticsRepository.js';
+import { AdRepository } from './AdRepository.js';
+import { AdminStatsRepository } from './AdminStatsRepository.js';
+import { AggregatorRepository } from './AggregatorRepository.js';
+import { AnalyticsRepository } from './AnalyticsRepository.js';
+import { AuditRepository } from './AuditRepository.js';
+import { ChatRepository } from './ChatRepository.js';
+import { CommentRepository } from './CommentRepository.js';
+import { CredentialsRepository } from './CredentialsRepository.js';
+import { FinancialAnalyticsRepository } from './FinancialAnalyticsRepository.js';
+import { FinancialRepository } from './FinancialRepository.js';
+import { GroupRepository } from './GroupRepository.js';
+import { InteractionRepository } from './InteractionRepository.js';
+import { MarketplaceRepository } from './MarketplaceRepository.js';
+import { NotificationRepository } from './NotificationRepository.js';
+import { PaymentRepository } from './PaymentRepository.js';
+import { PostRepository } from './PostRepository.js';
+import { ReelsRepository } from './ReelsRepository.js';
+import { RelationshipRepository } from './RelationshipRepository.js';
+import { ReportRepository } from './ReportRepository.js';
+import { UserAnalyticsRepository } from './UserAnalyticsRepository.js';
+import { UserRepository } from './UserRepository.js';
+import { FeeRepository } from './financial/FeeRepository.js';
+import { GroupRankingRepository } from './ranking/GroupRankingRepository.js';
 
 // Cria e exporta os repositórios com proxy
-module.exports = {
-    AdAnalyticsRepository: createRepositoryProxy(AdAnalyticsRepository, trafficLogger, 'AdAnalyticsRepository'),
-    AdRepository: createRepositoryProxy(AdRepository, trafficLogger, 'AdRepository'),
-    AdminStatsRepository: createRepositoryProxy(AdminStatsRepository, trafficLogger, 'AdminStatsRepository'),
-    AggregatorRepository: createRepositoryProxy(AggregatorRepository, trafficLogger, 'AggregatorRepository'),
-    AnalyticsRepository: createRepositoryProxy(AnalyticsRepository, trafficLogger, 'AnalyticsRepository'),
-    AuditRepository: createRepositoryProxy(AuditRepository, trafficLogger, 'AuditRepository'),
-    ChatRepository: createRepositoryProxy(ChatRepository, trafficLogger, 'ChatRepository'),
-    CommentRepository: createRepositoryProxy(CommentRepository, trafficLogger, 'CommentRepository'),
-    CredentialsRepository: createRepositoryProxy(CredentialsRepository, trafficLogger, 'CredentialsRepository'),
-    FinancialAnalyticsRepository: createRepositoryProxy(FinancialAnalyticsRepository, trafficLogger, 'FinancialAnalyticsRepository'),
-    FinancialRepository: createRepositoryProxy(FinancialRepository, trafficLogger, 'FinancialRepository'),
-    GroupRepository: createRepositoryProxy(GroupRepository, trafficLogger, 'GroupRepository'),
-    InteractionRepository: createRepositoryProxy(InteractionRepository, trafficLogger, 'InteractionRepository'),
-    MarketplaceRepository: createRepositoryProxy(MarketplaceRepository, trafficLogger, 'MarketplaceRepository'),
-    NotificationRepository: createRepositoryProxy(NotificationRepository, trafficLogger, 'NotificationRepository'),
-    PaymentRepository: createRepositoryProxy(PaymentRepository, trafficLogger, 'PaymentRepository'),
-    PostRepository: createRepositoryProxy(PostRepository, trafficLogger, 'PostRepository'),
-    ReelsRepository: createRepositoryProxy(ReelsRepository, trafficLogger, 'ReelsRepository'),
-    RelationshipRepository: createRepositoryProxy(RelationshipRepository, trafficLogger, 'RelationshipRepository'),
-    ReportRepository: createRepositoryProxy(ReportRepository, trafficLogger, 'ReportRepository'),
-    UserAnalyticsRepository: createRepositoryProxy(UserAnalyticsRepository, trafficLogger, 'UserAnalyticsRepository'),
-    UserRepository: createRepositoryProxy(UserRepository, trafficLogger, 'UserRepository'),
-    FeeRepository: createRepositoryProxy(FeeRepository, trafficLogger, 'FeeRepository'),
-    GroupRankingRepository: createRepositoryProxy(GroupRankingRepository, trafficLogger, 'GroupRankingRepository'),
+const AdAnalyticsRepositoryProxy = createRepositoryProxy(AdAnalyticsRepository, trafficLogger, 'AdAnalyticsRepository');
+const AdRepositoryProxy = createRepositoryProxy(AdRepository, trafficLogger, 'AdRepository');
+const AdminStatsRepositoryProxy = createRepositoryProxy(AdminStatsRepository, trafficLogger, 'AdminStatsRepository');
+const AggregatorRepositoryProxy = createRepositoryProxy(AggregatorRepository, trafficLogger, 'AggregatorRepository');
+const AnalyticsRepositoryProxy = createRepositoryProxy(AnalyticsRepository, trafficLogger, 'AnalyticsRepository');
+const AuditRepositoryProxy = createRepositoryProxy(AuditRepository, trafficLogger, 'AuditRepository');
+const ChatRepositoryProxy = createRepositoryProxy(ChatRepository, trafficLogger, 'ChatRepository');
+const CommentRepositoryProxy = createRepositoryProxy(CommentRepository, trafficLogger, 'CommentRepository');
+const CredentialsRepositoryProxy = createRepositoryProxy(CredentialsRepository, trafficLogger, 'CredentialsRepository');
+const FinancialAnalyticsRepositoryProxy = createRepositoryProxy(FinancialAnalyticsRepository, trafficLogger, 'FinancialAnalyticsRepository');
+const FinancialRepositoryProxy = createRepositoryProxy(FinancialRepository, trafficLogger, 'FinancialRepository');
+const GroupRepositoryProxy = createRepositoryProxy(GroupRepository, trafficLogger, 'GroupRepository');
+const InteractionRepositoryProxy = createRepositoryProxy(InteractionRepository, trafficLogger, 'InteractionRepository');
+const MarketplaceRepositoryProxy = createRepositoryProxy(MarketplaceRepository, trafficLogger, 'MarketplaceRepository');
+const NotificationRepositoryProxy = createRepositoryProxy(NotificationRepository, trafficLogger, 'NotificationRepository');
+const PaymentRepositoryProxy = createRepositoryProxy(PaymentRepository, trafficLogger, 'PaymentRepository');
+const PostRepositoryProxy = createRepositoryProxy(PostRepository, trafficLogger, 'PostRepository');
+const ReelsRepositoryProxy = createRepositoryProxy(ReelsRepository, trafficLogger, 'ReelsRepository');
+const RelationshipRepositoryProxy = createRepositoryProxy(RelationshipRepository, trafficLogger, 'RelationshipRepository');
+const ReportRepositoryProxy = createRepositoryProxy(ReportRepository, trafficLogger, 'ReportRepository');
+const UserAnalyticsRepositoryProxy = createRepositoryProxy(UserAnalyticsRepository, trafficLogger, 'UserAnalyticsRepository');
+const UserRepositoryProxy = createRepositoryProxy(UserRepository, trafficLogger, 'UserRepository');
+const FeeRepositoryProxy = createRepositoryProxy(FeeRepository, trafficLogger, 'FeeRepository');
+const GroupRankingRepositoryProxy = createRepositoryProxy(GroupRankingRepository, trafficLogger, 'GroupRankingRepository');
+
+export {
+    AdAnalyticsRepositoryProxy as AdAnalyticsRepository,
+    AdRepositoryProxy as AdRepository,
+    AdminStatsRepositoryProxy as AdminStatsRepository,
+    AggregatorRepositoryProxy as AggregatorRepository,
+    AnalyticsRepositoryProxy as AnalyticsRepository,
+    AuditRepositoryProxy as AuditRepository,
+    ChatRepositoryProxy as ChatRepository,
+    CommentRepositoryProxy as CommentRepository,
+    CredentialsRepositoryProxy as CredentialsRepository,
+    FinancialAnalyticsRepositoryProxy as FinancialAnalyticsRepository,
+    FinancialRepositoryProxy as FinancialRepository,
+    GroupRepositoryProxy as GroupRepository,
+    InteractionRepositoryProxy as InteractionRepository,
+    MarketplaceRepositoryProxy as MarketplaceRepository,
+    NotificationRepositoryProxy as NotificationRepository,
+    PaymentRepositoryProxy as PaymentRepository,
+    PostRepositoryProxy as PostRepository,
+    ReelsRepositoryProxy as ReelsRepository,
+    RelationshipRepositoryProxy as RelationshipRepository,
+    ReportRepositoryProxy as ReportRepository,
+    UserAnalyticsRepositoryProxy as UserAnalyticsRepository,
+    UserRepositoryProxy as UserRepository,
+    FeeRepositoryProxy as FeeRepository,
+    GroupRankingRepositoryProxy as GroupRankingRepository,
 };
