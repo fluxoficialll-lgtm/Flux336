@@ -5,7 +5,6 @@ import { trafficLogger } from '../../services/audit/trafficLogger.js';
 // Importa os repositórios originais
 import { AdAnalyticsRepository } from './AdAnalyticsRepository.js';
 import { AdRepository } from './AdRepository.js';
-import { AdminStatsRepository } from './AdminStatsRepository.js';
 import { AggregatorRepository } from './AggregatorRepository.js';
 import { AnalyticsRepository } from './AnalyticsRepository.js';
 import { AuditRepository } from './AuditRepository.js';
@@ -31,7 +30,6 @@ import { GroupRankingRepository } from './ranking/GroupRankingRepository.js';
 // Cria e exporta os repositórios com proxy
 const AdAnalyticsRepositoryProxy = createRepositoryProxy(AdAnalyticsRepository, trafficLogger, 'AdAnalyticsRepository');
 const AdRepositoryProxy = createRepositoryProxy(AdRepository, trafficLogger, 'AdRepository');
-const AdminStatsRepositoryProxy = createRepositoryProxy(AdminStatsRepository, trafficLogger, 'AdminStatsRepository');
 const AggregatorRepositoryProxy = createRepositoryProxy(AggregatorRepository, trafficLogger, 'AggregatorRepository');
 const AnalyticsRepositoryProxy = createRepositoryProxy(AnalyticsRepository, trafficLogger, 'AnalyticsRepository');
 const AuditRepositoryProxy = createRepositoryProxy(AuditRepository, trafficLogger, 'AuditRepository');
@@ -57,7 +55,6 @@ const GroupRankingRepositoryProxy = createRepositoryProxy(GroupRankingRepository
 export {
     AdAnalyticsRepositoryProxy as AdAnalyticsRepository,
     AdRepositoryProxy as AdRepository,
-    AdminStatsRepositoryProxy as AdminStatsRepository,
     AggregatorRepositoryProxy as AggregatorRepository,
     AnalyticsRepositoryProxy as AnalyticsRepository,
     AuditRepositoryProxy as AuditRepository,

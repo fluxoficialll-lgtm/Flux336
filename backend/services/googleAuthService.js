@@ -1,8 +1,8 @@
 
-const { OAuth2Client } = require('google-auth-library');
-const UserRepository = require('../../database/repositories/UserRepository');
-const { issueToken } = require('../utils/tokenHandler'); 
-const { v4: uuidv4 } = require('uuid');
+import { OAuth2Client } from 'google-auth-library';
+import { UserRepository } from '../database/repositories/UserRepository.js';
+import { issueToken } from '../utils/tokenHandler.js'; 
+import { v4 as uuidv4 } from 'uuid';
 
 // Usar uma única instância do cliente para ser mais eficiente
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -11,7 +11,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
  * Realiza a autenticação de um usuário com o Google, validando o token.
  * Retorna o usuário e um token de sessão.
  */
-exports.handleGoogleAuth = async (req, res) => {
+export const handleGoogleAuth = async (req, res) => {
     const { credential } = req.body;
     const traceId = req.headers['x-flux-trace-id'] || uuidv4();
 

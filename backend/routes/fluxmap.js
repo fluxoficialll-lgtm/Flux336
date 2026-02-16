@@ -9,4 +9,4 @@ router.get('/', (req, res) => {
     res.send('Página do Mapa de Fluxo');
 });
 
-export default router;
+export { router as fluxmapRoutes };

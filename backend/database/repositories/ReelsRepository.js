@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Repositório para gerenciar as operações de Reels no banco de dados (PostgreSQL).
  */
-const ReelsRepository = {
+export const ReelsRepository = {
     /**
      * Cria um novo Reel no banco de dados.
      * @param {object} reelData - Os dados do Reel a serem criados.
@@ -91,5 +91,3 @@ const ReelsRepository = {
         );
     }
 };
-
-export default ReelsRepository;

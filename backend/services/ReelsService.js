@@ -1,4 +1,4 @@
-import ReelsRepository from '../database/repositories/ReelsRepository.js';
+import { ReelsRepository } from '../database/repositories/ReelsRepository.js';
 import { storageService } from './storageService.js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -95,4 +95,4 @@ class ReelsService {
     }
 }
 
-export default new ReelsService();
+export const reelsService = new ReelsService();

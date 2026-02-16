@@ -1,32 +1,81 @@
 
 import { dbManager } from '../databaseManager.js';
-import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { trafficLogger } from './audit/trafficLogger.js';
 
-async function authenticate(email, password, traceId) {
-    trafficLogger.logSystem('info', '[PasswordAuthService] Iniciando autenticação', { trace_id: traceId, email });
+const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-    const user = await dbManager.users.findByEmail(email, traceId);
+async function register(req, res) {
+    const { email, password, name, nickname } = req.body;
 
-    if (!user) {
-        trafficLogger.logSystem('warn', '[PasswordAuthService] Usuário não encontrado', { trace_id: traceId, email });
-        return null;
+    if (!email || !password || !name || !nickname) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios: email, senha, nome e apelido.' });
     }
 
-    // Em um sistema real, o hash da senha não estaria aqui.
-    // Isso seria tratado por um repositório ou serviço de usuário de forma segura.
-    const [salt, key] = user.password_hash.split(':');
-    const derivedKey = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    try {
+        const existingUser = await dbManager.users.findByEmail(email);
+        if (existingUser) {
+            return res.status(409).json({ error: 'O e-mail fornecido já está em uso.' });
+        }
 
-    if (derivedKey !== key) {
-        trafficLogger.logSystem('warn', '[PasswordAuthService] Senha inválida', { trace_id: traceId, email });
-        return null;
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await dbManager.users.create({
+            email,
+            password: hashedPassword,
+            name,
+            profile: { name, nickname }
+        });
+
+        res.status(201).json({
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email
+        });
+
+    } catch (error) {
+        console.error("Erro no registro de usuário:", error);
+        res.status(500).json({ error: 'Erro interno do servidor ao registrar o usuário.' });
     }
-    
-    trafficLogger.logSystem('info', '[PasswordAuthService] Autenticação bem-sucedida', { trace_id: traceId, userId: user.id });
-    return user;
+}
+
+async function login(req, res) {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: 'E-mail e senha são obrigatórios.' });
+    }
+
+    try {
+        const user = await dbManager.users.findByEmail(email);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Credenciais inválidas.' });
+        }
+
+        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' });
+
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                profile: user.profile
+            }
+        });
+
+    } catch (error) {
+        console.error("Erro no login:", error);
+        res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
 }
 
 export const passwordAuthService = {
-    authenticate
+    login,
+    register
 };

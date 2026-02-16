@@ -1,5 +1,5 @@
 
-import { commentRepository } from '../database/repositories/CommentRepository.js';
+import { CommentRepository } from '../database/repositories/CommentRepository.js';
 import { NotFoundError, AppError } from '../utils/errors.js';
 
 /**
@@ -20,7 +20,7 @@ class CommentService {
         if (!commentableId || !commentableType) {
             throw new AppError('ID e Tipo do item são obrigatórios para buscar comentários.', 400);
         }
-        return await commentRepository.findByCommentable(commentableId, commentableType);
+        return await CommentRepository.findByCommentable(commentableId, commentableType);
     }
 
     /**
@@ -37,7 +37,7 @@ class CommentService {
             throw new AppError('O conteúdo do comentário não pode estar vazio.', 400);
         }
         // O repositório já lida com o erro de banco de dados, o serviço adiciona a lógica de negócio.
-        return await commentRepository.create(commentData);
+        return await CommentRepository.create(commentData);
     }
 
     /**
@@ -49,7 +49,7 @@ class CommentService {
     async deleteComment(commentId, userId) {
         // O repositório já contém a lógica para garantir que apenas o autor possa deletar.
         // Se no futuro houver moderadores, essa lógica seria adicionada aqui no serviço.
-        return await commentRepository.delete(commentId, userId);
+        return await CommentRepository.delete(commentId, userId);
     }
 }
 
