@@ -89,16 +89,54 @@ export const Login: React.FC = () => {
         }
     };
 
-    // Google Init logic
     useEffect(() => {
-        // ... (o restante da lógica de inicialização do Google permanece o mesmo)
+        if (showEmailForm || typeof google === 'undefined' || !document.getElementById(GOOGLE_BTN_ID)) {
+            return;
+        }
+
+        const initializeGoogleSignIn = async () => {
+            try {
+                const googleClientId = await authService.getGoogleClientId();
+                if (!googleClientId) {
+                    console.error("Google Client ID not found");
+                    setError("A autenticação Google não está configurada corretamente.");
+                    return;
+                }
+
+                if (buttonRendered.current) return;
+                
+                google.accounts.id.initialize({
+                    client_id: googleClientId,
+                    callback: handleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true,
+                    ux_mode: 'popup'
+                });
+
+                google.accounts.id.renderButton(
+                    document.getElementById(GOOGLE_BTN_ID),
+                    { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill' }
+                );
+                
+                buttonRendered.current = true;
+
+            } catch (error) {
+                console.error("Error initializing Google Sign-In:", error);
+                setError("Erro ao inicializar o login com Google. Tente novamente mais tarde.");
+            }
+        };
+
+        initializeGoogleSignIn();
+
     }, [showEmailForm, handleCredentialResponse]);
 
     if (loading) return null;
 
     return (
         <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#050505] text-white font-['Inter'] relative overflow-hidden">
-            {/* ... (o restante do JSX permanece o mesmo) ... */}
+            <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(/path/to/your/background.svg)'}}></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00c2ff] rounded-full filter blur-[150px] opacity-20"></div>
+
             <div className="w-full max-w-[400px] mx-4 bg-white/5 backdrop-blur-2xl rounded-[32px] p-10 border border-white/10 shadow-2xl relative z-10 flex flex-col items-center">
                 {showEmailForm ? (
                     <LoginEmailCard 
