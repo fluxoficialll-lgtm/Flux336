@@ -23,4 +23,4 @@ router.post('/log', async (req, res) => {
     }
 });
 
-export default router;
+export { router as auditRoutes };

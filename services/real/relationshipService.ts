@@ -2,9 +2,7 @@
 import { Relationship, User } from '../../types';
 import { authService } from '../authService';
 import { db } from '@/database';
-import { API_BASE } from '../../apiConfig';
-
-const API_URL = `${API_BASE}/api/relationships`;
+import { apiClient } from '../apiClient';
 
 export const relationshipService = {
   /**
@@ -15,14 +13,11 @@ export const relationshipService = {
     if (!currentId) return;
 
     try {
-        const response = await fetch(`${API_URL}/me?followerId=${encodeURIComponent(currentId)}`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data.relationships && Array.isArray(data.relationships)) {
-                data.relationships.forEach((rel: Relationship) => {
-                    db.relationships.add(rel);
-                });
-            }
+        const data = await apiClient.get(`/relationships/me?followerId=${encodeURIComponent(currentId)}`);
+        if (data && data.relationships && Array.isArray(data.relationships)) {
+            data.relationships.forEach((rel: Relationship) => {
+                db.relationships.add(rel);
+            });
         }
     } catch (e) {
         console.warn("⚠️ [Relationship] Falha ao sincronizar relacionamentos.");
@@ -45,20 +40,11 @@ export const relationshipService = {
     if (!targetUser) throw new Error("Usuário não encontrado no sistema.");
 
     try {
-        const response = await fetch(`${API_URL}/follow`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                followerId: currentId, 
-                followingId: targetUser.id,
-                status: 'accepted'
-            })
+        await apiClient.post(`/relationships/follow`, { 
+            followerId: currentId, 
+            followingId: targetUser.id,
+            status: 'accepted'
         });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || "Falha ao seguir usuário no servidor.");
-        }
 
         const rel: Relationship = { 
             followerId: currentId, 
@@ -89,14 +75,7 @@ export const relationshipService = {
     if (!targetUser) return;
     
     try {
-        const response = await fetch(`${API_URL}/unfollow`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ followerId: currentId, followingId: targetUser.id })
-        });
-
-        if (!response.ok) throw new Error("Erro ao deixar de seguir.");
-        
+        await apiClient.post(`/relationships/unfollow`, { followerId: currentId, followingId: targetUser.id });
         db.relationships.remove(currentId, targetUser.id);
     } catch (e) {
         console.error("[RelationshipService] Unfollow error:", e);
@@ -114,7 +93,6 @@ export const relationshipService = {
     const allRels = db.relationships.getAll();
     
     const rel = allRels.find(r => 
-        // Fix: changed currentUserId to currentId to match the constant defined above
         r && String(r.followerId) === String(currentId) && 
         (
             String(r.followingId) === String(targetHandleOrId) ||
@@ -195,8 +173,7 @@ export const relationshipService = {
 
   getTopCreators: async () => {
       try {
-          const res = await fetch(`${API_BASE}/api/rankings/top`);
-          const data = await res.json();
+          const data = await apiClient.get(`/rankings/top`);
           return data.data || [];
       } catch (e) {
           return [];

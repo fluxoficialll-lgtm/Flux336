@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../services/authService';
 import { trackingService } from '../services/trackingService';
-import { API_BASE } from '../apiConfig';
 import { LoginInitialCard } from '../features/auth/components/LoginInitialCard';
 import { LoginEmailCard } from '../features/auth/components/LoginEmailCard';
 
@@ -16,7 +15,6 @@ export const Login: React.FC = () => {
     const [googleAuthProcessing, setGoogleAuthProcessing] = useState(false);
     const [error, setError] = useState('');
     
-    // Email/Password State
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showEmailForm, setShowEmailForm] = useState(false);
@@ -30,16 +28,14 @@ export const Login: React.FC = () => {
 
     const handleRedirect = useCallback((user: any, isNewUser: boolean = false) => {
         setGoogleAuthProcessing(false);
-        if (isNewUser || (user && !user.isProfileCompleted)) {
-            navigate('/complete-profile', { replace: true });
-            return;
-        }
+        const targetPath = isNewUser || (user && !user.isProfileCompleted) ? '/complete-profile' : '/feed';
         const pendingRedirect = sessionStorage.getItem('redirect_after_login') || (location.state as any)?.from?.pathname;
+        
         if (pendingRedirect && pendingRedirect !== '/' && !pendingRedirect.includes('login')) {
             sessionStorage.removeItem('redirect_after_login');
             navigate(pendingRedirect, { replace: true });
         } else {
-            navigate('/feed', { replace: true });
+            navigate(targetPath, { replace: true });
         }
     }, [navigate, location]);
 
@@ -55,15 +51,18 @@ export const Login: React.FC = () => {
     const handleCredentialResponse = useCallback(async (response: any) => {
         setGoogleAuthProcessing(true);
         setError('');
+        const traceId = crypto.randomUUID();
+        
         try {
             if (!response || !response.credential) throw new Error("Login falhou.");
-            const result = await authService.loginWithGoogle(response.credential);
+            const result = await authService.loginWithGoogle(response.credential, traceId);
             if (result && result.user) {
                 const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
                 handleRedirect(result.user, isNew);
             }
         } catch (err: any) {
-            setError(err.message || 'Falha ao autenticar.');
+            const displayError = `Falha na autenticação. Se o problema persistir, contate o suporte. Código de rastreamento: ${err.traceId || traceId}`;
+            setError(displayError);
             setGoogleAuthProcessing(false);
         }
     }, [handleRedirect]);
@@ -73,64 +72,66 @@ export const Login: React.FC = () => {
         if (!email || !password || googleAuthProcessing) return;
         setGoogleAuthProcessing(true);
         setError('');
+        const traceId = crypto.randomUUID();
+        
         try {
-            const result = await authService.login(email, password);
+            const result = await authService.login(email, password, traceId);
             if (result && result.user) {
                 const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
                 handleRedirect(result.user, isNew);
             }
         } catch (err: any) {
-            setError(err.message || 'Credenciais inválidas.');
+            const displayError = `Credenciais inválidas. Se o problema persistir, contate o suporte. Código de rastreamento: ${err.traceId || traceId}`;
+            setError(displayError);
             setGoogleAuthProcessing(false);
         }
     };
 
-    // Google Init logic remains stable in the parent
     useEffect(() => {
-        if (showEmailForm) return; // Don't init if not on initial card
-        
-        let isMounted = true;
-        const initGoogle = async () => {
-            let clientId = "";
+        if (showEmailForm || typeof google === 'undefined' || !document.getElementById(GOOGLE_BTN_ID) || buttonRendered.current) {
+            return;
+        }
+
+        const initializeGoogleSignIn = async () => {
             try {
-                const res = await fetch(`${API_BASE}/api/auth/config`);
-                if (res.ok) {
-                    const data = await res.json();
-                    clientId = data.clientId;
+                const googleClientId = await authService.getGoogleClientId();
+                if (!googleClientId) {
+                    console.error("Google Client ID not found");
+                    setError("A autenticação Google não está configurada corretamente.");
+                    return;
                 }
-            } catch (err) {}
+                
+                google.accounts.id.initialize({
+                    client_id: googleClientId,
+                    callback: handleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true,
+                    ux_mode: 'popup'
+                });
 
-            if (!isMounted || !clientId || clientId.includes("CONFIGURADO")) return;
+                google.accounts.id.renderButton(
+                    document.getElementById(GOOGLE_BTN_ID),
+                    { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill' }
+                );
+                
+                buttonRendered.current = true;
 
-            const interval = setInterval(() => {
-                const btnDiv = document.getElementById(GOOGLE_BTN_ID);
-                if (typeof google !== 'undefined' && google.accounts && btnDiv) {
-                    clearInterval(interval);
-                    google.accounts.id.initialize({
-                        client_id: clientId,
-                        callback: handleCredentialResponse,
-                        auto_select: false
-                    });
-                    google.accounts.id.renderButton(btnDiv, {
-                        theme: 'filled_black',
-                        size: 'large',
-                        width: '400'
-                    });
-                }
-            }, 100);
+            } catch (error) {
+                console.error("Error initializing Google Sign-In:", error);
+                setError("Erro ao inicializar o login com Google. Tente novamente mais tarde.");
+            }
         };
-        initGoogle();
-        return () => { isMounted = false; };
+
+        initializeGoogleSignIn();
+
     }, [showEmailForm, handleCredentialResponse]);
 
     if (loading) return null;
 
     return (
         <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#050505] text-white font-['Inter'] relative overflow-hidden">
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-indigo-900/10 rounded-full blur-[100px]"></div>
-            </div>
+            <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(/path/to/your/background.svg)'}}></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00c2ff] rounded-full filter blur-[150px] opacity-20"></div>
 
             <div className="w-full max-w-[400px] mx-4 bg-white/5 backdrop-blur-2xl rounded-[32px] p-10 border border-white/10 shadow-2xl relative z-10 flex flex-col items-center">
                 {showEmailForm ? (
@@ -153,6 +154,10 @@ export const Login: React.FC = () => {
                     />
                 )}
                 
+                {error && !googleAuthProcessing && (
+                     <p className="text-red-400 text-xs text-center mt-4 max-w-full break-words">{error}</p>
+                )}
+
                 {googleAuthProcessing && (
                     <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-[32px] flex items-center justify-center z-50">
                         <i className="fa-solid fa-circle-notch fa-spin text-[#00c2ff] text-2xl"></i>

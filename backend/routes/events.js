@@ -69,4 +69,4 @@ router.get('/health', (req, res) => {
     });
 });
 
-export default router;
+export { router as eventsRoutes };

@@ -1,9 +1,15 @@
 
 import { query } from '../pool.js';
+import { logger } from '../../config.js'; // Corrigido
 
-const toUuid = (val) => (val === "" || val === "undefined" || val === "null") ? null : val;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// Esta função agora extrai os metadados da coluna 'data' JSONB.
+const toUuid = (val) => {
+    if (!val || typeof val !== 'string') return null;
+    const cleanedVal = val.trim();
+    return UUID_REGEX.test(cleanedVal) ? cleanedVal : null;
+};
+
 const mapRowToUser = (row) => {
     if (!row) return null;
     const data = typeof row.data === 'string' ? JSON.parse(row.data) : (row.data || {});
@@ -15,87 +21,91 @@ const mapRowToUser = (row) => {
         googleId: row.google_id,
         isProfileCompleted: row.is_profile_completed,
         createdAt: row.created_at,
-        ...data // Combina os campos de dentro do JSONB no objeto de usuário.
+        ...data
     };
 };
 
 export const UserRepository = {
-    async findByEmail(email) {
+    async findByEmail(email, traceId) {
         if (!email) return null;
-        const res = await query('SELECT * FROM users WHERE email = $1', [email.toLowerCase().trim()]);
-        return mapRowToUser(res.rows[0]);
+        const sql = 'SELECT * FROM users WHERE email = $1';
+        const params = [email.toLowerCase().trim()];
+        logger.logSystem('info', '[UserRepository] Executing findByEmail', { trace_id: traceId, sql, params });
+        const res = await query(sql, params);
+        const user = mapRowToUser(res.rows[0]);
+        logger.logSystem('info', '[UserRepository] Result findByEmail', { trace_id: traceId, found: !!user });
+        return user;
     },
 
-    async findByHandle(handle) {
+    async findByHandle(handle, traceId) {
         if (!handle) return null;
-        const res = await query('SELECT * FROM users WHERE handle = $1', [handle.toLowerCase().trim()]);
+        const sql = 'SELECT * FROM users WHERE handle = $1';
+        const params = [handle.toLowerCase().trim()];
+        logger.logSystem('info', '[UserRepository] Executing findByHandle', { trace_id: traceId, sql, params });
+        const res = await query(sql, params);
         return mapRowToUser(res.rows[0]);
     },
 
-    async findById(id) {
+    async findById(id, traceId) {
         const uuid = toUuid(id);
         if (!uuid) return null;
-        const res = await query('SELECT * FROM users WHERE id = $1', [uuid]);
+        const sql = 'SELECT * FROM users WHERE id = $1';
+        const params = [uuid];
+        logger.logSystem('info', '[UserRepository] Executing findById', { trace_id: traceId, sql, params });
+        const res = await query(sql, params);
         return mapRowToUser(res.rows[0]);
     },
 
-    async findByGoogleId(googleId) {
+    async findByGoogleId(googleId, traceId) {
         if (!googleId) return null;
-        const res = await query('SELECT * FROM users WHERE google_id = $1', [googleId]);
-        return mapRowToUser(res.rows[0]);
+        const sql = 'SELECT * FROM users WHERE google_id = $1';
+        const params = [googleId];
+        logger.logSystem('info', '[UserRepository] Executing findByGoogleId', { trace_id: traceId, sql, params });
+        const res = await query(sql, params);
+        const user = mapRowToUser(res.rows[0]);
+        logger.logSystem('info', '[UserRepository] Result findByGoogleId', { trace_id: traceId, found: !!user });
+        return user;
     },
 
-    async searchByTerm(term) {
+    async searchByTerm(term, traceId) {
         if (!term || term.trim() === '') {
             return [];
         }
         const searchTerm = `%${term.toLowerCase().trim()}%`;
-        const res = await query(
-            'SELECT id, email, handle, data, is_profile_completed FROM users WHERE handle ILIKE $1 OR email ILIKE $1 ORDER BY handle ASC LIMIT 25',
-            [searchTerm]
-        );
+        const sql = 'SELECT id, email, handle, data, is_profile_completed FROM users WHERE handle ILIKE $1 OR email ILIKE $1 ORDER BY handle ASC LIMIT 25';
+        const params = [searchTerm];
+        logger.logSystem('info', '[UserRepository] Executing searchByTerm', { trace_id: traceId, sql, params });
+        const res = await query(sql, params);
         return res.rows.map(mapRowToUser);
     },
 
-    async create(userData) {
+    async create(userData, traceId) {
         const { email, password_hash, google_id, handle, is_profile_completed, ...data } = userData;
 
         const columns = ['email'];
         const values = [email.toLowerCase().trim()];
 
-        if (password_hash) {
-            columns.push('password_hash');
-            values.push(password_hash);
-        }
-        if (google_id) {
-            columns.push('google_id');
-            values.push(google_id);
-        }
-        if (handle) {
-            columns.push('handle');
-            values.push(handle.toLowerCase().trim());
-        }
-        if (is_profile_completed !== undefined) {
-            columns.push('is_profile_completed');
-            values.push(is_profile_completed);
-        }
+        if (password_hash) { columns.push('password_hash'); values.push(password_hash); }
+        if (google_id) { columns.push('google_id'); values.push(google_id); }
+        if (handle) { columns.push('handle'); values.push(handle.toLowerCase().trim()); }
+        if (is_profile_completed !== undefined) { columns.push('is_profile_completed'); values.push(is_profile_completed); }
         
-        // Os dados restantes são agrupados no JSONB.
         columns.push('data');
         values.push(JSON.stringify(data));
 
         const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
         const columnNames = columns.join(', ');
+        
+        const sql = `INSERT INTO users (${columnNames}) VALUES (${placeholders}) RETURNING id`;
+        logger.logSystem('info', '[UserRepository] Executing create', { trace_id: traceId, sql, values });
 
-        const res = await query(
-            `INSERT INTO users (${columnNames}) VALUES (${placeholders}) RETURNING id`,
-            values
-        );
-        return res.rows[0].id;
+        const res = await query(sql, values);
+        const newId = res.rows[0].id;
+        logger.logSystem('info', '[UserRepository] Result create', { trace_id: traceId, newId });
+        return newId;
     },
 
-    // A função de atualização agora usa a coluna 'data' corretamente.
-    async update(user) {
+    async update(user, traceId) {
         const { id, handle, is_profile_completed, ...data } = user;
         const uuid = toUuid(id);
         
@@ -106,18 +116,23 @@ export const UserRepository = {
                 data = data || $3::jsonb
             WHERE id = $4
         `;
-
-        await query(sql, [
+        const params = [
             handle || null,
             is_profile_completed !== undefined ? is_profile_completed : null,
             JSON.stringify(data),
             uuid
-        ]);
+        ];
+        logger.logSystem('info', '[UserRepository] Executing update', { trace_id: traceId, sql, params });
+
+        await query(sql, params);
+        logger.logSystem('info', '[UserRepository] Result update', { trace_id: traceId, updated: true, userId: uuid });
         return true;
     },
 
-    async getAll() {
-        const res = await query('SELECT * FROM users ORDER BY created_at DESC LIMIT 1000');
+    async getAll(traceId) {
+        const sql = 'SELECT * FROM users ORDER BY created_at DESC LIMIT 1000';
+        logger.logSystem('info', '[UserRepository] Executing getAll', { trace_id: traceId, sql });
+        const res = await query(sql);
         return res.rows.map(mapRowToUser);
     }
 };

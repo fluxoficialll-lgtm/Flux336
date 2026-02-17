@@ -3,9 +3,13 @@ import React from 'react';
 import { marketplaceService } from '../../../services/marketplaceService';
 import { ProductCard } from '../../../components/marketplace/ProductCard';
 
-export const ProfileProductsGrid: React.FC = () => {
+interface ProfileProductsGridProps {
+    userId: string;
+}
 
-    const products = marketplaceService.getProductsByCurrentUser();
+export const ProfileProductsGrid: React.FC<ProfileProductsGridProps> = ({ userId }) => {
+
+    const products = marketplaceService.getProductsByUserId(userId);
 
     if (products.length === 0) return <div className="text-center text-gray-400 mt-8">Nenhum produto na loja.</div>;
 

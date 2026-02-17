@@ -53,4 +53,4 @@ router.delete('/:id', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-export default router;
+export { router as groupsRoutes };

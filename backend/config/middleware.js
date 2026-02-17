@@ -4,25 +4,26 @@ import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
 import { bridgeLogger } from '../services/audit/bridgeLogger.js';
-import { trafficLogger } from '../services/audit/trafficLogger.js';
+import { logger } from '../config.js'; // Corrigido: Importa o logger centralizado
 import { heartbeatLogger } from '../services/audit/heartbeatLogger.js';
+import { traceMiddleware } from '../middleware/traceMiddleware.js';
 
 export const setupMiddlewares = (app, io) => {
-    // Configuração do Helmet otimizada para Google Auth e Aplicações Híbridas
+    // 1. MIDDLEWARE DE RASTREAMENTO
+    app.use(traceMiddleware);
+
+    // 2. MIDDLEWARES DE SEGURANÇA E PERFORMANCE
     app.use(helmet({
-        contentSecurityPolicy: false, // Desabilitado para permitir scripts externos como o do Google
+        contentSecurityPolicy: false,
         crossOriginEmbedderPolicy: false,
-        // CRÍTICO: Permite que o popup do Google se comunique com a aba principal
         crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
-        // Garante que o Google receba a origem correta da requisição
         referrerPolicy: { policy: "no-referrer-when-downgrade" }
     }));
 
     app.use(cors({
-        origin: true, // Permite qualquer origem que envie credenciais (ideal para dev e múltiplos domínios)
+        origin: true,
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-        // Adicionados cabeçalhos customizados usados pelo fluxClient e sistemas internos
         allowedHeaders: [
             'Content-Type', 
             'Authorization', 
@@ -31,45 +32,40 @@ export const setupMiddlewares = (app, io) => {
             'Origin', 
             'Cache-Control', 
             'X-Flux-Client-ID', 
-            'X-Flux-Trace-ID',
+            'x-flux-trace-id',
             'X-Admin-Action',
             'X-Protocol-Version'
         ],
-        exposedHeaders: ['X-Flux-Trace-ID']
+        exposedHeaders: ['x-flux-trace-id']
     }));
 
     app.use(compression());
     app.use(express.json({ limit: '50mb' })); 
     app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+    // 3. MIDDLEWARE DE LOGGING E CONTEXTO
     app.use((req, res, next) => {
         const start = Date.now();
+        
+        // Log de entrada com o logger centralizado
+        logger.logInbound(req);
+
         const clientId = req.headers['x-flux-client-id'];
-
-        // 1. Log de Entrada
-        if (req.method === 'OPTIONS') {
-            trafficLogger.logCors(req);
-        } else {
-            trafficLogger.logInbound(req);
-        }
-
         if (clientId) {
             heartbeatLogger.logPulse(clientId);
         }
 
-        // 2. Interceptor de Resposta (Saída)
         res.on('finish', () => {
             const duration = Date.now() - start;
             
-            // Log de Bridge para Validação de Auth
             if (res.statusCode === 401 || res.statusCode === 403) {
                 bridgeLogger.logAccessRefused(req, 'Unauthorized/Forbidden');
             } else if (req.path.includes('/admin/') && res.statusCode < 400) {
                 bridgeLogger.logAccessGranted(req, 'ADMIN_ACCESS');
             }
 
-            // Log de Tráfego de Saída
-            trafficLogger.logOutbound(req, res, duration);
+            // Log de saída com o logger centralizado
+            logger.logOutbound(req, res, duration);
         });
         
         req.io = io;
@@ -77,4 +73,17 @@ export const setupMiddlewares = (app, io) => {
     });
 
     app.set('trust proxy', 1);
+    
+    // 4. ERROR HANDLER GLOBAL
+    app.use((error, req, res, next) => {
+        // Usa o logger de erro centralizado
+        logger.logError(error, req);
+
+        if (!res.headersSent) {
+            res.status(500).json({
+                message: 'Internal Server Error',
+                trace_id: req.traceId 
+            });
+        }
+    });
 };

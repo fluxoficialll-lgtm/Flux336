@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { AdAnalyticsRepository } from '../database/repositories/AdAnalyticsRepository.js';
+import { AdAnalyticsRepository } from '../database/repositories/index.js';
 import { dbManager } from '../databaseManager.js';
 
 const router = express.Router();
@@ -76,4 +76,4 @@ router.post('/track', async (req, res) => {
     }
 });
 
-export default router;
+export { router as adRoutes };

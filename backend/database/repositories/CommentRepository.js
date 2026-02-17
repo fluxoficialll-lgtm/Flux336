@@ -8,7 +8,7 @@ import { NotFoundError, AppError } from '../../utils/errors.js';
  * para vincular comentários a diferentes tipos de conteúdo (posts, reels, etc.).
  */
 
-class CommentRepository {
+export const CommentRepository = {
 
     /**
      * Encontra todos os comentários para um item "comentável" específico (ex: um Post ou Reel).
@@ -30,7 +30,7 @@ class CommentRepository {
         } catch (error) {
             throw new AppError('Erro ao buscar comentários no banco de dados.', 500, error);
         }
-    }
+    },
 
     /**
      * Cria um novo comentário para um item.
@@ -52,7 +52,7 @@ class CommentRepository {
         } catch (error) {
             throw new AppError('Erro ao criar comentário no banco de dados.', 500, error);
         }
-    }
+    },
 
     /**
      * Deleta um comentário pelo seu ID.
@@ -78,6 +78,4 @@ class CommentRepository {
             throw new AppError('Erro ao deletar comentário no banco de dados.', 500, error);
         }
     }
-}
-
-export const commentRepository = new CommentRepository();
+};

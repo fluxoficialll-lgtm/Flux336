@@ -39,23 +39,42 @@ export const marketplaceService = {
   },
 
   getItems: (): MarketplaceItem[] => {
-    // BLINDADO: Garante que sempre retorne um array, mesmo que o banco de dados esteja vazio.
     const items = db.marketplace.getAll() || [];
     return items.sort((a, b) => (Number(b.timestamp) || 0) - (Number(a.timestamp) || 0));
   },
 
   getItemById: (id: string): MarketplaceItem | undefined => {
-    // BLINDADO: Garante que a busca seja feita em um array.
     const items = db.marketplace.getAll() || [];
     return items.find(item => item.id === id);
+  },
+
+  getProductsByUserId: async (userId: string): Promise<MarketplaceItem[]> => {
+    try {
+        const response = await fetch(`${API_URL}/user/${userId}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data && Array.isArray(data.data)) {
+                sqlite.upsertItems('marketplace', data.data);
+                return data.data;
+            }
+        }
+    } catch (e) {
+        console.warn(`Falha ao buscar produtos para o usuário ${userId}.`, e);
+    }
+    // Fallback para dados locais em caso de erro na API
+    return db.marketplace.getAll().filter(item => item.sellerId === userId);
+  },
+
+  getProductsByCurrentUser: () => {
+      const currentUser = authService.getCurrentUser();
+      if (!currentUser) return Promise.resolve([]);
+      return marketplaceService.getProductsByUserId(currentUser.id);
   },
   
   createItem: async (item: MarketplaceItem) => {
     item.dna = await ContentDnaService.generateDna(item);
-
     db.marketplace.add(item);
     logService.logEvent('PostgreSQL Marketplace Metadados Adicionados. ✅', { itemId: item.id });
-
     try {
         await fetch(`${API_URL}/create`, {
             method: 'POST',
@@ -68,7 +87,6 @@ export const marketplaceService = {
   deleteItem: async (id: string) => {
     db.marketplace.delete(id);
     logService.logEvent('PostgreSQL Marketplace Metadados Apagados. 🗑️', { itemId: id });
-
     try {
         await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
     } catch (e) {}

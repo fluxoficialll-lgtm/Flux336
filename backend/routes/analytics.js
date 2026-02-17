@@ -57,4 +57,4 @@ router.post('/log-payment-method', async (req, res) => {
     }
 });
 
-export default router;
+export { router as analyticsRoutes };

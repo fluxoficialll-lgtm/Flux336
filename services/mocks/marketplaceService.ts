@@ -1,4 +1,5 @@
 
+import { authService } from '../authService';
 import { MarketplaceItem, Comment, User } from '../../types';
 import { db } from '../../database';
 
@@ -24,6 +25,16 @@ export const marketplaceService = {
   deleteItem: async (id: string) => db.marketplace.delete(id),
   trackView: () => {},
   
+  getProductsByUserId: (userId: string) => {
+    return db.marketplace.getAll().filter(item => item.sellerId === userId);
+  },
+
+  getProductsByCurrentUser: () => {
+      const currentUser = authService.getCurrentUser();
+      if (!currentUser) return [];
+      return marketplaceService.getProductsByUserId(currentUser.id);
+  },
+
   addComment: (itemId: string, text: string, user: User) => {
       const item = db.marketplace.findById(itemId);
       if (item) {

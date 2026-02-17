@@ -1,73 +1,62 @@
 
 import express from 'express';
-import authRoutes from './routes/auth.js';
-import usersRoutes from './routes/users.js';
-import groupsRoutes from './routes/groups.js';
-import messagesRoutes from './routes/messages.js';
-import adminRoutes from './routes/admin.js';
-import paymentRoutes from './routes/payments.js';
-import socialRoutes from './routes/social.js';
-import eventRoutes from './routes/events.js';
-import marketplaceRoutes from './routes/marketplace.js';
-import postsRoutes from './routes/posts.js';
-import reelsRoutes from './routes/reels.js';
-import adsRoutes from './routes/ads.js';
-import screensRoutes from './routes/screens.js';
-import moderationRoutes from './routes/moderation.js';
-import trackingRoutes from './routes/tracking.js';
-import rankingRoutes from './routes/ranking.js';
-import profileRoutes from './routes/profile.js';
-import fluxmapRoutes from './routes/fluxmap.js';
-import credentialsRoutes from './routes/credentials.js';
-import userRoutes from './routes/user.js';
-import notificationRoutes from './routes/notifications.js';
-import { commentRoutes } from './routes/commentRoutes.js';
-import logsRoutes from './routes/logs.js'; // Importando a nova rota de logs
+import { traceMiddleware } from './middleware/traceMiddleware.js';
 
-// Gateway specific routes
-import syncpayRoutes from './routes/gateways/syncpay.js';
-import stripeRoutes from './routes/gateways/stripe.js';
-import paypalRoutes from './routes/gateways/paypal.js';
+// Import all routes
+import { adRoutes } from './routes/ads.js';
+import { analyticsRoutes } from './routes/analytics.js';
+import { auditRoutes } from './routes/audit.js';
+import { authRoutes } from './routes/auth.js';
+import { commentRoutes } from './routes/commentRoutes.js';
+import { credentialsRoutes } from './routes/credentials.js';
+import { eventsRoutes } from './routes/events.js';
+import { fluxmapRoutes } from './routes/fluxmap.js';
+import { groupsRoutes } from './routes/groups.js';
+import logsRoutes from './routes/logs.js';
+import marketplaceRoutes from './routes/marketplace.js';
+import messagesRoutes from './routes/messages.js';
+import moderationRoutes from './routes/moderation.js';
+import notificationsRoutes from './routes/notifications.js';
+import paymentsRoutes from './routes/payments.js';
+import postsRoutes from './routes/posts.js';
+import profileRoutes from './routes/profile.js';
+import rankingRoutes from './routes/ranking.js';
+import reelsRoutes from './routes/reels.js';
+import screensRoutes from './routes/screens.js';
+import socialRoutes from './routes/social.js';
+import trackingRoutes from './routes/tracking.js';
+import usersRoutes from './routes/users.js';
+import adminRoutes from './routes/admin.js';
 
 const router = express.Router();
 
-// Handshake Route (Batimento)
-router.get('/ping', (req, res) => res.send('pong'));
+// Apply trace middleware to all routes
+router.use(traceMiddleware);
 
-// BFF / Screens Aggregator
-router.use('/screens', screensRoutes);
-
-// Register modular routers
+// Use all imported routes
+router.use('/ads', adRoutes);
+router.use('/analytics', analyticsRoutes);
+router.use('/audit', auditRoutes);
 router.use('/auth', authRoutes);
-router.use('/users', usersRoutes);
-router.use('/groups', groupsRoutes);
-router.use('/messages', messagesRoutes);
-router.use('/admin', adminRoutes);
-router.use('/events', eventRoutes);
-router.use('/marketplace', marketplaceRoutes);
-router.use('/posts', postsRoutes);
-router.use('/reels', reelsRoutes);
-router.use('/ads', adsRoutes);
-router.use('/moderation', moderationRoutes);
-router.use('/tracking', trackingRoutes);
-router.use('/ranking', rankingRoutes);
-router.use('/profile', profileRoutes);
-router.use('/fluxmap', fluxmapRoutes);
+router.use('/comments', commentRoutes);
 router.use('/credentials', credentialsRoutes);
-router.use('/user', userRoutes);
-router.use('/notifications', notificationRoutes);
-router.use('/logs', logsRoutes); // Registrando a rota de logs
-
-// Mounting Gateways
-router.use('/syncpay', syncpayRoutes);
-router.use('/stripe', stripeRoutes);
-router.use('/paypal', paypalRoutes);
-
-// Mounting specific prefixes to maintain compatibility with frontend services
-router.use('/', socialRoutes);
-router.use('/', paymentRoutes);
-
-// Montando as rotas de comentário na raiz para suportar URLs polimórficas
-router.use('/', commentRoutes);
+router.use('/events', eventsRoutes);
+router.use('/fluxmap', fluxmapRoutes);
+router.use('/groups', groupsRoutes);
+router.use('/logs', logsRoutes);
+router.use('/marketplace', marketplaceRoutes);
+router.use('/messages', messagesRoutes);
+router.use('/moderation', moderationRoutes);
+router.use('/notifications', notificationsRoutes);
+router.use('/payments', paymentsRoutes);
+router.use('/posts', postsRoutes);
+router.use('/profile', profileRoutes);
+router.use('/ranking', rankingRoutes);
+router.use('/reels', reelsRoutes);
+router.use('/screens', screensRoutes);
+router.use('/social', socialRoutes);
+router.use('/tracking', trackingRoutes);
+router.use('/users', usersRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;

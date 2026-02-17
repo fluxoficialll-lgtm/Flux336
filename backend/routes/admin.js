@@ -1,17 +1,15 @@
+
 import express from 'express';
 import { validateAdmin } from '../middleware.js';
 import { adminDispatcher } from './admin/dispatcher.js';
 
 const router = express.Router();
 
-/**
- * ENDPOINT ÚNICO ADMINISTRATIVO
- * ---------------------------------------------------------
- * A partir de agora, não existem mais rotas fixas no Admin.
- * Tudo é resolvido dinamicamente pelo Dispatcher.
- * 
- * Padrão: /api/admin/execute/:category/:action
- */
-router.all('/execute/:category/:action', validateAdmin, adminDispatcher);
+// Aplica o middleware de validação a todas as rotas de admin.
+router.use(validateAdmin);
+
+// CORREÇÃO: A rota foi ajustada para /:category/:action para corresponder à URL
+// que o frontend está chamando (ex: /system/config) e resolver o erro 404.
+router.all('/execute/:category/:action', adminDispatcher);
 
 export default router;

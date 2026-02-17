@@ -1,16 +1,13 @@
 
 import React from 'react';
-import { authService } from '../../../services/authService';
 import { postService } from '../../../services/postService';
 
-export const ProfileReelsGrid: React.FC = () => {
-    const currentUser = authService.getCurrentUser();
-    
-    if (!currentUser) {
-        return <div className="text-center text-gray-400 mt-8">Usuário não encontrado.</div>;
-    }
+interface ProfileReelsGridProps {
+    userId: string;
+}
 
-    const posts = postService.getPostsByAuthor(currentUser.id);
+export const ProfileReelsGrid: React.FC<ProfileReelsGridProps> = ({ userId }) => {
+    const posts = postService.getUserPosts(userId);
 
     if (posts.length === 0) {
         return <div className="text-center text-gray-400 mt-8">Sem reels para mostrar.</div>;

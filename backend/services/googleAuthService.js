@@ -1,62 +1,76 @@
 
-import { dbManager } from '../databaseManager.js';
 import { OAuth2Client } from 'google-auth-library';
-import { googleAuthConfig } from '../authConfig.js';
-import crypto from 'crypto';
+import { UserRepository } from '../database/repositories/UserRepository.js';
+import { issueToken } from '../utils/tokenHandler.js'; 
+import { v4 as uuidv4 } from 'uuid';
 
-const client = new OAuth2Client(googleAuthConfig.clientId);
+// Usar uma única instância do cliente para ser mais eficiente
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-async function authenticate(googleToken) {
-    let googleId, email, name;
+/**
+ * Realiza a autenticação de um usuário com o Google, validando o token.
+ * Retorna o usuário e um token de sessão.
+ */
+export const handleGoogleAuth = async (req, res) => {
+    const { credential } = req.body;
+    const traceId = req.headers['x-flux-trace-id'] || uuidv4();
 
-    if (googleAuthConfig.clientId !== "GOOGLE_CLIENT_ID_NAO_CONFIGURADO" && googleToken && googleToken.length > 50) {
-        try {
-            const ticket = await client.verifyIdToken({ idToken: googleToken, audience: googleAuthConfig.clientId });
-            const payload = ticket.getPayload();
-            googleId = payload['sub'];
-            email = payload['email'];
-            name = payload['name'];
-        } catch (err) {
-            console.warn("Falha na verificação do token do Google:", err.message);
+    if (!credential) {
+        return res.status(400).json({ error: 'O token de credencial do Google não foi fornecido.', trace_id: traceId });
+    }
+
+    try {
+        // Verifica o token de ID do Google
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        
+        const payload = ticket.getPayload();
+
+        if (!payload || !payload.email || !payload.sub) {
+            return res.status(401).json({ error: 'O token do Google é inválido ou não contém as informações necessárias.', trace_id: traceId });
         }
-    }
 
-    if (!googleId) {
-        googleId = `mock_${crypto.randomUUID().substring(0, 8)}`;
-        email = `guest_${googleId}@gmail.com`;
-    }
+        const { email, name, picture, sub: googleId } = payload;
+        
+        let user = await UserRepository.findByEmail(email);
+        let isNew = false;
 
-    let user = await dbManager.users.findByGoogleId(googleId);
-    let isNew = false;
-
-    if (!user) {
-        const existingByEmail = await dbManager.users.findByEmail(email);
-        if (existingByEmail) {
-            user = existingByEmail;
-            user.googleId = googleId;
-            await dbManager.users.update(user);
-        } else {
-            isNew = true;
+        if (!user) {
+            // Se o usuário não existe, cria um novo
             const newUser = {
-                email: email.toLowerCase().trim(),
-                googleId,
-                isVerified: true,
-                isProfileCompleted: false,
-                profile: {
-                    name: `user_${googleId.slice(-4)}`,
-                    nickname: name || 'Usuário Flux',
-                    isPrivate: false,
-                    photoUrl: ''
-                }
+                email,
+                google_id: googleId,
+                profile: { 
+                    name: name || 'Usuário',
+                    picture: picture || null 
+                },
+                is_profile_completed: false, // Perfil não completo
             };
-            const id = await dbManager.users.create(newUser);
-            user = { ...newUser, id };
+            user = await UserRepository.create(newUser);
+            isNew = true;
+        } else {
+            // Se o usuário já existe, mas não tem o google_id, atualiza
+            if (!user.google_id) {
+                await UserRepository.update(user.id, { google_id: googleId });
+            }
         }
-    }
-    
-    return { user, isNew };
-}
+        
+        // Gera um token de sessão para o usuário
+        const token = issueToken({ userId: user.id, email: user.email });
 
-export const googleAuthService = {
-    authenticate
+        res.status(200).json({ 
+            token, 
+            user,
+            isNew 
+        });
+
+    } catch (error) {
+        console.error(`[${traceId}] Erro na autenticação com Google:`, error);
+        res.status(500).json({ 
+            error: 'Ocorreu um erro interno durante a autenticação com o Google.', 
+            trace_id: traceId 
+        });
+    }
 };

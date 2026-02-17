@@ -1,138 +1,81 @@
 
-import 'dotenv/config';
+// Importa a configuração centralizada primeiro para garantir que as variáveis de ambiente sejam carregadas.
+import { config } from './backend/config.js';
+
 import express from 'express';
-import path from 'path';
-import fs from 'fs';
-import http from 'http';
-import { fileURLToPath } from 'url';
-import pg from 'pg';
-import { S3Client, ListBucketsCommand } from "@aws-sdk/client-s3";
+import cors from 'cors';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import compression from 'compression';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
+import { initializeApp, cert } from 'firebase-admin/app';
 
-// Configurações Modulares
-import { initSocket } from './backend/config/socket.js';
-import { setupMiddlewares } from './backend/config/middleware.js';
-import { upload } from './backend/config/storage.js';
+import routes from './backend/routes.js';
 
-// Auditoria e Telemetria
-import { traceMiddleware } from './backend/services/audit/TraceMiddleware.js';
-
-// Serviços e Rotas
-import { dbManager } from './backend/databaseManager.js';
-import { storageService } from './backend/services/storageService.js';
-import { IntegrityCheck } from './backend/jobs/IntegrityCheck.js';
-import apiRoutes from './backend/routes.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Inicialização do Firebase Admin usando a configuração importada
+if (config.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    try {
+        const serviceAccount = JSON.parse(config.FIREBASE_SERVICE_ACCOUNT_KEY);
+        initializeApp({
+          credential: cert(serviceAccount)
+        });
+        console.log('Firebase Admin SDK inicializado com sucesso.');
+    } catch (error) {
+        console.error('Erro ao inicializar o Firebase Admin SDK: A chave FIREBASE_SERVICE_ACCOUNT_KEY parece estar mal formatada.', error);
+    }
+}
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const httpServer = http.createServer(app);
+const port = config.PORT;
 
-// 1. Inicialização da Infraestrutura e Socket
-const io = initSocket(httpServer);
-setupMiddlewares(app, io);
+// Confia no proxy reverso (Render, Heroku, etc) para obter o IP real do usuário.
+// Isso é crucial para que o express-rate-limit funcione corretamente.
+app.set('trust proxy', 1);
 
-// 2. Injeção de Camada de Observabilidade (Trace ID)
-app.use(traceMiddleware);
+// Middlewares de Segurança
+app.use(helmet());
+app.use(compression());
+app.use(express.json({ limit: '10kb' }));
+app.use(hpp());
 
-// 3. Inicialização do Banco de Dados e Manutenção
-dbManager.init()
-    .then(() => {
-        console.log("✅ [System] Database system initialized.");
-        setTimeout(() => {
-            IntegrityCheck.fixGroupMemberCounts();
-            IntegrityCheck.cleanupExpiredVip();
-        }, 5000);
+// CORS - agora usa a configuração do config.js
+const corsOptions = {
+    origin: config.ALLOWED_ORIGINS,
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
-        setInterval(() => {
-            IntegrityCheck.fixGroupMemberCounts();
-        }, 1000 * 60 * 60);
-    })
-    .catch(err => console.error("❌ [System] DB Boot Error:", err));
-
-// Rota de Health Check
-app.get('/health', async (req, res) => {
-    const checks = {};
-
-    // Verifica o PostgreSQL
-    try {
-        const client = new pg.Client({
-            connectionString: process.env.DATABASE_URL,
-            ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-        });
-        await client.connect();
-        checks.postgresql = 'ok';
-        await client.end();
-    } catch (e) {
-        checks.postgresql = 'error';
-    }
-
-    // Verifica o Cloudflare R2
-    try {
-        const r2Client = new S3Client({
-            region: "auto",
-            endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-            credentials: {
-                accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
-                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
-            },
-        });
-        await r2Client.send(new ListBucketsCommand({}));
-        checks.r2 = 'ok';
-    } catch (e) {
-        checks.r2 = 'error';
-    }
-
-    res.status(checks.postgresql === 'ok' && checks.r2 === 'ok' ? 200 : 500).json(checks);
+// Rate Limiter
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false, 
 });
+app.use('/api/', limiter);
 
-// --- ROTAS DE API ---
-app.use('/api', apiRoutes);
+// Rotas da API
+app.use('/api', routes);
 
-app.post('/api/upload', upload.single('file'), async (req, res) => {
-    if (!req.file) return res.status(400).json({ error: 'Nenhum arquivo enviado' });
-    try {
-        const folder = req.body.folder || 'misc';
-        const fileUrl = await storageService.uploadFile(req.file, folder);
-        res.json({ success: true, files: [{ url: fileUrl }] });
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao processar upload para nuvem' });
-    }
-});
-
-// --- SERVIÇO DE ARQUIVOS ESTÁTICOS (SPA) ---
-const distPath = path.resolve(process.cwd(), 'dist');
-app.use(express.static(distPath));
-
-// Tratamento de erro 404 para API (Sempre JSON)
-app.use('/api', (req, res) => {
-    res.status(404).json({ 
-        error: "Endpoint não encontrado no Dispatcher Administrativo.",
-        path: req.path,
-        method: req.method
+// Configuração do ambiente de desenvolvimento vs produção
+if (config.NODE_ENV !== 'production') {
+    // Modo de Desenvolvimento (proxy para Vite)
+    app.use('/', createProxyMiddleware({
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        ws: true,
+    }));
+} else {
+    // Modo de Produção (servir arquivos estáticos)
+    app.use(express.static('dist'));
+    app.get('*', (req, res) => {
+        res.sendFile('index.html', { root: 'dist' });
     });
-});
+}
 
-// Tratamento global de erros (Sempre JSON para API)
-app.use((err, req, res, next) => {
-    if (req.path.startsWith('/api')) {
-        console.error(`🔴 [API Error]: ${err.message}`);
-        return res.status(500).json({ error: "Erro interno no servidor de dados.", details: err.message });
-    }
-    next(err);
-});
-
-// Catch-all para SPA (Apenas se NÃO for API)
-app.get('*', (req, res) => {
-    const indexPath = path.join(distPath, 'index.html');
-    if (fs.existsSync(indexPath)) {
-        res.sendFile(indexPath);
-    } else {
-        res.status(404).send('Frontend build not found.');
-    }
-});
-
-httpServer.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 [System] Flux Server running on port ${PORT}.`);
+// Iniciar o servidor
+app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
+    console.log(`Ambiente: ${config.NODE_ENV}`);
 });

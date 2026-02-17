@@ -1,3 +1,4 @@
+
 import { db } from '@/database';
 import { sqlite } from '@/database/engine';
 import { ChatMessage, ChatData, User } from '../../types';
@@ -9,7 +10,7 @@ const API_URL = `${API_BASE}/api/messages`;
 
 export const chatService = {
 
-    // --- Novas Funções de Sincronização e Acesso a Dados ---
+    // --- Funções de Sincronização e Acesso a Dados ---
 
     async syncChats(): Promise<void> {
         try {
@@ -26,11 +27,100 @@ export const chatService = {
         return db.chats.getAll();
     },
 
+    getChat: (chatId: string): ChatData | undefined => {
+        const chat = db.chats.get(chatId);
+        // Retornar uma estrutura de ChatData mesmo que vazia para evitar erros
+        if (!chat) {
+            return {
+                id: chatId,
+                messages: [],
+                participants: [],
+                type: 'group', // ou 'direct' dependendo da lógica
+                unreadCount: 0
+            };
+        }
+        return chat;
+    },
+
     getChatById: (chatId: string): ChatData | undefined => {
         return db.chats.get(chatId);
     },
+
+    sendMessage: (chatId: string, message: ChatMessage): void => {
+        const chat = db.chats.get(chatId);
+        if (chat) {
+            const updatedMessages = [...(chat.messages || []), message];
+            sqlite.upsertItems('chats', [{ ...chat, messages: updatedMessages }]);
+        } else {
+            const newChatData: ChatData = {
+                id: chatId,
+                type: 'group', 
+                participants: [], 
+                messages: [message],
+                unreadCount: 1,
+                lastMessage: message.text,
+                lastMessageTimestamp: new Date().toISOString()
+            };
+            sqlite.upsertItems('chats', [newChatData]);
+        }
+    },
+
+    markChatAsRead: (chatId: string): void => {
+        const chat = db.chats.get(chatId);
+        if (chat && Array.isArray(chat.messages)) {
+            const currentUser = authService.getCurrentUser();
+            if (!currentUser) return;
+
+            let needsUpdate = false;
+            chat.messages.forEach(message => {
+                // Considera a mensagem como não lida se não tiver a propriedade isRead
+                if (message.senderEmail !== currentUser.email && (message.isRead === false || message.isRead === undefined)) {
+                    message.isRead = true;
+                    needsUpdate = true;
+                }
+            });
+
+            if (needsUpdate) {
+                chat.unreadCount = 0;
+                sqlite.upsertItems('chats', [chat]);
+            }
+        }
+    },
     
-    // --- Funções Auxiliares e de Interação (Mantidas) ---
+    deleteMessages: (chatId: string, messageIds: number[], mode: 'me' | 'all'): Promise<void> => {
+        return new Promise((resolve) => {
+            const chat = db.chats.get(chatId);
+            if (!chat) return resolve();
+            
+            const currentUserEmail = authService.getCurrentUserEmail();
+            if (!currentUserEmail) return resolve();
+
+            if (mode === 'me') {
+                chat.messages.forEach(msg => {
+                    if (messageIds.includes(msg.id)) {
+                        msg.deletedBy = msg.deletedBy || [];
+                        if (!msg.deletedBy.includes(currentUserEmail)) {
+                            msg.deletedBy.push(currentUserEmail);
+                        }
+                    }
+                });
+            } else { // mode === 'all'
+                chat.messages.forEach(msg => {
+                    if (messageIds.includes(msg.id)) {
+                        msg.text = 'Esta mensagem foi apagada';
+                        msg.contentType = 'deleted';
+                        msg.mediaUrl = undefined;
+                        msg.reactions = {};
+                    }
+                });
+            }
+            
+            sqlite.upsertItems('chats', [chat]);
+            resolve();
+        });
+    },
+    
+    // --- Funções Auxiliares e de Interação ---
 
     reportMessage: (chatId: string, messageId: number, reason: string, comments: string) => {
         const chat = db.chats.get(chatId);
@@ -41,7 +131,6 @@ export const chatService = {
                 chat.messages[msgIndex].reportReason = reason;
                 chat.messages[msgIndex].reportComments = comments;
                 sqlite.upsertItems('chats', [chat]);
-                 console.log(`Reporting message ${messageId} in chat ${chatId} for: ${reason} with comments: ${comments}`);
             }
         }
     },
@@ -57,38 +146,24 @@ export const chatService = {
         const message = chat.messages[msgIndex];
         message.reactions = message.reactions || {};
 
+        // Remove a reação anterior do usuário, se houver
         Object.keys(message.reactions).forEach(key => {
-            message.reactions[key] = message.reactions[key].filter(id => id !== currentUser.id);
-            if (message.reactions[key].length === 0) {
-                delete message.reactions[key];
+            const userIndex = message.reactions[key].findIndex(u => u.id === currentUser.id);
+            if (userIndex > -1) {
+                message.reactions[key].splice(userIndex, 1);
+                if (message.reactions[key].length === 0) {
+                    delete message.reactions[key];
+                }
             }
         });
-
-        if (message.reactions[reaction]?.includes(currentUser.id)) {
-            // Already reacted
-        } else {
-            message.reactions[reaction] = [...(message.reactions[reaction] || []), currentUser.id];
+        
+        // Adiciona a nova reação
+        if (!message.reactions[reaction]) {
+            message.reactions[reaction] = [];
         }
+        message.reactions[reaction].push({ id: currentUser.id, name: currentUser.profile.name });
 
         sqlite.upsertItems('chats', [chat]);
-    },
-
-    getGroupUnreadCount: (groupId: string): number => {
-        const chat = db.chats.get(groupId);
-        if (!chat || !Array.isArray(chat.messages)) {
-            return 0;
-        }
-
-        const currentUser = authService.getCurrentUser();
-        if (!currentUser) return 0;
-
-        let unreadCount = 0;
-        chat.messages.forEach(message => {
-            if (message.senderId !== currentUser.id && !message.isRead) {
-                unreadCount++;
-            }
-        });
-        return unreadCount;
     },
 
     getUnreadCount: (): number => {
@@ -102,7 +177,7 @@ export const chatService = {
         chats.forEach(chat => {
             if (chat && Array.isArray(chat.messages)) {
                 chat.messages.forEach(message => {
-                    if (message.senderId !== currentUser.id && !message.isRead) {
+                    if (message.senderEmail !== currentUser.email && !message.isRead) {
                         unreadCount++;
                     }
                 });

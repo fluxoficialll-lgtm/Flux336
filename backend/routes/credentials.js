@@ -129,4 +129,4 @@ router.post('/disconnect', async (req, res) => {
     }
 });
 
-export default router;
+export { router as credentialsRoutes };

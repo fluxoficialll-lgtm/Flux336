@@ -11,18 +11,43 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
     try {
-        // Usa o dbManager para obter todos os usuários.
         const users = await dbManager.users.getAll();
-
-        // Retorna a lista de usuários dentro de um objeto, como o frontend espera
         res.json({ users: users });
-
     } catch (error) {
         console.error('[API] Erro ao sincronizar usuários:', error);
         res.status(500).json({ error: 'Falha ao sincronizar usuários.' });
     }
 });
 
+/**
+ * @route   GET /api/users/update
+ * @desc    Endpoint de verificação para a rota de atualização.
+ * @access  Private
+ */
+router.get('/update', async (req, res) => {
+    res.json({ success: true, message: 'Endpoint GET /api/users/update atingido com sucesso.' });
+});
+
+/**
+ * @route   GET /api/users/:id
+ * @desc    Busca um usuário específico pelo ID.
+ * @access  Public
+ */
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await dbManager.users.findById(id);
+
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+    } catch (error) {
+        console.error('[API] Erro ao buscar usuário por ID:', error);
+        res.status(500).json({ error: 'Falha ao buscar usuário.' });
+    }
+});
 
 /**
  * @route   POST /api/users/update-location
@@ -54,7 +79,7 @@ router.post('/update-location', async (req, res) => {
 /**
  * @route   GET /api/users/nearby
  * @desc    Encontra usuários próximos a um determinado ponto geográfico.
- * @access  Public (ou Private, dependendo da regra de negócio)
+ * @access  Public
  */
 router.get('/nearby', async (req, res) => {
     try {
@@ -92,11 +117,10 @@ router.get('/search', async (req, res) => {
 
         const users = await req.hub.users.searchByTerm(term);
 
-        // Filtrar dados para expor apenas o necessário publicamente
         const publicUsers = users.map(user => ({
             id: user.id,
             handle: user.handle,
-            profile: { // Exemplo de como expor dados de perfil aninhados
+            profile: { 
                 name: user.profile?.name,
                 avatar: user.profile?.avatar
             }
@@ -109,16 +133,6 @@ router.get('/search', async (req, res) => {
         res.status(500).json({ error: 'Falha ao buscar usuários.' });
     }
 });
-
-/**
- * @route   GET /api/users/update
- * @desc    Endpoint de verificação para a rota de atualização.
- * @access  Private
- */
-router.get('/update', async (req, res) => {
-    res.json({ success: true, message: 'Endpoint GET /api/users/update atingido com sucesso.' });
-});
-
 
 /**
  * @route   PUT /api/users/update

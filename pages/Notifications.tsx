@@ -3,10 +3,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Notification as NotificationType } from '@/services/notificationService';
 import { useNotifications } from '@/features/notifications/hooks/useNotifications';
+import { MainHeader } from '../components/layout/MainHeader';
+import { Footer } from '../components/layout/Footer';
 
-// O componente NotificationItem permanece o mesmo, focado em apresentar uma notificação.
 const NotificationItem: React.FC<{ notification: NotificationType }> = ({ notification }) => {
-    // ... (lógica interna do item, sem alterações)
     const getNotificationMessage = (notif: NotificationType) => {
         if (!notif.data) return <span>Você tem uma nova notificação.</span>;
 
@@ -42,21 +42,13 @@ const NotificationItem: React.FC<{ notification: NotificationType }> = ({ notifi
     );
 };
 
-/**
- * Componente da Página de Notificações, agora refatorado para usar o hook useNotifications.
- * A responsabilidade é apenas de apresentação.
- */
 export const Notifications: React.FC = () => {
-    // A lógica complexa é substituída por uma única linha.
     const { notifications, loading, error } = useNotifications();
 
     return (
-        <div className="min-h-screen bg-black text-white">
-            <header className="p-4 border-b border-gray-800">
-                <h1 className="text-xl font-bold">Notificações</h1>
-            </header>
-
-            <main>
+        <div className="min-h-screen bg-black text-white flex flex-col">
+            <MainHeader title="Notificações" />
+            <main className="flex-grow w-full overflow-y-auto pt-4">
                 {loading && <div className="p-4 text-center">Carregando...</div>}
                 {error && <div className="p-4 text-center text-red-500">{error}</div>}
                 {!loading && !error && (
@@ -67,6 +59,7 @@ export const Notifications: React.FC = () => {
                     )
                 )}
             </main>
+            <Footer />
         </div>
     );
 };
