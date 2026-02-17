@@ -1,6 +1,6 @@
 
 import { createRepositoryProxy } from '../../services/audit/repositoryLoggerProxy.js';
-import { trafficLogger } from '../../services/audit/trafficLogger.js';
+import { logger } from '../../config.js'; // Corrigido
 
 // Importa os repositórios originais
 import { AdAnalyticsRepository } from './AdAnalyticsRepository.js';
@@ -27,30 +27,30 @@ import { UserRepository } from './UserRepository.js';
 import { FeeRepository } from './financial/FeeRepository.js';
 import { GroupRankingRepository } from './ranking/GroupRankingRepository.js';
 
-// Cria e exporta os repositórios com proxy
-const AdAnalyticsRepositoryProxy = createRepositoryProxy(AdAnalyticsRepository, trafficLogger, 'AdAnalyticsRepository');
-const AdRepositoryProxy = createRepositoryProxy(AdRepository, trafficLogger, 'AdRepository');
-const AggregatorRepositoryProxy = createRepositoryProxy(AggregatorRepository, trafficLogger, 'AggregatorRepository');
-const AnalyticsRepositoryProxy = createRepositoryProxy(AnalyticsRepository, trafficLogger, 'AnalyticsRepository');
-const AuditRepositoryProxy = createRepositoryProxy(AuditRepository, trafficLogger, 'AuditRepository');
-const ChatRepositoryProxy = createRepositoryProxy(ChatRepository, trafficLogger, 'ChatRepository');
-const CommentRepositoryProxy = createRepositoryProxy(CommentRepository, trafficLogger, 'CommentRepository');
-const CredentialsRepositoryProxy = createRepositoryProxy(CredentialsRepository, trafficLogger, 'CredentialsRepository');
-const FinancialAnalyticsRepositoryProxy = createRepositoryProxy(FinancialAnalyticsRepository, trafficLogger, 'FinancialAnalyticsRepository');
-const FinancialRepositoryProxy = createRepositoryProxy(FinancialRepository, trafficLogger, 'FinancialRepository');
-const GroupRepositoryProxy = createRepositoryProxy(GroupRepository, trafficLogger, 'GroupRepository');
-const InteractionRepositoryProxy = createRepositoryProxy(InteractionRepository, trafficLogger, 'InteractionRepository');
-const MarketplaceRepositoryProxy = createRepositoryProxy(MarketplaceRepository, trafficLogger, 'MarketplaceRepository');
-const NotificationRepositoryProxy = createRepositoryProxy(NotificationRepository, trafficLogger, 'NotificationRepository');
-const PaymentRepositoryProxy = createRepositoryProxy(PaymentRepository, trafficLogger, 'PaymentRepository');
-const PostRepositoryProxy = createRepositoryProxy(PostRepository, trafficLogger, 'PostRepository');
-const ReelsRepositoryProxy = createRepositoryProxy(ReelsRepository, trafficLogger, 'ReelsRepository');
-const RelationshipRepositoryProxy = createRepositoryProxy(RelationshipRepository, trafficLogger, 'RelationshipRepository');
-const ReportRepositoryProxy = createRepositoryProxy(ReportRepository, trafficLogger, 'ReportRepository');
-const UserAnalyticsRepositoryProxy = createRepositoryProxy(UserAnalyticsRepository, trafficLogger, 'UserAnalyticsRepository');
-const UserRepositoryProxy = createRepositoryProxy(UserRepository, trafficLogger, 'UserRepository');
-const FeeRepositoryProxy = createRepositoryProxy(FeeRepository, trafficLogger, 'FeeRepository');
-const GroupRankingRepositoryProxy = createRepositoryProxy(GroupRankingRepository, trafficLogger, 'GroupRankingRepository');
+// Cria e exporta os repositórios com proxy, usando o logger centralizado
+const AdAnalyticsRepositoryProxy = createRepositoryProxy(AdAnalyticsRepository, logger, 'AdAnalyticsRepository');
+const AdRepositoryProxy = createRepositoryProxy(AdRepository, logger, 'AdRepository');
+const AggregatorRepositoryProxy = createRepositoryProxy(AggregatorRepository, logger, 'AggregatorRepository');
+const AnalyticsRepositoryProxy = createRepositoryProxy(AnalyticsRepository, logger, 'AnalyticsRepository');
+const AuditRepositoryProxy = createRepositoryProxy(AuditRepository, logger, 'AuditRepository');
+const ChatRepositoryProxy = createRepositoryProxy(ChatRepository, logger, 'ChatRepository');
+const CommentRepositoryProxy = createRepositoryProxy(CommentRepository, logger, 'CommentRepository');
+const CredentialsRepositoryProxy = createRepositoryProxy(CredentialsRepository, logger, 'CredentialsRepository');
+const FinancialAnalyticsRepositoryProxy = createRepositoryProxy(FinancialAnalyticsRepository, logger, 'FinancialAnalyticsRepository');
+const FinancialRepositoryProxy = createRepositoryProxy(FinancialRepository, logger, 'FinancialRepository');
+const GroupRepositoryProxy = createRepositoryProxy(GroupRepository, logger, 'GroupRepository');
+const InteractionRepositoryProxy = createRepositoryProxy(InteractionRepository, logger, 'InteractionRepository');
+const MarketplaceRepositoryProxy = createRepositoryProxy(MarketplaceRepository, logger, 'MarketplaceRepository');
+const NotificationRepositoryProxy = createRepositoryProxy(NotificationRepository, logger, 'NotificationRepository');
+const PaymentRepositoryProxy = createRepositoryProxy(PaymentRepository, logger, 'PaymentRepository');
+const PostRepositoryProxy = createRepositoryProxy(PostRepository, logger, 'PostRepository');
+const ReelsRepositoryProxy = createRepositoryProxy(ReelsRepository, logger, 'ReelsRepository');
+const RelationshipRepositoryProxy = createRepositoryProxy(RelationshipRepository, logger, 'RelationshipRepository');
+const ReportRepositoryProxy = createRepositoryProxy(ReportRepository, logger, 'ReportRepository');
+const UserAnalyticsRepositoryProxy = createRepositoryProxy(UserAnalyticsRepository, logger, 'UserAnalyticsRepository');
+const UserRepositoryProxy = createRepositoryProxy(UserRepository, logger, 'UserRepository');
+const FeeRepositoryProxy = createRepositoryProxy(FeeRepository, logger, 'FeeRepository');
+const GroupRankingRepositoryProxy = createRepositoryProxy(GroupRankingRepository, logger, 'GroupRankingRepository');
 
 export {
     AdAnalyticsRepositoryProxy as AdAnalyticsRepository,

@@ -2,7 +2,7 @@
 import express from 'express';
 import { dbManager } from '../databaseManager.js';
 import { decodeToken } from '../middleware/authMiddleware.js';
-import { trafficLogger } from '../services/audit/trafficLogger.js';
+import { logger } from '../config.js';
 
 const router = express.Router();
 

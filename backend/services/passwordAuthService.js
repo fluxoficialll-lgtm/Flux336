@@ -2,11 +2,11 @@
 import { dbManager } from '../databaseManager.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { trafficLogger } from './audit/trafficLogger.js';
+import { logger, config } from '../config.js'; // Importa o logger e a config
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+const JWT_SECRET = config.JWT_SECRET;
 
-async function register(req, res) {
+async function register(req, res, next) {
     const { email, password, name, nickname } = req.body;
 
     if (!email || !password || !name || !nickname) {
@@ -28,6 +28,7 @@ async function register(req, res) {
             profile: { name, nickname }
         });
 
+        logger.logSystem('info', 'Novo usuário registrado com senha.', { userId: newUser.id, email });
         res.status(201).json({
             id: newUser.id,
             name: newUser.name,
@@ -35,12 +36,12 @@ async function register(req, res) {
         });
 
     } catch (error) {
-        console.error("Erro no registro de usuário:", error);
-        res.status(500).json({ error: 'Erro interno do servidor ao registrar o usuário.' });
+        logger.logError(error, req, 'Erro no registro de usuário com senha.');
+        next(error); // Passa para o error handler global
     }
 }
 
-async function login(req, res) {
+async function login(req, res, next) {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({ error: 'E-mail e senha são obrigatórios.' });
@@ -48,8 +49,8 @@ async function login(req, res) {
 
     try {
         const user = await dbManager.users.findByEmail(email);
-        if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        if (!user || !user.password) { // Garante que o usuário tem senha
+            return res.status(404).json({ error: 'Usuário não encontrado ou não registrado com senha.' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -58,7 +59,8 @@ async function login(req, res) {
         }
 
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' });
-
+        
+        logger.logSystem('info', 'Usuário logado com senha.', { userId: user.id, email });
         res.json({
             token,
             user: {
@@ -70,8 +72,8 @@ async function login(req, res) {
         });
 
     } catch (error) {
-        console.error("Erro no login:", error);
-        res.status(500).json({ error: 'Erro interno do servidor.' });
+        logger.logError(error, req, 'Erro no login de usuário com senha.');
+        next(error); // Passa para o error handler global
     }
 }
 

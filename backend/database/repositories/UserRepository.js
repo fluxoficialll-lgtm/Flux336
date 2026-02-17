@@ -1,6 +1,6 @@
 
 import { query } from '../pool.js';
-import { trafficLogger } from '../../services/audit/trafficLogger.js';
+import { logger } from '../../config.js'; // Corrigido
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -30,10 +30,10 @@ export const UserRepository = {
         if (!email) return null;
         const sql = 'SELECT * FROM users WHERE email = $1';
         const params = [email.toLowerCase().trim()];
-        trafficLogger.logSystem('info', '[UserRepository] Executing findByEmail', { trace_id: traceId, sql, params });
+        logger.logSystem('info', '[UserRepository] Executing findByEmail', { trace_id: traceId, sql, params });
         const res = await query(sql, params);
         const user = mapRowToUser(res.rows[0]);
-        trafficLogger.logSystem('info', '[UserRepository] Result findByEmail', { trace_id: traceId, found: !!user });
+        logger.logSystem('info', '[UserRepository] Result findByEmail', { trace_id: traceId, found: !!user });
         return user;
     },
 
@@ -41,7 +41,7 @@ export const UserRepository = {
         if (!handle) return null;
         const sql = 'SELECT * FROM users WHERE handle = $1';
         const params = [handle.toLowerCase().trim()];
-        trafficLogger.logSystem('info', '[UserRepository] Executing findByHandle', { trace_id: traceId, sql, params });
+        logger.logSystem('info', '[UserRepository] Executing findByHandle', { trace_id: traceId, sql, params });
         const res = await query(sql, params);
         return mapRowToUser(res.rows[0]);
     },
@@ -51,7 +51,7 @@ export const UserRepository = {
         if (!uuid) return null;
         const sql = 'SELECT * FROM users WHERE id = $1';
         const params = [uuid];
-        trafficLogger.logSystem('info', '[UserRepository] Executing findById', { trace_id: traceId, sql, params });
+        logger.logSystem('info', '[UserRepository] Executing findById', { trace_id: traceId, sql, params });
         const res = await query(sql, params);
         return mapRowToUser(res.rows[0]);
     },
@@ -60,10 +60,10 @@ export const UserRepository = {
         if (!googleId) return null;
         const sql = 'SELECT * FROM users WHERE google_id = $1';
         const params = [googleId];
-        trafficLogger.logSystem('info', '[UserRepository] Executing findByGoogleId', { trace_id: traceId, sql, params });
+        logger.logSystem('info', '[UserRepository] Executing findByGoogleId', { trace_id: traceId, sql, params });
         const res = await query(sql, params);
         const user = mapRowToUser(res.rows[0]);
-        trafficLogger.logSystem('info', '[UserRepository] Result findByGoogleId', { trace_id: traceId, found: !!user });
+        logger.logSystem('info', '[UserRepository] Result findByGoogleId', { trace_id: traceId, found: !!user });
         return user;
     },
 
@@ -74,7 +74,7 @@ export const UserRepository = {
         const searchTerm = `%${term.toLowerCase().trim()}%`;
         const sql = 'SELECT id, email, handle, data, is_profile_completed FROM users WHERE handle ILIKE $1 OR email ILIKE $1 ORDER BY handle ASC LIMIT 25';
         const params = [searchTerm];
-        trafficLogger.logSystem('info', '[UserRepository] Executing searchByTerm', { trace_id: traceId, sql, params });
+        logger.logSystem('info', '[UserRepository] Executing searchByTerm', { trace_id: traceId, sql, params });
         const res = await query(sql, params);
         return res.rows.map(mapRowToUser);
     },
@@ -97,11 +97,11 @@ export const UserRepository = {
         const columnNames = columns.join(', ');
         
         const sql = `INSERT INTO users (${columnNames}) VALUES (${placeholders}) RETURNING id`;
-        trafficLogger.logSystem('info', '[UserRepository] Executing create', { trace_id: traceId, sql, values });
+        logger.logSystem('info', '[UserRepository] Executing create', { trace_id: traceId, sql, values });
 
         const res = await query(sql, values);
         const newId = res.rows[0].id;
-        trafficLogger.logSystem('info', '[UserRepository] Result create', { trace_id: traceId, newId });
+        logger.logSystem('info', '[UserRepository] Result create', { trace_id: traceId, newId });
         return newId;
     },
 
@@ -122,16 +122,16 @@ export const UserRepository = {
             JSON.stringify(data),
             uuid
         ];
-        trafficLogger.logSystem('info', '[UserRepository] Executing update', { trace_id: traceId, sql, params });
+        logger.logSystem('info', '[UserRepository] Executing update', { trace_id: traceId, sql, params });
 
         await query(sql, params);
-        trafficLogger.logSystem('info', '[UserRepository] Result update', { trace_id: traceId, updated: true, userId: uuid });
+        logger.logSystem('info', '[UserRepository] Result update', { trace_id: traceId, updated: true, userId: uuid });
         return true;
     },
 
     async getAll(traceId) {
         const sql = 'SELECT * FROM users ORDER BY created_at DESC LIMIT 1000';
-        trafficLogger.logSystem('info', '[UserRepository] Executing getAll', { trace_id: traceId, sql });
+        logger.logSystem('info', '[UserRepository] Executing getAll', { trace_id: traceId, sql });
         const res = await query(sql);
         return res.rows.map(mapRowToUser);
     }

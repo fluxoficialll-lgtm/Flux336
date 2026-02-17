@@ -4,14 +4,12 @@ import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
 import { bridgeLogger } from '../services/audit/bridgeLogger.js';
-import { trafficLogger } from '../services/audit/trafficLogger.js';
+import { logger } from '../config.js'; // Corrigido: Importa o logger centralizado
 import { heartbeatLogger } from '../services/audit/heartbeatLogger.js';
 import { traceMiddleware } from '../middleware/traceMiddleware.js';
 
 export const setupMiddlewares = (app, io) => {
-    // 1. MIDDLEWARE DE RASTREAMENTO (O MAIS IMPORTANTE)
-    // Deve ser o primeiro a ser registrado para garantir que CADA requisição
-    // tenha um `traceId` antes de qualquer outro processamento ou log.
+    // 1. MIDDLEWARE DE RASTREAMENTO
     app.use(traceMiddleware);
 
     // 2. MIDDLEWARES DE SEGURANÇA E PERFORMANCE
@@ -34,7 +32,7 @@ export const setupMiddlewares = (app, io) => {
             'Origin', 
             'Cache-Control', 
             'X-Flux-Client-ID', 
-            'x-flux-trace-id', // Nome do header em minúsculas por padrão no Express
+            'x-flux-trace-id',
             'X-Admin-Action',
             'X-Protocol-Version'
         ],
@@ -49,8 +47,8 @@ export const setupMiddlewares = (app, io) => {
     app.use((req, res, next) => {
         const start = Date.now();
         
-        // Log de entrada (agora com traceId garantido pelo traceMiddleware)
-        trafficLogger.logInbound(req);
+        // Log de entrada com o logger centralizado
+        logger.logInbound(req);
 
         const clientId = req.headers['x-flux-client-id'];
         if (clientId) {
@@ -66,8 +64,8 @@ export const setupMiddlewares = (app, io) => {
                 bridgeLogger.logAccessGranted(req, 'ADMIN_ACCESS');
             }
 
-            // Log de saída (agora com traceId garantido)
-            trafficLogger.logOutbound(req, res, duration);
+            // Log de saída com o logger centralizado
+            logger.logOutbound(req, res, duration);
         });
         
         req.io = io;
@@ -76,16 +74,14 @@ export const setupMiddlewares = (app, io) => {
 
     app.set('trust proxy', 1);
     
-    // 4. ERROR HANDLER GLOBAL (OBRIGATÓRIO)
-    // Este deve ser o ÚLTIMO middleware, para capturar erros de toda a aplicação.
+    // 4. ERROR HANDLER GLOBAL
     app.use((error, req, res, next) => {
-        // Usa o logger de erro estruturado, que inclui o traceId
-        trafficLogger.logError(error, req);
+        // Usa o logger de erro centralizado
+        logger.logError(error, req);
 
         if (!res.headersSent) {
             res.status(500).json({
                 message: 'Internal Server Error',
-                // Devolve o traceId no corpo do erro para facilitar a correlação no cliente.
                 trace_id: req.traceId 
             });
         }

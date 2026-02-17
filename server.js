@@ -14,7 +14,6 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import routes from './backend/routes.js';
 
 // Inicialização do Firebase Admin usando a configuração importada
-// O aviso de chave ausente já é tratado dentro do config.js
 if (config.FIREBASE_SERVICE_ACCOUNT_KEY) {
     try {
         const serviceAccount = JSON.parse(config.FIREBASE_SERVICE_ACCOUNT_KEY);
@@ -29,6 +28,10 @@ if (config.FIREBASE_SERVICE_ACCOUNT_KEY) {
 
 const app = express();
 const port = config.PORT;
+
+// Confia no proxy reverso (Render, Heroku, etc) para obter o IP real do usuário.
+// Isso é crucial para que o express-rate-limit funcione corretamente.
+app.set('trust proxy', 1);
 
 // Middlewares de Segurança
 app.use(helmet());

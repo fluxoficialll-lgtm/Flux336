@@ -1,106 +1,111 @@
 
 /**
- * LOGGER DE TRÁFEGO - Visão Clara do Fluxo de Dados
+ * FÁBRICA DE LOGGER DE TRÁFEGO - Visão Clara e Configurável do Fluxo de Dados
  * 
- * Este logger aprimorado transforma os logs técnicos em um formato JSON estruturado,
- * que é mais fácil de ler e perfeito para ser enviado a um painel de monitoramento.
+ * O logger transforma os logs técnicos em um formato JSON estruturado.
+ * Esta versão usa uma fábrica para criar um logger configurável, permitindo
+ * que o nível de log seja controlado por variáveis de ambiente.
  */
 
-// Função central que formata e exibe o log como JSON.
-const log = (level, direction, details) => {
-    const logEntry = {
-        timestamp: new Date().toISOString(),
-        level, // 'info', 'warn', 'error'
-        direction, // 'inbound', 'outbound', 'system'
-        ...details
-    };
-    // Converte o objeto de log em uma string JSON e imprime no console.
-    // Ideal para sistemas de logging centralizado (Splunk, ELK, Datadog).
-    console.log(JSON.stringify(logEntry));
+// Níveis de severidade dos logs. Um nível mais baixo inclui todos os níveis acima dele.
+const severities = {
+    debug: 0,
+    info: 1,
+    warn: 2,
+    error: 3,
 };
 
 /**
- * O objeto trafficLogger encapsula os métodos de logging para manter a consistência.
- * Ele utiliza o `traceId` injetado pelo `traceMiddleware`.
+ * Cria e retorna uma instância do logger configurada com um nível de log específico.
+ * @param {object} options - Opções de configuração para o logger.
+ * @param {string} options.level - O nível mínimo de log a ser registrado (e.g., 'info', 'debug').
  */
-export const trafficLogger = {
-    logInbound: (req) => {
-        const { method, path, headers, ip } = req;
-        // O traceId é garantido pelo middleware que deve ser executado antes.
-        const traceId = req.traceId;
+export const createLogger = ({ level = 'info' }) => {
+    const configuredSeverity = severities[level.toLowerCase()] ?? severities.info;
 
-        const isHealthCheck = (path === '/' || path === '/api/ping');
-        if (isHealthCheck) {
-            // Ocultamos os health checks por padrão para não poluir os logs.
-            return;
+    // Função central que formata e exibe o log como JSON, respeitando o nível.
+    const log = (logLevel, direction, details) => {
+        const logSeverity = severities[logLevel];
+        // Só registra a mensagem se a severidade dela for igual ou maior que a configurada.
+        if (logSeverity >= configuredSeverity) {
+            const logEntry = {
+                timestamp: new Date().toISOString(),
+                level: logLevel,
+                direction, // 'inbound', 'outbound', 'system'
+                ...details
+            };
+            // Converte para JSON e imprime no console.
+            console.log(JSON.stringify(logEntry));
         }
+    };
 
-        log('info', 'inbound', {
-            message: `Requisição recebida: ${method} ${path}`,
-            trace_id: traceId,
-            details: {
-                source_ip: ip,
-                method,
-                path,
-                // Log de headers essenciais e seguros, evitando tokens e cookies.
-                origin: headers['origin'],
-                user_agent: headers['user-agent'],
-                content_length: headers['content-length'] || 0
-            }
-        });
-    },
+    // Retorna o objeto logger com todos os seus métodos.
+    return {
+        logInbound: (req) => {
+            const { method, path, headers, ip } = req;
+            const traceId = req.traceId;
 
-    logOutbound: (req, res, duration) => {
-        const { method, path } = req;
-        const { statusCode } = res;
-        // O traceId é garantido pelo middleware.
-        const traceId = req.traceId;
+            if (path === '/' || path === '/api/ping') return;
 
-        if ((path === '/' || path === '/api/ping')) return; // Silencia pings
+            log('info', 'inbound', {
+                message: `Requisição recebida: ${method} ${path}`,
+                trace_id: traceId,
+                details: {
+                    source_ip: ip,
+                    method,
+                    path,
+                    origin: headers['origin'],
+                    user_agent: headers['user-agent'],
+                    content_length: headers['content-length'] || 0
+                }
+            });
+        },
 
-        const isSuccess = statusCode < 400;
-        const level = isSuccess ? 'info' : 'error';
-        const message = isSuccess 
-            ? `Resposta enviada com sucesso: ${statusCode} ${method} ${path}`
-            : `Falha ao processar a requisição: ${statusCode} ${method} ${path}`;
+        logOutbound: (req, res, duration) => {
+            const { method, path } = req;
+            const { statusCode } = res;
+            const traceId = req.traceId;
 
-        log(level, 'outbound', {
-            message,
-            trace_id: traceId,
-            details: {
-                method,
-                path,
-                status_code: statusCode,
-                duration_ms: duration,
-            }
-        });
-    },
+            if (path === '/' || path === '/api/ping') return;
 
-    logError: (error, req, message = 'Erro inesperado no sistema') => {
-        // Garante o traceId mesmo em erros onde o middleware possa ter falhado.
-        const traceId = req.traceId || 'no-trace-in-error';
-        log('error', 'system', {
-            message,
-            trace_id: traceId,
-            error: {
-                message: error.message,
-                stack: error.stack,
-            },
-            request_context: {
-                method: req.method,
-                path: req.path
-            }
-        });
-    },
+            const isSuccess = statusCode < 400;
+            const logLevel = isSuccess ? 'info' : 'error';
+            const message = isSuccess 
+                ? `Resposta enviada com sucesso: ${statusCode} ${method} ${path}`
+                : `Falha ao processar a requisição: ${statusCode} ${method} ${path}`;
 
-    // Logger genérico para eventos internos do sistema (services, repos, etc.)
-    logSystem: (level, message, details) => {
-        log(level, 'system', {
-            message,
-            ...details
-        });
-    },
-    
-    // Exporta a função base para usos específicos se necessário.
-    log
+            log(logLevel, 'outbound', {
+                message,
+                trace_id: traceId,
+                details: {
+                    method,
+                    path,
+                    status_code: statusCode,
+                    duration_ms: duration,
+                }
+            });
+        },
+
+        logError: (error, req, message = 'Erro inesperado no sistema') => {
+            const traceId = req?.traceId || 'no-trace-in-error';
+            log('error', 'system', {
+                message,
+                trace_id: traceId,
+                error: {
+                    message: error.message,
+                    stack: error.stack?.split('\n').map(line => line.trim()),
+                },
+                request_context: req ? { method: req.method, path: req.path } : undefined
+            });
+        },
+
+        logSystem: (logLevel, message, details) => {
+            log(logLevel, 'system', {
+                message,
+                ...details
+            });
+        },
+        
+        log, // Exporta a função base para usos específicos se necessário.
+    };
 };

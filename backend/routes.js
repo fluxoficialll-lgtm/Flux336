@@ -1,9 +1,8 @@
 
 import express from 'express';
 import { traceMiddleware } from './middleware/traceMiddleware.js';
-import { trafficLogger } from './services/audit/trafficLogger.js';
 
-// Import all routes with correct export types
+// Import all routes
 import { adRoutes } from './routes/ads.js';
 import { analyticsRoutes } from './routes/analytics.js';
 import { auditRoutes } from './routes/audit.js';
@@ -31,12 +30,8 @@ import adminRoutes from './routes/admin.js';
 
 const router = express.Router();
 
-// Apply middleware
+// Apply trace middleware to all routes
 router.use(traceMiddleware);
-router.use((req, res, next) => {
-    trafficLogger.logInbound(req);
-    next();
-});
 
 // Use all imported routes
 router.use('/ads', adRoutes);

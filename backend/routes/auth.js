@@ -3,8 +3,7 @@ import express from 'express';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { OAuth2Client } from 'google-auth-library';
-import { config } from '../config.js'; // Importa a configuração centralizada
-import { trafficLogger } from '../services/audit/trafficLogger.js';
+import { config, logger } from '../config.js'; // Importa a configuração centralizada e o logger
 
 const router = express.Router();
 
@@ -13,12 +12,10 @@ const GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Rota para expor o Client ID do Google de forma segura
-// A verificação de existência já é feita no módulo de configuração
 router.get('/config/google-client-id', (req, res) => {
     if (GOOGLE_CLIENT_ID) {
         res.json({ clientId: GOOGLE_CLIENT_ID });
     } else {
-        // O aviso já foi logado no console na inicialização do servidor
         res.status(500).json({ error: 'Google Client ID not configured on server.' });
     }
 });
@@ -30,13 +27,13 @@ router.post('/google', async (req, res) => {
 
     if (!credential) {
         const error = new Error("Credential not provided.");
-        trafficLogger.logError(error, req, 'Payload de autenticação incompleto.');
+        logger.logError(error, req, 'Payload de autenticação incompleto.');
         return res.status(400).json({ error: "Credential not provided.", trace_id: traceId });
     }
 
     if (!GOOGLE_CLIENT_ID) {
         const error = new Error("Google Client ID not configured.");
-        trafficLogger.logError(error, req, 'Tentativa de login com Google sem configuração no servidor.');
+        logger.logError(error, req, 'Tentativa de login com Google sem configuração no servidor.');
         return res.status(500).json({ error: "Authentication system not configured.", trace_id: traceId });
     }
 
@@ -49,7 +46,7 @@ router.post('/google', async (req, res) => {
         
         if (!payload || !payload.email) {
             const error = new Error("Invalid Google token.");
-            trafficLogger.logError(error, req, 'Token do Google inválido ou sem email.');
+            logger.logError(error, req, 'Token do Google inválido ou sem email.');
             return res.status(401).json({ error: "Invalid Google token.", trace_id: traceId });
         }
 
@@ -73,7 +70,7 @@ router.post('/google', async (req, res) => {
                 isBanned: false,
             };
             await newUserRef.set(user);
-            trafficLogger.logSystem('info', 'Novo usuário criado via Google Auth', { userId: user.id, email: user.email, traceId });
+            logger.logSystem('info', 'Novo usuário criado via Google Auth', { userId: user.id, email: user.email, traceId });
         } else {
             const doc = snapshot.docs[0];
             user = doc.data();
@@ -81,7 +78,7 @@ router.post('/google', async (req, res) => {
                 name: payload.name,
                 profilePicture: payload.picture 
             });
-             trafficLogger.logSystem('info', 'Usuário existente logado via Google Auth', { userId: user.id, email: user.email, traceId });
+             logger.logSystem('info', 'Usuário existente logado via Google Auth', { userId: user.id, email: user.email, traceId });
         }
         
         const adminAuth = getAuth();
@@ -90,7 +87,7 @@ router.post('/google', async (req, res) => {
         res.status(200).json({ token: customToken, user, isNew });
 
     } catch (error) {
-        trafficLogger.logError(error, req, 'Falha crítica na autenticação Google.');
+        logger.logError(error, req, 'Falha crítica na autenticação Google.');
         res.status(500).json({ error: 'Internal server error during authentication.', trace_id: traceId });
     }
 });
