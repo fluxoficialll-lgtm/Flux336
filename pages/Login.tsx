@@ -24,6 +24,13 @@ export const Login: React.FC = () => {
     const GOOGLE_BTN_ID = 'googleButtonDiv';
 
     useEffect(() => {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if (apiUrl) {
+            logClientEvent('info', `✅ Variável de ambiente do frontend 'VITE_API_URL' foi injetada: ${apiUrl}`, { component: 'Login' });
+        } else {
+            logClientEvent('error', "❌ ERRO CRÍTICO: A variável 'VITE_API_URL' não foi injetada no frontend. A comunicação com o backend falhará.", { component: 'Login' });
+        }
+
         logClientEvent('info', 'História de Usuário: Visitante acessou a página de Login do Flux.', { component: 'Login' });
         trackingService.captureUrlParams();
     }, [location]);
@@ -61,7 +68,7 @@ export const Login: React.FC = () => {
         setError('');
         const traceId = crypto.randomUUID();
         
-        logClientEvent('info', 'História de Usuário: Selecionou a conta Google. Validando...', { component: 'Login', traceId });
+        logClientEvent('info', 'História de Usuário: Clicou no botão Google e selecionou uma conta. Validando...', { component: 'Login', traceId });
 
         try {
             if (!response || !response.credential) throw new Error("Login falhou. Credencial do Google não recebida.");
@@ -112,47 +119,50 @@ export const Login: React.FC = () => {
     };
 
     useEffect(() => {
-        if (showEmailForm || typeof google === 'undefined') return;
+        if (showEmailForm || typeof google === 'undefined' || buttonRendered.current) return;
 
         const initializeGoogleSignIn = async () => {
-            if (buttonRendered.current) return;
-
             try {
                 logClientEvent('info', 'História de Usuário: Preparando o botão de login com Google...', { component: 'Login' });
                 const googleClientId = await authService.getGoogleClientId();
-                const googleButtonDiv = document.getElementById(GOOGLE_BTN_ID);
-
-                if (!googleClientId || !googleButtonDiv) {
-                    const errorMsg = "A autenticação Google não está configurada ou o elemento do botão não foi encontrado.";
-                    setError(errorMsg);
-                    return;
-                }
                 
-                if (buttonRendered.current) return;
-
                 google.accounts.id.initialize({
                     client_id: googleClientId,
                     callback: handleCredentialResponse,
-                    ux_mode: 'popup', // <-- RESTAURADO
-                    cancel_on_tap_outside: true, // <-- RESTAURADO
-                    auto_select: false // <-- RESTAURADO
+                    ux_mode: 'popup',
+                    cancel_on_tap_outside: true,
+                    auto_select: false
                 });
 
-                google.accounts.id.renderButton(
-                    googleButtonDiv,
-                    { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill' }
-                );
-                
-                buttonRendered.current = true;
-                logClientEvent('info', 'História de Usuário: Botão de login com Google está pronto.', { component: 'Login' });
+                const googleButtonDiv = document.getElementById(GOOGLE_BTN_ID);
+                if(googleButtonDiv) {
+                    google.accounts.id.renderButton(
+                        googleButtonDiv,
+                        { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill' }
+                    );
+                    buttonRendered.current = true;
+                    logClientEvent('info', 'História de Usuário: Botão de login com Google está pronto.', { component: 'Login' });
+                } else {
+                    throw new Error("Elemento do botão do Google (googleButtonDiv) não encontrado no DOM.");
+                }
 
             } catch (error: any) {
-                setError("Erro ao inicializar o login com Google.");
+                logClientEvent('error', "Falha crítica na inicialização do Google Sign-In.", { component: 'Login', errorMessage: error.message });
+                setError("Erro ao inicializar o login com Google. Tente recarregar a página.");
             }
         };
 
-        const timer = setTimeout(initializeGoogleSignIn, 100);
-        return () => clearTimeout(timer);
+        // **A NOVA LÓGICA ROBUSTA**
+        // Em vez de um timer fixo, vamos verificar repetidamente se o elemento do botão já existe.
+        const checkInterval = setInterval(() => {
+            if (document.getElementById(GOOGLE_BTN_ID)) {
+                clearInterval(checkInterval);
+                initializeGoogleSignIn();
+            }
+        }, 100); // Verifica a cada 100ms
+
+        // Limpa o intervalo se o componente for desmontado
+        return () => clearInterval(checkInterval);
 
     }, [showEmailForm, handleCredentialResponse]);
 
@@ -160,7 +170,7 @@ export const Login: React.FC = () => {
 
     return (
         <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#050505] text-white font-['Inter'] relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(/path/to/your/background.svg)'}}></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00c2ff] rounded-full filter blur-[150px] opacity-20"></div>
 
             <div className="w-full max-w-[400px] mx-4 bg-white/5 backdrop-blur-2xl rounded-[32px] p-10 border border-white/10 shadow-2xl relative z-10 flex flex-col items-center">
