@@ -54,14 +54,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            ...helmet.contentSecurityPolicy.getDefaults().directives,
-            "script-src": ["'self'", "https://accounts.google.com"], // Permite scripts do Google
-        },
-    },
-}));
+// A chamada defeituosa foi removida. Restaurando para a configuração padrão.
+app.use(helmet());
+
 app.use(compression());
 app.use(express.json({ limit: '10kb' }));
 app.use(hpp());
