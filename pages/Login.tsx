@@ -20,32 +20,26 @@ export const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [showEmailForm, setShowEmailForm] = useState(false);
     
-    const buttonRendered = React.useRef(false);
     const GOOGLE_BTN_ID = 'googleButtonDiv';
 
     useEffect(() => {
         const apiUrl = import.meta.env.VITE_API_URL;
         if (apiUrl) {
-            logClientEvent('info', `✅ Variável de ambiente do frontend 'VITE_API_URL' foi injetada: ${apiUrl}`, { component: 'Login' });
+            logClientEvent('info', `✅ Frontend VITE_API_URL: ${apiUrl}`, { component: 'Login' });
         } else {
-            logClientEvent('error', "❌ ERRO CRÍTICO: A variável 'VITE_API_URL' não foi injetada no frontend. A comunicação com o backend falhará.", { component: 'Login' });
+            logClientEvent('error', "❌ CRITICAL: VITE_API_URL not injected.", { component: 'Login' });
         }
 
-        logClientEvent('info', 'História de Usuário: Visitante acessou a página de Login do Flux.', { component: 'Login' });
+        logClientEvent('info', 'User Story: Visitor landed on Login page.', { component: 'Login' });
         trackingService.captureUrlParams();
     }, [location]);
 
     const handleRedirect = useCallback((user: any, isNewUser: boolean = false) => {
         setGoogleAuthProcessing(false);
         const targetPath = isNewUser || (user && !user.isProfileCompleted) ? '/complete-profile' : '/feed';
-        const pendingRedirect = sessionStorage.getItem('redirect_after_login') || (location.state as any)?.from?.pathname;
+        logClientEvent('info', `Redirecting user to ${targetPath}`, { component: 'Login', userId: user.id });
         
-        if (targetPath === '/feed') {
-            logClientEvent('info', 'História de Usuário: Login concluído. Entrando no Feed.', { component: 'Login', userId: user.id });
-        } else {
-            logClientEvent('info', 'História de Usuário: Novo usuário detectado. Redirecionando para completar o perfil.', { component: 'Login', userId: user.id });
-        }
-
+        const pendingRedirect = sessionStorage.getItem('redirect_after_login') || (location.state as any)?.from?.pathname;
         if (pendingRedirect && pendingRedirect !== '/' && !pendingRedirect.includes('login')) {
             sessionStorage.removeItem('redirect_after_login');
             navigate(pendingRedirect, { replace: true });
@@ -67,141 +61,109 @@ export const Login: React.FC = () => {
         setGoogleAuthProcessing(true);
         setError('');
         const traceId = crypto.randomUUID();
-        
-        logClientEvent('info', 'História de Usuário: Clicou no botão Google e selecionou uma conta. Validando...', { component: 'Login', traceId });
+        logClientEvent('info', 'User Story: Google account selected. Validating...', { traceId });
 
         try {
-            if (!response || !response.credential) throw new Error("Login falhou. Credencial do Google não recebida.");
+            if (!response || !response.credential) throw new Error("Google credential not received.");
             const result = await authService.loginWithGoogle(response.credential, traceId);
             if (result && result.user) {
-                const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
-                handleRedirect(result.user, isNew);
+                handleRedirect(result.user, result.nextStep === '/complete-profile');
             }
         } catch (err: any) {
-            const displayError = `Falha na autenticação. Se o problema persistir, contate o suporte. Código: ${err.traceId || traceId}`;
-            logClientEvent('error', 'História de Usuário: Falha ao validar a conta Google.', { component: 'Login', traceId, errorMessage: err.message });
-            setError(displayError);
+            logClientEvent('error', 'User Story: Google validation failed.', { traceId, error: err.message });
+            setError(`Authentication failed. Please try again. Code: ${err.traceId || traceId}`);
             setGoogleAuthProcessing(false);
         }
     }, [handleRedirect]);
 
-    const handleEmailLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!email || !password || googleAuthProcessing) return;
-        setGoogleAuthProcessing(true);
-        setError('');
-        const traceId = crypto.randomUUID();
-        
-        logClientEvent('info', 'História de Usuário: Tentando login com e-mail e senha.', { component: 'Login', traceId, email });
-
-        try {
-            const result = await authService.login(email, password, traceId);
-            if (result && result.user) {
-                const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
-                handleRedirect(result.user, isNew);
-            }
-        } catch (err: any) {
-            const displayError = `Credenciais inválidas. Código: ${err.traceId || traceId}`;
-            logClientEvent('error', 'História de Usuário: Falha no login com e-mail.', { component: 'Login', traceId, email, errorMessage: err.message });
-            setError(displayError);
-            setGoogleAuthProcessing(false);
+    // ** NOVA LÓGICA DE INICIALIZAÇÃO - Estável e encapsulada **
+    const initializeGoogleSignIn = useCallback(() => {
+        if (typeof google === 'undefined') {
+            logClientEvent('error', "Google Identity Services library not loaded.", { component: 'Login' });
+            return;
         }
-    };
 
-    const handleShowEmailForm = () => {
-        logClientEvent('info', 'História de Usuário: Optou por fazer login com e-mail.', { component: 'Login' });
-        setShowEmailForm(true);
-    };
-
-    const handleBackToGoogle = () => {
-        logClientEvent('info', 'História de Usuário: Voltou para a tela de login inicial.', { component: 'Login' });
-        setShowEmailForm(false);
-    };
-
-    useEffect(() => {
-        if (showEmailForm || typeof google === 'undefined' || buttonRendered.current) return;
-
-        const initializeGoogleSignIn = async () => {
+        const renderGoogleButton = async () => {
             try {
-                logClientEvent('info', 'História de Usuário: Preparando o botão de login com Google...', { component: 'Login' });
                 const googleClientId = await authService.getGoogleClientId();
-                
                 google.accounts.id.initialize({
                     client_id: googleClientId,
                     callback: handleCredentialResponse,
                     ux_mode: 'popup',
-                    cancel_on_tap_outside: true,
-                    auto_select: false
                 });
 
                 const googleButtonDiv = document.getElementById(GOOGLE_BTN_ID);
-                if(googleButtonDiv) {
+                if (googleButtonDiv) {
+                    // Limpa o botão antigo antes de renderizar um novo
+                    googleButtonDiv.innerHTML = ''; 
                     google.accounts.id.renderButton(
                         googleButtonDiv,
                         { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill' }
                     );
-                    buttonRendered.current = true;
-                    logClientEvent('info', 'História de Usuário: Botão de login com Google está pronto.', { component: 'Login' });
-                } else {
-                    throw new Error("Elemento do botão do Google (googleButtonDiv) não encontrado no DOM.");
+                    logClientEvent('info', 'Google button has been rendered.', { component: 'Login' });
                 }
-
             } catch (error: any) {
-                logClientEvent('error', "Falha crítica na inicialização do Google Sign-In.", { component: 'Login', errorMessage: error.message });
-                setError("Erro ao inicializar o login com Google. Tente recarregar a página.");
+                logClientEvent('error', 'Google Sign-In initialization failed.', { errorMessage: error.message });
+                setError("Could not load login options. Please refresh.");
             }
         };
 
-        // **A NOVA LÓGICA ROBUSTA**
-        // Em vez de um timer fixo, vamos verificar repetidamente se o elemento do botão já existe.
-        const checkInterval = setInterval(() => {
-            if (document.getElementById(GOOGLE_BTN_ID)) {
-                clearInterval(checkInterval);
-                initializeGoogleSignIn();
+        renderGoogleButton();
+
+    }, [handleCredentialResponse]);
+
+    const handleEmailLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setGoogleAuthProcessing(true);
+        setError('');
+        const traceId = crypto.randomUUID();
+        logClientEvent('info', 'User Story: Email login attempt.', { traceId, email });
+        try {
+            const result = await authService.login(email, password, traceId);
+            if (result && result.user) {
+                handleRedirect(result.user, result.nextStep === '/complete-profile');
             }
-        }, 100); // Verifica a cada 100ms
+        } catch (err: any) {
+            logClientEvent('error', 'User Story: Email login failed.', { traceId, email, error: err.message });
+            setError(`Invalid credentials. Code: ${err.traceId || traceId}`);
+            setGoogleAuthProcessing(false);
+        }
+    };
 
-        // Limpa o intervalo se o componente for desmontado
-        return () => clearInterval(checkInterval);
-
-    }, [showEmailForm, handleCredentialResponse]);
+    const handleShowEmailForm = () => setShowEmailForm(true);
+    const handleBackToGoogle = () => setShowEmailForm(false);
 
     if (loading) return null;
 
     return (
         <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#050505] text-white font-['Inter'] relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00c2ff] rounded-full filter blur-[150px] opacity-20"></div>
-
             <div className="w-full max-w-[400px] mx-4 bg-white/5 backdrop-blur-2xl rounded-[32px] p-10 border border-white/10 shadow-2xl relative z-10 flex flex-col items-center">
+                
+                {googleAuthProcessing && (
+                    <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-[32px] flex items-center justify-center z-50">
+                        <i className="fa-solid fa-circle-notch fa-spin text-[#00c2ff] text-2xl"></i>
+                    </div>
+                )}
+
                 {showEmailForm ? (
                     <LoginEmailCard 
-                        email={email}
-                        setEmail={setEmail}
-                        password={password}
-                        setPassword={setPassword}
-                        onSubmit={handleEmailLogin}
-                        onBackToGoogle={handleBackToGoogle}
-                        loading={googleAuthProcessing}
-                        error={error}
+                        email={email} setEmail={setEmail}
+                        password={password} setPassword={setPassword}
+                        onSubmit={handleEmailLogin} onBackToGoogle={handleBackToGoogle}
+                        loading={googleAuthProcessing} error={error}
                     />
                 ) : (
                     <LoginInitialCard 
                         onSelectEmail={handleShowEmailForm}
                         googleButtonId={GOOGLE_BTN_ID}
-                        loading={loading}
-                        googleProcessing={googleAuthProcessing}
+                        loading={loading} googleProcessing={googleAuthProcessing}
+                        initializeGoogleSignIn={initializeGoogleSignIn} // Passando a função
                     />
                 )}
                 
                 {error && !googleAuthProcessing && (
                      <p className="text-red-400 text-xs text-center mt-4 max-w-full break-words">{error}</p>
-                )}
-
-                {googleAuthProcessing && (
-                    <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-[32px] flex items-center justify-center z-50">
-                        <i className="fa-solid fa-circle-notch fa-spin text-[#00c2ff] text-2xl"></i>
-                    </div>
                 )}
             </div>
         </div>
