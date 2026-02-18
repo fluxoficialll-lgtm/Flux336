@@ -30,18 +30,22 @@ router.post('/google', async (req, res) => {
     const traceId = req.traceId;
 
     if (!credential) {
+        // O logger.logError já está aqui, o que é bom.
         const error = new Error("Credential not provided.");
         logger.logError(error, req, 'Payload de autenticação incompleto.');
         return res.status(400).json({ error: "Credential not provided.", trace_id: traceId });
     }
 
     if (!GOOGLE_CLIENT_ID) {
+        // E aqui também.
         const error = new Error("Google Client ID not configured.");
         logger.logError(error, req, 'Tentativa de login com Google sem configuração no servidor.');
         return res.status(500).json({ error: "Authentication system not configured.", trace_id: traceId });
     }
 
     try {
+        logger.logSystem('debug', 'Iniciando verificação de token do Google.', { traceId });
+        
         const ticket = await client.verifyIdToken({
             idToken: credential,
             audience: GOOGLE_CLIENT_ID,
@@ -54,8 +58,12 @@ router.post('/google', async (req, res) => {
             return res.status(401).json({ error: "Invalid Google token.", trace_id: traceId });
         }
 
+        logger.logSystem('debug', 'Token do Google verificado com sucesso.', { traceId, email: payload.email });
+
         const db = getFirestore();
         const usersRef = db.collection('users');
+
+        logger.logSystem('debug', 'Consultando o banco de dados pelo usuário.', { traceId, email: payload.email });
         const snapshot = await usersRef.where('email', '==', payload.email).limit(1).get();
 
         let user, isNew = false;
@@ -73,24 +81,39 @@ router.post('/google', async (req, res) => {
                 isProfileCompleted: false,
                 isBanned: false,
             };
+            
+            logger.logSystem('info', 'Novo usuário detectado. Criando perfil no banco de dados.', { 
+                traceId, 
+                userId: user.id, 
+                email: user.email 
+            });
+
             await newUserRef.set(user);
-            logger.logSystem('info', 'Novo usuário criado via Google Auth', { userId: user.id, email: user.email, traceId });
         } else {
             const doc = snapshot.docs[0];
             user = doc.data();
+
+            logger.logSystem('info', 'Usuário existente encontrado. Atualizando informações de perfil.', {
+                traceId,
+                userId: user.id,
+                email: user.email,
+            });
+
             await doc.ref.update({ 
                 name: payload.name,
                 profilePicture: payload.picture 
             });
-             logger.logSystem('info', 'Usuário existente logado via Google Auth', { userId: user.id, email: user.email, traceId });
         }
         
+        logger.logSystem('debug', 'Iniciando geração de token de autenticação customizado.', { traceId, userId: user.id });
         const adminAuth = getAuth();
         const customToken = await adminAuth.createCustomToken(user.id);
+        logger.logSystem('debug', 'Token customizado gerado com sucesso.', { traceId, userId: user.id });
 
         res.status(200).json({ token: customToken, user, isNew });
 
     } catch (error) {
+        // Este logError já captura falhas críticas no processo.
         logger.logError(error, req, 'Falha crítica na autenticação Google.');
         res.status(500).json({ error: 'Internal server error during authentication.', trace_id: traceId });
     }

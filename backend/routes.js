@@ -27,6 +27,7 @@ import socialRoutes from './routes/social.js';
 import trackingRoutes from './routes/tracking.js';
 import usersRoutes from './routes/users.js';
 import adminRoutes from './routes/admin.js';
+import { clientLogsRoutes } from './routes/clientLogs.js'; // Import the new route
 
 const router = express.Router();
 
@@ -58,5 +59,6 @@ router.use('/social', socialRoutes);
 router.use('/tracking', trackingRoutes);
 router.use('/users', usersRoutes);
 router.use('/admin', adminRoutes);
+router.use('/client-logs', clientLogsRoutes); // Use the new route
 
 export default router;

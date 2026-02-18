@@ -5,6 +5,7 @@ import { authService } from '../services/authService';
 import { trackingService } from '../services/trackingService';
 import { LoginInitialCard } from '../features/auth/components/LoginInitialCard';
 import { LoginEmailCard } from '../features/auth/components/LoginEmailCard';
+import { logClientEvent } from '../utils/logger'; // Importando o logger
 
 declare const google: any;
 
@@ -53,15 +54,19 @@ export const Login: React.FC = () => {
         setError('');
         const traceId = crypto.randomUUID();
         
+        logClientEvent('info', 'Processando login com Google', { component: 'Login', traceId });
+
         try {
-            if (!response || !response.credential) throw new Error("Login falhou.");
+            if (!response || !response.credential) throw new Error("Login falhou. Credencial do Google não recebida.");
             const result = await authService.loginWithGoogle(response.credential, traceId);
             if (result && result.user) {
+                logClientEvent('info', 'Login com Google bem-sucedido', { component: 'Login', userId: result.user.id });
                 const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
                 handleRedirect(result.user, isNew);
             }
         } catch (err: any) {
             const displayError = `Falha na autenticação. Se o problema persistir, contate o suporte. Código de rastreamento: ${err.traceId || traceId}`;
+            logClientEvent('error', 'Falha no login com Google', { component: 'Login', traceId, errorMessage: err.message });
             setError(displayError);
             setGoogleAuthProcessing(false);
         }
@@ -74,17 +79,31 @@ export const Login: React.FC = () => {
         setError('');
         const traceId = crypto.randomUUID();
         
+        logClientEvent('info', 'Tentativa de login com e-mail e senha', { component: 'Login', traceId, email });
+
         try {
             const result = await authService.login(email, password, traceId);
             if (result && result.user) {
+                logClientEvent('info', 'Login com e-mail bem-sucedido', { component: 'Login', traceId, userId: result.user.id });
                 const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
                 handleRedirect(result.user, isNew);
             }
         } catch (err: any) {
             const displayError = `Credenciais inválidas. Se o problema persistir, contate o suporte. Código de rastreamento: ${err.traceId || traceId}`;
+            logClientEvent('error', 'Falha no login com e-mail', { component: 'Login', traceId, email, errorMessage: err.message });
             setError(displayError);
             setGoogleAuthProcessing(false);
         }
+    };
+
+    const handleShowEmailForm = () => {
+        logClientEvent('info', 'Usuário selecionou a opção de login com e-mail', { component: 'Login' });
+        setShowEmailForm(true);
+    };
+
+    const handleBackToGoogle = () => {
+        logClientEvent('info', 'Usuário voltou para a opção de login inicial', { component: 'Login' });
+        setShowEmailForm(false);
     };
 
     useEffect(() => {
@@ -94,9 +113,11 @@ export const Login: React.FC = () => {
 
         const initializeGoogleSignIn = async () => {
             try {
+                logClientEvent('debug', 'Inicializando Google Sign-In', { component: 'Login' });
                 const googleClientId = await authService.getGoogleClientId();
                 if (!googleClientId) {
                     console.error("Google Client ID not found");
+                    logClientEvent('error', 'Google Client ID não encontrado', { component: 'Login' });
                     setError("A autenticação Google não está configurada corretamente.");
                     return;
                 }
@@ -115,9 +136,11 @@ export const Login: React.FC = () => {
                 );
                 
                 buttonRendered.current = true;
+                logClientEvent('debug', 'Botão do Google renderizado com sucesso', { component: 'Login' });
 
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error initializing Google Sign-In:", error);
+                logClientEvent('error', 'Erro ao inicializar o Google Sign-In', { component: 'Login', errorMessage: error.message });
                 setError("Erro ao inicializar o login com Google. Tente novamente mais tarde.");
             }
         };
@@ -141,13 +164,13 @@ export const Login: React.FC = () => {
                         password={password}
                         setPassword={setPassword}
                         onSubmit={handleEmailLogin}
-                        onBackToGoogle={() => setShowEmailForm(false)}
+                        onBackToGoogle={handleBackToGoogle} // Usando o novo manipulador
                         loading={googleAuthProcessing}
                         error={error}
                     />
                 ) : (
                     <LoginInitialCard 
-                        onSelectEmail={() => setShowEmailForm(true)}
+                        onSelectEmail={handleShowEmailForm} // Usando o novo manipulador
                         googleButtonId={GOOGLE_BTN_ID}
                         loading={loading}
                         googleProcessing={googleAuthProcessing}

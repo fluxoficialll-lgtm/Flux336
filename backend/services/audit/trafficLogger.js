@@ -66,13 +66,19 @@ export const createLogger = ({ level = 'info' }) => {
             const { statusCode } = res;
             const traceId = req.traceId;
 
+            // Ignora rotas de health check ou irrelevantes
             if (path === '/' || path === '/api/ping') return;
 
+            // Determina o nível do log com base no status code
             const isSuccess = statusCode < 400;
             const logLevel = isSuccess ? 'info' : 'error';
+
+            // Constrói o caminho da rota se existir (ex: /users/:id)
+            const routePath = req.route ? req.baseUrl + req.route.path : 'N/A';
+
             const message = isSuccess 
-                ? `Resposta enviada com sucesso: ${statusCode} ${method} ${path}`
-                : `Falha ao processar a requisição: ${statusCode} ${method} ${path}`;
+                ? `Resposta enviada: ${statusCode} ${method} ${path}`
+                : `Falha ao processar: ${statusCode} ${method} ${path}`;
 
             log(logLevel, 'outbound', {
                 message,
@@ -80,6 +86,7 @@ export const createLogger = ({ level = 'info' }) => {
                 details: {
                     method,
                     path,
+                    route: routePath, // << AQUI ESTÁ A INFORMAÇÃO QUE FALTAVA
                     status_code: statusCode,
                     duration_ms: duration,
                 }
@@ -88,6 +95,8 @@ export const createLogger = ({ level = 'info' }) => {
 
         logError: (error, req, message = 'Erro inesperado no sistema') => {
             const traceId = req?.traceId || 'no-trace-in-error';
+            const routePath = req && req.route ? req.baseUrl + req.route.path : 'N/A';
+            
             log('error', 'system', {
                 message,
                 trace_id: traceId,
@@ -95,7 +104,11 @@ export const createLogger = ({ level = 'info' }) => {
                     message: error.message,
                     stack: error.stack?.split('\n').map(line => line.trim()),
                 },
-                request_context: req ? { method: req.method, path: req.path } : undefined
+                request_context: req ? { 
+                    method: req.method, 
+                    path: req.path, 
+                    route: routePath // << E AQUI TAMBÉM
+                } : undefined
             });
         },
 

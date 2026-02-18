@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { logClientEvent } from '../../utils/logger'; // Caminho de importação corrigido
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,6 +9,15 @@ interface LayoutProps {
 }
 
 export const AuthLayout: React.FC<LayoutProps> = ({ children, title, subtitle }) => {
+
+  // useEffect para disparar o log quando o componente é montado
+  useEffect(() => {
+    logClientEvent('info', 'Página de autenticação carregada', {
+      pageTitle: title,
+      component: 'AuthLayout',
+    });
+  }, [title]); // O array de dependências garante que o log seja enviado apenas se o título mudar
+
   return (
     <div className="h-screen w-full overflow-y-auto bg-gradient-to-br from-indigo-100 to-blue-50 p-4">
       <div className="min-h-full flex items-center justify-center">

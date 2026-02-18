@@ -1,6 +1,6 @@
 
 // Importa a configuração centralizada primeiro para garantir que as variáveis de ambiente sejam carregadas.
-import { config } from './backend/config.js';
+import { config, logger } from './backend/config.js';
 
 import express from 'express';
 import cors from 'cors';
@@ -10,6 +10,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { initializeApp, cert } from 'firebase-admin/app';
+import { randomUUID } from 'crypto';
 
 import routes from './backend/routes.js';
 
@@ -20,9 +21,9 @@ if (config.FIREBASE_SERVICE_ACCOUNT_KEY) {
         initializeApp({
           credential: cert(serviceAccount)
         });
-        console.log('Firebase Admin SDK inicializado com sucesso.');
+        logger.logSystem('info', 'Firebase Admin SDK inicializado com sucesso.');
     } catch (error) {
-        console.error('Erro ao inicializar o Firebase Admin SDK: A chave FIREBASE_SERVICE_ACCOUNT_KEY parece estar mal formatada.', error);
+        logger.logSystem('error', 'Erro ao inicializar o Firebase Admin SDK: A chave FIREBASE_SERVICE_ACCOUNT_KEY parece estar mal formatada.', { error: error.message });
     }
 }
 
@@ -30,10 +31,23 @@ const app = express();
 const port = config.PORT;
 
 // Confia no proxy reverso (Render, Heroku, etc) para obter o IP real do usuário.
-// Isso é crucial para que o express-rate-limit funcione corretamente.
 app.set('trust proxy', 1);
 
-// Middlewares de Segurança
+// Middlewares de Segurança e Logging
+app.use((req, res, next) => {
+    const traceId = randomUUID();
+    req.traceId = traceId;
+    res.setHeader('X-Trace-Id', traceId);
+    logger.logInbound(req);
+    
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        logger.logOutbound(req, res, duration);
+    });
+    next();
+});
+
 app.use(helmet());
 app.use(compression());
 app.use(express.json({ limit: '10kb' }));
@@ -76,6 +90,5 @@ if (config.NODE_ENV !== 'production') {
 
 // Iniciar o servidor
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
-    console.log(`Ambiente: ${config.NODE_ENV}`);
+    logger.logSystem('info', `Servidor rodando na porta ${port}` , { environment: config.NODE_ENV });
 });
