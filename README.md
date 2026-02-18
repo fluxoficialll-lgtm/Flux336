@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <div align="center">
 <img width="1200" height="475" alt="Flux Platform" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -118,3 +119,6 @@ npm run db:up
 - `/server.js`: Servidor Node.js (API Gateway + Arquivos Estáticos).
 - `/backend`: Lógica de conexão com bancos de dados.
 - `/services`: Lógica de negócios compartilhada.
+=======
+# Flux336
+>>>>>>> c092a90ca8354c113271bc38274281c2cd35fd5c
