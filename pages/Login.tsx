@@ -5,7 +5,7 @@ import { authService } from '../services/authService';
 import { trackingService } from '../services/trackingService';
 import { LoginInitialCard } from '../features/auth/components/LoginInitialCard';
 import { LoginEmailCard } from '../features/auth/components/LoginEmailCard';
-import { logClientEvent } from '../utils/logger'; // Importando o logger
+import { logClientEvent } from '../utils/logger';
 
 declare const google: any;
 
@@ -24,6 +24,7 @@ export const Login: React.FC = () => {
     const GOOGLE_BTN_ID = 'googleButtonDiv';
 
     useEffect(() => {
+        logClientEvent('info', 'História de Usuário: Visitante acessou a página de Login do Flux.', { component: 'Login' });
         trackingService.captureUrlParams();
     }, [location]);
 
@@ -32,6 +33,12 @@ export const Login: React.FC = () => {
         const targetPath = isNewUser || (user && !user.isProfileCompleted) ? '/complete-profile' : '/feed';
         const pendingRedirect = sessionStorage.getItem('redirect_after_login') || (location.state as any)?.from?.pathname;
         
+        if (targetPath === '/feed') {
+            logClientEvent('info', 'História de Usuário: Login concluído. Entrando no Feed.', { component: 'Login', userId: user.id });
+        } else {
+            logClientEvent('info', 'História de Usuário: Novo usuário detectado. Redirecionando para completar o perfil.', { component: 'Login', userId: user.id });
+        }
+
         if (pendingRedirect && pendingRedirect !== '/' && !pendingRedirect.includes('login')) {
             sessionStorage.removeItem('redirect_after_login');
             navigate(pendingRedirect, { replace: true });
@@ -54,19 +61,18 @@ export const Login: React.FC = () => {
         setError('');
         const traceId = crypto.randomUUID();
         
-        logClientEvent('info', 'Processando login com Google', { component: 'Login', traceId });
+        logClientEvent('info', 'História de Usuário: Selecionou a conta Google. Validando...', { component: 'Login', traceId });
 
         try {
             if (!response || !response.credential) throw new Error("Login falhou. Credencial do Google não recebida.");
             const result = await authService.loginWithGoogle(response.credential, traceId);
             if (result && result.user) {
-                logClientEvent('info', 'Login com Google bem-sucedido', { component: 'Login', userId: result.user.id });
                 const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
                 handleRedirect(result.user, isNew);
             }
         } catch (err: any) {
-            const displayError = `Falha na autenticação. Se o problema persistir, contate o suporte. Código de rastreamento: ${err.traceId || traceId}`;
-            logClientEvent('error', 'Falha no login com Google', { component: 'Login', traceId, errorMessage: err.message });
+            const displayError = `Falha na autenticação. Se o problema persistir, contate o suporte. Código: ${err.traceId || traceId}`;
+            logClientEvent('error', 'História de Usuário: Falha ao validar a conta Google.', { component: 'Login', traceId, errorMessage: err.message });
             setError(displayError);
             setGoogleAuthProcessing(false);
         }
@@ -79,30 +85,29 @@ export const Login: React.FC = () => {
         setError('');
         const traceId = crypto.randomUUID();
         
-        logClientEvent('info', 'Tentativa de login com e-mail e senha', { component: 'Login', traceId, email });
+        logClientEvent('info', 'História de Usuário: Tentando login com e-mail e senha.', { component: 'Login', traceId, email });
 
         try {
             const result = await authService.login(email, password, traceId);
             if (result && result.user) {
-                logClientEvent('info', 'Login com e-mail bem-sucedido', { component: 'Login', traceId, userId: result.user.id });
                 const isNew = result.nextStep === '/complete-profile' || !result.user.isProfileCompleted;
                 handleRedirect(result.user, isNew);
             }
         } catch (err: any) {
-            const displayError = `Credenciais inválidas. Se o problema persistir, contate o suporte. Código de rastreamento: ${err.traceId || traceId}`;
-            logClientEvent('error', 'Falha no login com e-mail', { component: 'Login', traceId, email, errorMessage: err.message });
+            const displayError = `Credenciais inválidas. Código: ${err.traceId || traceId}`;
+            logClientEvent('error', 'História de Usuário: Falha no login com e-mail.', { component: 'Login', traceId, email, errorMessage: err.message });
             setError(displayError);
             setGoogleAuthProcessing(false);
         }
     };
 
     const handleShowEmailForm = () => {
-        logClientEvent('info', 'Usuário selecionou a opção de login com e-mail', { component: 'Login' });
+        logClientEvent('info', 'História de Usuário: Optou por fazer login com e-mail.', { component: 'Login' });
         setShowEmailForm(true);
     };
 
     const handleBackToGoogle = () => {
-        logClientEvent('info', 'Usuário voltou para a opção de login inicial', { component: 'Login' });
+        logClientEvent('info', 'História de Usuário: Voltou para a tela de login inicial.', { component: 'Login' });
         setShowEmailForm(false);
     };
 
@@ -110,20 +115,16 @@ export const Login: React.FC = () => {
         if (showEmailForm || typeof google === 'undefined') return;
 
         const initializeGoogleSignIn = async () => {
-            if (buttonRendered.current) return; // Se já renderizou, não faz nada
+            if (buttonRendered.current) return;
 
             try {
-                logClientEvent('debug', 'Inicializando Google Sign-In', { component: 'Login' });
+                logClientEvent('info', 'História de Usuário: Preparando o botão de login com Google...', { component: 'Login' });
                 const googleClientId = await authService.getGoogleClientId();
-                
-                // Adicionando verificação para garantir que o elemento existe antes de continuar
                 const googleButtonDiv = document.getElementById(GOOGLE_BTN_ID);
 
                 if (!googleClientId || !googleButtonDiv) {
                     const errorMsg = "A autenticação Google não está configurada ou o elemento do botão não foi encontrado.";
-                    console.error(errorMsg);
-                    logClientEvent('error', errorMsg, { component: 'Login' });
-                    setError("A autenticação Google não está configurada corretamente.");
+                    setError(errorMsg);
                     return;
                 }
                 
@@ -132,9 +133,6 @@ export const Login: React.FC = () => {
                 google.accounts.id.initialize({
                     client_id: googleClientId,
                     callback: handleCredentialResponse,
-                    auto_select: false,
-                    cancel_on_tap_outside: true,
-                    ux_mode: 'popup'
                 });
 
                 google.accounts.id.renderButton(
@@ -143,18 +141,14 @@ export const Login: React.FC = () => {
                 );
                 
                 buttonRendered.current = true;
-                logClientEvent('debug', 'Botão do Google renderizado com sucesso', { component: 'Login' });
+                logClientEvent('info', 'História de Usuário: Botão de login com Google está pronto.', { component: 'Login' });
 
             } catch (error: any) {
-                console.error("Error initializing Google Sign-In:", error);
-                logClientEvent('error', 'Erro ao inicializar o Google Sign-In', { component: 'Login', errorMessage: error.message });
-                setError("Erro ao inicializar o login com Google. Tente novamente mais tarde.");
+                setError("Erro ao inicializar o login com Google.");
             }
         };
 
-        // Um pequeno atraso para garantir que o DOM esteja pronto.
         const timer = setTimeout(initializeGoogleSignIn, 100);
-
         return () => clearTimeout(timer);
 
     }, [showEmailForm, handleCredentialResponse]);
@@ -174,13 +168,13 @@ export const Login: React.FC = () => {
                         password={password}
                         setPassword={setPassword}
                         onSubmit={handleEmailLogin}
-                        onBackToGoogle={handleBackToGoogle} // Usando o novo manipulador
+                        onBackToGoogle={handleBackToGoogle}
                         loading={googleAuthProcessing}
                         error={error}
                     />
                 ) : (
                     <LoginInitialCard 
-                        onSelectEmail={handleShowEmailForm} // Usando o novo manipulador
+                        onSelectEmail={handleShowEmailForm}
                         googleButtonId={GOOGLE_BTN_ID}
                         loading={loading}
                         googleProcessing={googleAuthProcessing}
