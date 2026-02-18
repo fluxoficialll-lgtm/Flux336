@@ -107,21 +107,28 @@ export const Login: React.FC = () => {
     };
 
     useEffect(() => {
-        if (showEmailForm || typeof google === 'undefined' || !document.getElementById(GOOGLE_BTN_ID) || buttonRendered.current) {
-            return;
-        }
+        if (showEmailForm || typeof google === 'undefined') return;
 
         const initializeGoogleSignIn = async () => {
+            if (buttonRendered.current) return; // Se já renderizou, não faz nada
+
             try {
                 logClientEvent('debug', 'Inicializando Google Sign-In', { component: 'Login' });
                 const googleClientId = await authService.getGoogleClientId();
-                if (!googleClientId) {
-                    console.error("Google Client ID not found");
-                    logClientEvent('error', 'Google Client ID não encontrado', { component: 'Login' });
+                
+                // Adicionando verificação para garantir que o elemento existe antes de continuar
+                const googleButtonDiv = document.getElementById(GOOGLE_BTN_ID);
+
+                if (!googleClientId || !googleButtonDiv) {
+                    const errorMsg = "A autenticação Google não está configurada ou o elemento do botão não foi encontrado.";
+                    console.error(errorMsg);
+                    logClientEvent('error', errorMsg, { component: 'Login' });
                     setError("A autenticação Google não está configurada corretamente.");
                     return;
                 }
                 
+                if (buttonRendered.current) return;
+
                 google.accounts.id.initialize({
                     client_id: googleClientId,
                     callback: handleCredentialResponse,
@@ -131,7 +138,7 @@ export const Login: React.FC = () => {
                 });
 
                 google.accounts.id.renderButton(
-                    document.getElementById(GOOGLE_BTN_ID),
+                    googleButtonDiv,
                     { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill' }
                 );
                 
@@ -145,7 +152,10 @@ export const Login: React.FC = () => {
             }
         };
 
-        initializeGoogleSignIn();
+        // Um pequeno atraso para garantir que o DOM esteja pronto.
+        const timer = setTimeout(initializeGoogleSignIn, 100);
+
+        return () => clearTimeout(timer);
 
     }, [showEmailForm, handleCredentialResponse]);
 
