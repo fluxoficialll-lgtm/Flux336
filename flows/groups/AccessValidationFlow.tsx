@@ -1,7 +1,7 @@
 
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '../../services/groupService';
-import { authService } from '../../services/authService';
+import { groupService } from '../../ServiçosDoFrontend/ServiçoDeGrupo/groupService.ts';
+import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
 
 export const useAccessValidationFlow = () => {
     const navigate = useNavigate();

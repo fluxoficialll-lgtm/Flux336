@@ -1,1 +1,0 @@
-export { eventCollectorService } from './real/eventCollectorService';

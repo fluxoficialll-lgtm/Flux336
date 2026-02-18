@@ -1,11 +1,11 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MarketplaceItem, Group } from '../../types';
-import { metaPixelService } from '../../services/metaPixelService';
-import { geoService } from '../../services/geoService';
-import { currencyService } from '../../services/currencyService';
-import { authService } from '../../services/authService';
+import { MarketplaceItem, Group } from '../../tipos/index.ts';
+import { metaPixelService } from '../../ServiçosDoFrontend/ServiçoDeMetaPixel/metaPixelService.ts';
+import { geoService } from '../../ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService.ts';
+import { currencyService } from '../../ServiçosDoFrontend/ServiçoDeConversaoDeMoeda/currencyService.ts';
+import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
 
 export const useCheckoutFlow = () => {
     const navigate = useNavigate();

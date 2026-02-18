@@ -1,29 +1,16 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { HashRouter } from 'react-router-dom';
-import { ModalProvider } from './components/ModalSystem';
-import { GlobalTracker } from './components/layout/GlobalTracker';
-import { DeepLinkHandler } from './components/layout/DeepLinkHandler';
-import AppRoutes from './routes/AppRoutes';
+import { ModalProvider } from './componentes/ComponentesDeInterface/ModalSystem';
+import { GlobalTracker } from './componentes/ComponentesDeLayout/GlobalTracker';
+import { DeepLinkHandler } from './componentes/ComponentesDeLayout/DeepLinkHandler';
+import AppRoutes from './RotasDoFrontEnd/AppRoutes';
 import { useAuthSync } from './hooks/useAuthSync';
-import { USE_MOCKS } from './mocks';
-import { GlobalErrorBoundary } from './components/GlobalErrorBoundary';
-import { configControl } from './services/admin/ConfigControl';
-import { hydrationManager } from './services/sync/HydrationManager';
+import { GlobalErrorBoundary } from './componentes/ComponentesDeLayout/GlobalErrorBoundary';
+import { configControl } from './ServiçosDoFrontend/ServiçoDeAdmin/ConfigControl';
+import { hydrationManager } from './ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager';
 
-const Maintenance = lazy(() => import('./pages/Maintenance').then(m => ({ default: m.Maintenance })));
-
-const DemoModeBadge = () => {
-    if (!USE_MOCKS) return null;
-    return (
-        <div className="fixed bottom-24 left-4 z-[100] animate-fade-in pointer-events-none">
-            <div className="flex items-center gap-2 bg-yellow-500/10 backdrop-blur-md border border-yellow-500/50 px-3 py-1.5 rounded-full shadow-lg">
-                <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
-                <span className="text-[10px] font-black text-yellow-500 uppercase tracking-widest">Modo Visualização</span>
-            </div>
-        </div>
-    );
-};
+const Maintenance = lazy(() => import('./Paginas/Maintenance').then(m => ({ default: m.Maintenance })));
 
 const LoadingFallback: React.FC = () => (
     <div className="h-screen w-full bg-[#0c0f14] flex flex-col items-center justify-center gap-4">
@@ -68,7 +55,7 @@ const App: React.FC = () => {
 
         const forceOpen = getParam('ignoreMaintenance') === 'true' || getParam('force') === 'true';
         const config = await configControl.boot();
-        const shouldShowMaintenance = config.maintenanceMode === true && !USE_MOCKS && !forceOpen;
+        const shouldShowMaintenance = config.maintenanceMode === true && !forceOpen;
         
         setIsMaintenance(shouldShowMaintenance);
       } catch (e) {
@@ -77,7 +64,7 @@ const App: React.FC = () => {
       } finally {
         clearTimeout(bootTimeout);
         setIsReady(true);
-        if (USE_MOCKS || !localStorage.getItem('auth_token')) {
+        if (!localStorage.getItem('auth_token')) {
             setIsHydrated(true);
         }
       }
@@ -87,7 +74,7 @@ const App: React.FC = () => {
     return () => unsub();
   }, []);
 
-  if (!isReady || (!isHydrated && !USE_MOCKS)) {
+  if (!isReady || !isHydrated) {
     return <LoadingFallback />;
   }
 
@@ -105,7 +92,6 @@ const App: React.FC = () => {
         <HashRouter>
           <GlobalTracker />
           <DeepLinkHandler />
-          <DemoModeBadge />
           <AppRoutes />
         </HashRouter>
       </ModalProvider>

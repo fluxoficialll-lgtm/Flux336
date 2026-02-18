@@ -1,4 +1,4 @@
-import { db } from './src/database';
+import { db } from './debug_database";
 
 /**
  * This script is for debugging purposes.

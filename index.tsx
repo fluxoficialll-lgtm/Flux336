@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { validateEnvironment } from './services/environmentValidator';
-import { initNetworkInterceptor } from './services/telemetry/NetworkInterceptor';
-import { eventTracker } from './services/telemetry/EventTracker';
-import { TelemetryFilter } from './services/telemetry/TelemetryFilter';
+import { validateEnvironment } from './ServiçosDoFrontend/ServiçoDeConfiguracao/environmentValidator';
+import { initNetworkInterceptor } from './ServiçosDoFrontend/telemetry/NetworkInterceptor';
+import { eventTracker } from './ServiçosDoFrontend/telemetry/EventTracker';
+import { TelemetryFilter } from './ServiçosDoFrontend/telemetry/TelemetryFilter';
 
 // 1. Validação de Infraestrutura antes do boot
 validateEnvironment();
