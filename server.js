@@ -11,8 +11,14 @@ import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { randomUUID } from 'crypto';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import routes from './backend/routes.js';
+
+// Obter __dirname no escopo de módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Inicialização do Firebase Admin usando a configuração importada
 if (config.FIREBASE_SERVICE_ACCOUNT_KEY) {
@@ -48,7 +54,14 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            ...helmet.contentSecurityPolicy.getDefaults().directives,
+            "script-src": ["'self'", "https://accounts.google.com"], // Permite scripts do Google
+        },
+    },
+}));
 app.use(compression());
 app.use(express.json({ limit: '10kb' }));
 app.use(hpp());
@@ -67,25 +80,31 @@ const limiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false, 
 });
-app.use('/api/', limiter);
 
-// Rotas da API
+// Aplica o rate limiter apenas às rotas da API
+app.use('/api', limiter);
+
+// Rotas da API - Tratadas primeiro
 app.use('/api', routes);
 
-// Configuração do ambiente de desenvolvimento vs produção
-if (config.NODE_ENV !== 'production') {
-    // Modo de Desenvolvimento (proxy para Vite)
+// Configuração para servir o frontend
+if (config.NODE_ENV === 'production') {
+    // Servir arquivos estáticos da pasta 'dist'
+    const buildPath = path.join(__dirname, 'dist');
+    app.use(express.static(buildPath));
+
+    // Para qualquer outra rota que não seja da API e não seja um arquivo estático,
+    // servir o index.html da SPA.
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(buildPath, 'index.html'));
+    });
+} else {
+    // Modo de Desenvolvimento (proxy para Vite) - não servir arquivos estáticos
     app.use('/', createProxyMiddleware({
         target: 'http://localhost:3000',
         changeOrigin: true,
         ws: true,
     }));
-} else {
-    // Modo de Produção (servir arquivos estáticos)
-    app.use(express.static('dist'));
-    app.get('*', (req, res) => {
-        res.sendFile('index.html', { root: 'dist' });
-    });
 }
 
 // Iniciar o servidor
