@@ -133,6 +133,9 @@ export const Login: React.FC = () => {
                 google.accounts.id.initialize({
                     client_id: googleClientId,
                     callback: handleCredentialResponse,
+                    ux_mode: 'popup', // <-- RESTAURADO
+                    cancel_on_tap_outside: true, // <-- RESTAURADO
+                    auto_select: false // <-- RESTAURADO
                 });
 
                 google.accounts.id.renderButton(
