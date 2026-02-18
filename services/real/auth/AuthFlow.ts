@@ -1,7 +1,6 @@
 
 import { User, AuthError } from '../../../types';
 import { emailService } from '../../emailService';
-import { cryptoService } from '../../cryptoService';
 import { API_BASE } from '../../../apiConfig';
 import { db } from '@/database';
 import { AccountSyncService } from '../../sync/AccountSyncService';
@@ -41,21 +40,19 @@ export const AuthFlow = {
         }
 
         const safeEmail = String(email || '').toLowerCase().trim();
-        const hashed = await cryptoService.hashPassword(password);
         
         const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
-                'x-flux-trace-id': traceId // Nome do header atualizado
+                'x-flux-trace-id': traceId
             },
-            body: JSON.stringify({ email: safeEmail, password: hashed })
+            body: JSON.stringify({ email: safeEmail, password: password })
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            // O backend agora retorna o traceId no corpo do erro
             throw createTraceableError(data.error || "Falha no login.", data.trace_id || traceId);
         }
 
@@ -76,7 +73,7 @@ export const AuthFlow = {
             method: 'POST', 
             headers: { 
                 'Content-Type': 'application/json',
-                'x-flux-trace-id': traceId // Nome do header atualizado
+                'x-flux-trace-id': traceId
             }, 
             body: JSON.stringify({ credential: googleToken, referredBy: referredBy || null }) 
         });

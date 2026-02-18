@@ -3,11 +3,11 @@ import express from 'express';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { OAuth2Client } from 'google-auth-library';
-import { config, logger } from '../config.js'; // Importa a configuração centralizada e o logger
+import { config, logger } from '../config.js';
+import { passwordAuthService } from '../services/passwordAuthService.js';
 
 const router = express.Router();
 
-// Usa o GOOGLE_CLIENT_ID do nosso objeto de configuração
 const GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
@@ -19,6 +19,10 @@ router.get('/config/google-client-id', (req, res) => {
         res.status(500).json({ error: 'Google Client ID not configured on server.' });
     }
 });
+
+// Rotas de autenticação com senha
+router.post('/login', passwordAuthService.login);
+router.post('/register', passwordAuthService.register);
 
 // Rota de login com Google
 router.post('/google', async (req, res) => {
