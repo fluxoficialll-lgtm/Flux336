@@ -1,6 +1,6 @@
-import { mockMode } from '@/ServiçosDoFrontend/ServiçoDeConfiguracao/envService.ts';
-import { trackingService as mockTrackingService, generateTrackingLinkModel as mockGenerateTrackingLinkModel } from '@/ServiçosDoFrontend/ServiçoDeSimulação/trackingService.ts';
-import { trackingService as realTrackingService, generateTrackingLinkModel as realGenerateTrackingLinkModel } from '@/ServiçosDoFrontend/ServiçoDeTelemetria/real_trackingService.ts';
+import { mockMode } from '../ServiçoDeConfiguracao/envService';
+import { trackingService as mockTrackingService, generateTrackingLinkModel as mockGenerateTrackingLinkModel } from '../ServiçoDeSimulação/trackingService';
+import { trackingService as realTrackingService, generateTrackingLinkModel as realGenerateTrackingLinkModel } from './real_trackingService';
 
 export const trackingService = mockMode ? mockTrackingService : realTrackingService;
 export const generateTrackingLinkModel = mockMode ? mockGenerateTrackingLinkModel : realGenerateTrackingLinkModel;

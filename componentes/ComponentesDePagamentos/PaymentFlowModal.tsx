@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SyncPayModel } from './SyncPayModel.tsx';
-import { PayPalModel } from './PayPalModel.tsx';
-import { StripeModel } from './StripeModel.tsx';
-import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { GeoData } from '@/ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService.ts';
-import { ConversionResult } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
+import { SyncPayModel } from './SyncPayModel';
+import { PayPalModel } from './PayPalModel';
+import { StripeModel } from './StripeModel';
+import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { GeoData } from '../../ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService';
+import { ConversionResult } from '../../ServiçosDoFrontend/ServiçoDeMoeda/currencyService';
 import { Group } from '../../types/index.ts';
 import { PurchaseIntention } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/PurchaseIntention.ts';
 

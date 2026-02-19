@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
-import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { groupService } from '../../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '../../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { useModal } from '@/componentes/ComponentesDeSistema/ModalSystem.tsx';
-import { Group, CheckoutConfig } from '@/types/social.types.ts';
+import { Group, CheckoutConfig } from '../../../../types/social.types';
 import { PROVIDER_METHODS } from '@/componentes/groups/componentes/settings/checkout/CheckoutMethodData';
-import { PREVIEW_COUNTRIES } from '@/componentes/ComponentesDeGrupos/GlobalSimulatorModal.tsx';
+import { PREVIEW_COUNTRIES } from '../../../ComponentesDeGrupos/GlobalSimulatorModal';
 
 /**
  * Coleta todos os IDs de métodos possíveis de todos os provedores e regiões

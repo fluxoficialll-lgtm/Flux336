@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SettingItem } from './SettingItem';
-import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { LANGUAGES } from '@/Paginas/LanguageSettings';
 
 export const GeneralGroup: React.FC = () => {

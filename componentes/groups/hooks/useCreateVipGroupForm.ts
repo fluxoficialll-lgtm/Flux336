@@ -1,11 +1,11 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
-import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService.ts';
-import { Group, VipMediaItem } from '@/types/social.types.ts';
-import { CurrencyType } from '@/componentes/ComponentesDeGrupos/CurrencySelectorModal.tsx';
+import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '../../../ServiçosDoFrontend/ServiçoDePosts/postService';
+import { Group, VipMediaItem } from '../../../types/social.types';
+import { CurrencyType } from '../../ComponentesDeGrupos/CurrencySelectorModal';
 import { GATEWAY_CURRENCIES, DEFAULT_CURRENCY_FOR_GATEWAY } from '@/ServiçosDoFrontend/gateways/gatewayConfig.ts';
 
 export const useCreateVipGroupForm = () => {

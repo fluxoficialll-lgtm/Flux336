@@ -1,4 +1,4 @@
-import { API_BASE } from '@/apiConfig.ts';
+import { API_BASE } from '../../apiConfig';
 
 /**
  * FLUX CLIENT (The Connection Brain)

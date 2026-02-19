@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { paypalService } from '@/ServiçosDoFrontend/ServiçoDePayPal/paypalService.ts';
-import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { metaPixelService } from '@/ServiçosDoFrontend/ServiçoDePixel/metaPixelService.ts';
 import { Group } from '../../types/index.ts';
-import { ConversionResult } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
-import { RedirectionBridgeCard } from './RedirectionBridgeCard.tsx';
+import { ConversionResult } from '../../ServiçosDoFrontend/ServiçoDeMoeda/currencyService';
+import { RedirectionBridgeCard } from './RedirectionBridgeCard';
 
 interface PayPalModelProps {
     group: Group;

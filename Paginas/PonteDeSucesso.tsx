@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
-import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { RedirectResolver } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/RedirectResolver.ts';
 import { PurchaseIntention } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/PurchaseIntention.ts';
 import { db } from '../infraestrutura/database.ts';
