@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePreciseLocation } from '../hooks/usePreciseLocation';
-import { RadiusSelector } from '../componentes/ComponentesDeLocalizacao/RadiusSelector';
+import { DistanceRadiusCard } from '../componentes/ComponentesDeLocalizacao/DistanceRadiusCard';
 import { LocationFilter } from '../types/location.types';
 
 type PlacementType = 'feed' | 'reels' | 'marketplace';
@@ -194,9 +194,8 @@ export const LocationSelector: React.FC = () => {
                         </div>
                     ) : (
                         <div className="animate-fade-in">
-                            <RadiusSelector 
-                                value={currentFilter.radius || 50} 
-                                onChange={handleRadiusChange} 
+                            <DistanceRadiusCard 
+                                onSelect={handleRadiusChange} 
                             />
                         </div>
                     )}

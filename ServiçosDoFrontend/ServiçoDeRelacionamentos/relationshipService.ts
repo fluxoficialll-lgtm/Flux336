@@ -1,5 +1,5 @@
 
-import { apiClient } from './apiClient';
+import { apiClient } from '../ServiçoDeAPI/apiClient';
 import { User } from '@/types';
 
 // Memória cache local para relacionamentos (padrão Observer)

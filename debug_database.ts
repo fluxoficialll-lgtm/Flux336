@@ -1,4 +1,4 @@
-import { db } from './debug_database";
+import { db } from './debug_database';
 
 /**
  * This script is for debugging purposes.
@@ -29,7 +29,7 @@ const runDatabaseCheck = () => {
     console.log("\n[2] Checking 'chats' table data...");
     try {
         const chatsData = db.chats.getAll();
-        console.log("  - Data received:", chatsData);
+        console.log("  - Data received:", chatsData, Array.isArray(chatsData));
 
         if (Array.isArray(chatsData)) {
             console.log("  - ✅ Check PASSED: Data is a valid array.");

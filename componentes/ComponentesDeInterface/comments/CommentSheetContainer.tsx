@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useComments } from '../../../hooks/useComments'; // Ajuste o caminho conforme sua estrutura
 import { CommentSheet } from './CommentSheet';
-import { CommentableType } from '../../../types";
+import { CommentableType } from '../../../types';
 
 interface CommentSheetContainerProps {
     isOpen: boolean;

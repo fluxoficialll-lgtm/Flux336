@@ -5,7 +5,7 @@ import { ProviderCredentialsModal } from '../componentes/ComponentesFinanceiros/
 import ProviderSettingsModal from '../componentes/ComponentesFinanceiros/ProviderSettingsModal';
 import { credentialsService } from '../ServiçosDoFrontend/ServiçoDeSeguranca/credentialsService';
 import './ProviderConfig.css';
-import { providers } from '../constants/providerData';
+import { providers } from '../ServiçosDoFrontend/ServiçoDePagamentos/providerData';
 import { ProviderListItem } from '../componentes/ComponentesFinanceiros/ProviderListItem';
 
 export const ProviderConfig: React.FC = () => {

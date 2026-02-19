@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { reelsService } from '../ServiçosDoFrontend/ServiçoDePosts/reelsService';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupo/groupService';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
 import { contentSafetyService } from '../ServiçosDoFrontend/ServiçoDeSegurança/contentSafetyService';
 import { adService } from '../ServiçosDoFrontend/ServiçoDeAnuncios/adService';
 import { Post, Group } from '../types';

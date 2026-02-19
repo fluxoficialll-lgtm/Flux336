@@ -10,7 +10,7 @@ import { GlobalErrorBoundary } from './componentes/ComponentesDeLayout/GlobalErr
 import { configControl } from './ServiçosDoFrontend/ServiçoDeAdmin/ConfigControl';
 import { hydrationManager } from './ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager';
 
-const Maintenance = lazy(() => import('./Paginas/Maintenance').then(m => ({ default: m.Maintenance })));
+const Maintenance = lazy(() => import('./Paginas/Manutencao').then(m => ({ default: m.Maintenance })));
 
 const LoadingFallback: React.FC = () => (
     <div className="h-screen w-full bg-[#0c0f14] flex flex-col items-center justify-center gap-4">

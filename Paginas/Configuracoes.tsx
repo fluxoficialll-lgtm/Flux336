@@ -6,9 +6,9 @@ import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
 import { Footer } from '../componentes/ComponentesDeLayout/Footer';
 
 // Novos Componentes Modulares
-import { AccountGroup } from '../componentes/ComponentesDeConfiguracoes/AccountGroup';
-import { PrivacyGroup } from '../componentes/ComponentesDeConfiguracoes/PrivacyGroup';
-import { GeneralGroup } from '../componentes/ComponentesDeConfiguracoes/GeneralGroup';
+import { AccountGroup } from '../componentes/ComponentesDeConfiguracoes/ConfiguracaoGrupoDeContas';
+import { PrivacyGroup } from '../componentes/ComponentesDeConfiguracoes/ConfiguracaoGrupoDePrivacidade';
+import { GeneralGroup } from '../componentes/ComponentesDeConfiguracoes/ConfiguracaoGrupoGeral';
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();

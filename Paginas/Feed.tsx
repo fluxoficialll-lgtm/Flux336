@@ -7,7 +7,7 @@ import { recommendationService } from '../ServiçosDoFrontend/ServiçoDeRecomend
 import { Post } from '../types';
 import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
 import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { FeedItem } from '../componentes/ComponentesDeFeed/FeedItem';
+import { FeedItem } from '../componentes/ComponentesDoFeed/FeedItem';
 import { Footer } from '../componentes/ComponentesDeLayout/Footer';
 import { MainHeader } from '../componentes/ComponentesDeLayout/MainHeader';
 

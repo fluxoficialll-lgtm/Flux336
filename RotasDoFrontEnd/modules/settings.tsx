@@ -2,13 +2,13 @@
 import React, { lazy } from 'react';
 import { ProtectedRoute } from '../../componentes/ComponentesDeLogin/ProtectedRoute';
 
-const Settings = lazy(() => import('../../Paginas/Settings').then(m => ({ default: m.Settings })));
-const SecurityLogin = lazy(() => import('../../Paginas/SecurityLogin').then(m => ({ default: m.SecurityLogin })));
-const NotificationSettings = lazy(() => import('../../Paginas/NotificationSettings').then(m => ({ default: m.NotificationSettings })));
-const LanguageSettings = lazy(() => import('../../Paginas/LanguageSettings').then(m => ({ default: m.LanguageSettings })));
-const BlockedUsers = lazy(() => import('../../Paginas/BlockedUsers').then(m => ({ default: m.BlockedUsers })));
-const TermsAndPrivacy = lazy(() => import('../../componentes/ComponentesDeConfiguracoes/TermsAndPrivacy').then(m => ({ default: m.TermsAndPrivacy })));
-const HelpSupport = lazy(() => import('../../Paginas/HelpSupport').then(m => ({ default: m.HelpSupport })));
+const Settings = lazy(() => import('../../Paginas/Configuracoes').then(m => ({ default: m.Settings })));
+const SecurityLogin = lazy(() => import('../../Paginas/LoginDeSeguranca').then(m => ({ default: m.SecurityLogin })));
+const NotificationSettings = lazy(() => import('../../Paginas/ConfiguracoesDeNotificacao').then(m => ({ default: m.NotificationSettings })));
+const LanguageSettings = lazy(() => import('../../Paginas/ConfiguracoesDeIdioma').then(m => ({ default: m.LanguageSettings })));
+const BlockedUsers = lazy(() => import('../../Paginas/UsuariosBloqueados').then(m => ({ default: m.BlockedUsers })));
+const TermsAndPrivacy = lazy(() => import('../../componentes/ComponentesDeConfiguracoes/ConfiguracaoTermosEPrivacidade').then(m => ({ default: m.TermsAndPrivacy })));
+const HelpSupport = lazy(() => import('../../Paginas/AjudaESuporte').then(m => ({ default: m.HelpSupport })));
 
 export const settingsRoutes = [
   { path: '/settings', element: <ProtectedRoute><Settings /></ProtectedRoute> },

@@ -5,10 +5,10 @@ import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authS
 import { Post } from '../types/index';
 
 // Componentes Modulares
-import { AdSelectionHeader } from '../componentes/ComponentesDeAnuncios/selection/AdSelectionHeader';
-import { AdContentTabs } from '../componentes/ComponentesDeAnuncios/selection/AdContentTabs';
-import { PostSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/PostSelectionCard';
-import { ReelSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/ReelSelectionCard';
+import { AdSelectionHeader } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCabecalhoDeSelecao';
+import { AdContentTabs } from '../componentes/ComponentesDeAnuncios/selection/AnuncioAbasDeConteudo';
+import { PostSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecaoDePost';
+import { ReelSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecaoDeReel';
 
 export const AdContentSelector: React.FC = () => {
     const navigate = useNavigate();
@@ -61,9 +61,9 @@ export const AdContentSelector: React.FC = () => {
                             <div className="flex flex-col p-4 max-w-[500px] mx-auto w-full px-3">
                                 {filteredContent.map(p => (
                                     <PostSelectionCard 
-                                        key={p.id} 
-                                        post={p} 
-                                        onSelect={handleSelect} 
+                                        key={p.id}
+                                        post={p}
+                                        onSelect={handleSelect}
                                     />
                                 ))}
                             </div>
@@ -71,9 +71,9 @@ export const AdContentSelector: React.FC = () => {
                             <div className="grid grid-cols-3 gap-[2px] p-[2px]">
                                 {filteredContent.map(p => (
                                     <ReelSelectionCard 
-                                        key={p.id} 
-                                        reel={p} 
-                                        onSelect={handleSelect} 
+                                        key={p.id}
+                                        reel={p}
+                                        onSelect={handleSelect}
                                     />
                                 ))}
                             </div>

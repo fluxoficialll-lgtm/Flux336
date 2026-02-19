@@ -2,14 +2,14 @@
 import React, { lazy } from 'react';
 import { ProtectedRoute } from '../../componentes/ComponentesDeLogin/ProtectedRoute';
 
-const Marketplace = lazy(() => import('../../Paginas/Marketplace').then(m => ({ default: m.Marketplace })));
-const ProductDetails = lazy(() => import('../../Paginas/ProductDetails').then(m => ({ default: m.ProductDetails })));
-const CreateMarketplaceItem = lazy(() => import('../../Paginas/CreateMarketplaceItem').then(m => ({ default: m.CreateMarketplaceItem })));
-const MyStore = lazy(() => import('../../Paginas/MyStore').then(m => ({ default: m.MyStore })));
-const AdPlacementSelector = lazy(() => import('../../Paginas/AdPlacementSelector').then(m => ({ default: m.AdPlacementSelector })));
-const CampaignPerformance = lazy(() => import('../../Paginas/CampaignPerformance').then(m => ({ default: m.CampaignPerformance })));
-const AdCampaignTypeSelector = lazy(() => import('../../Paginas/AdCampaignTypeSelector').then(m => ({ default: m.AdCampaignTypeSelector })));
-const AdContentSelector = lazy(() => import('../../Paginas/AdContentSelector').then(m => ({ default: m.AdContentSelector })));
+const Marketplace = lazy(() => import('../../Paginas/Mercado').then(m => ({ default: m.Marketplace })));
+const ProductDetails = lazy(() => import('../../Paginas/DetalhesDoProduto').then(m => ({ default: m.ProductDetails })));
+const CreateMarketplaceItem = lazy(() => import('../../Paginas/CriarItemDoMercado').then(m => ({ default: m.CreateMarketplaceItem })));
+const MyStore = lazy(() => import('../../Paginas/MinhaLoja').then(m => ({ default: m.MyStore })));
+const AdPlacementSelector = lazy(() => import('../../Paginas/SeletorDePosicionamentoDeAnuncio').then(m => ({ default: m.AdPlacementSelector })));
+const CampaignPerformance = lazy(() => import('../../Paginas/DesempenhoDaCampanha').then(m => ({ default: m.CampaignPerformance })));
+const AdCampaignTypeSelector = lazy(() => import('../../Paginas/SeletorDeTipoDeCampanhaDeAnuncio').then(m => ({ default: m.AdCampaignTypeSelector })));
+const AdContentSelector = lazy(() => import('../../Paginas/SeletorDeConteudoDeAnuncio').then(m => ({ default: m.AdContentSelector })));
 
 export const marketplaceRoutes = [
   { path: '/marketplace', element: <ProtectedRoute><Marketplace /></ProtectedRoute> },

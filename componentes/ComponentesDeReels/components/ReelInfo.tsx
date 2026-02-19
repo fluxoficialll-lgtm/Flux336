@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Post, Group } from '../../../types";
+import { Post, Group } from '../../../types';
 import { groupService } from '../../../services/groupService';
 import { AvatarPreviewModal } from '../../../components/ui/AvatarPreviewModal';
 import { UserBadge } from '../../../components/ui/user/UserBadge';
