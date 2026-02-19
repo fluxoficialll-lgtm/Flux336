@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
-import { Comment } from '../../../types';
-import { CommentItem } from './CommentItem';
+import { Comment } from '@/types';
+import { CommentItem } from '@/componentes/ComponentesDeInterface/comments/CommentItem';
 
 interface CommentSheetProps {
     isOpen: boolean;

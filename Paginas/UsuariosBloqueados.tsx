@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Import chatService from the service and ChatData from types
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { ChatData } from '../types';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { ChatData } from '@/types';
 
 export const BlockedUsers: React.FC = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
 import { useModal } from '@/componentes/ModalSystem';
-import { Group } from '../../../types';
+import { Group } from '@/types';
 
 interface GroupChatActionsProps {
     group: Group;

@@ -1,11 +1,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { vipSalesTracker } from '../ServiçosDoFrontend/pixel/trackers/VipSalesTracker';
-import { VipPlaybackController } from '../ServiçosDoFrontend/real/vip/VipPlaybackController';
-import { useVipPricing } from './useVipPricing';
-import { Group } from '../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { vipSalesTracker } from '@/ServiçosDoFrontend/ServiçoDePixel/trackers/VipSalesTracker';
+import { VipPlaybackController } from '@/ServiçosDoFrontend/real/vip/VipPlaybackController';
+import { useVipPricing } from '@/hooks/useVipPricing';
+import { Group } from '@/types';
 
 export const useVipGroupSales = (groupId: string | undefined) => {
   const [group, setGroup] = useState<Group | null>(null);

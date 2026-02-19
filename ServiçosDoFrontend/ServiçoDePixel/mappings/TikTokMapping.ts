@@ -1,5 +1,5 @@
-import { PixelEventName } from '../../../types/pixel.types';
-import { EngagementMapping } from './EngagementMapping';
+import { PixelEventName } from '@/types/pixel.types';
+import { EngagementMapping } from '@/ServiçosDoFrontend/ServiçoDePixel/mappings/EngagementMapping';
 
 /**
  * Dicionário de tradução para TikTok

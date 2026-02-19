@@ -1,6 +1,6 @@
 
-import { Group, User } from '../../types';
-import { ROLE_WEIGHTS } from '../../constants/RoleWeights';
+import { Group, User } from '@/types';
+import { ROLE_WEIGHTS } from '@/componentes/groups/constants/RoleWeights';
 
 /**
  * PermissionGuard

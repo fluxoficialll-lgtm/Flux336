@@ -1,17 +1,17 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCreateVipGroupForm } from '../componentes/groups/hooks/useCreateVipGroupForm';
+import { useCreateVipGroupForm } from '@/componentes/groups/hooks/useCreateVipGroupForm';
 import { CreateVipGroupHeader } from '@/componentes/groups/componentes/createVip/CreateVipGroupHeader';
 import { GroupBasicInfo } from '@/componentes/groups/componentes/createVip/GroupBasicInfo';
 import { VipDoorGallery } from '@/componentes/groups/componentes/createVip/VipDoorGallery';
 import { GroupPricing } from '@/componentes/groups/componentes/createVip/GroupPricing';
 import { GroupMarketing } from '@/componentes/groups/componentes/createVip/GroupMarketing';
-import { PixelSettingsModal } from '../componentes/ComponentesDeGrupos/PixelSettingsModal';
-import { AccessTypeModal } from '../componentes/ComponentesDeGrupos/AccessTypeModal';
-import { CurrencySelectorModal } from '../componentes/ComponentesDeGrupos/CurrencySelectorModal';
-import { ProviderSelectorModal } from '../componentes/ComponentesDeGrupos/ProviderSelectorModal';
-import { ImageCropModal } from '../componentes/ComponentesDeInterface/ImageCropModal';
+import { PixelSettingsModal } from '@/componentes/ComponentesDeGrupos/PixelSettingsModal';
+import { AccessTypeModal } from '@/componentes/ComponentesDeGrupos/AccessTypeModal';
+import { CurrencySelectorModal } from '@/componentes/ComponentesDeGrupos/CurrencySelectorModal';
+import { ProviderSelectorModal } from '@/componentes/ComponentesDeGrupos/ProviderSelectorModal';
+import { ImageCropModal } from '@/componentes/ComponentesDeInterface/ImageCropModal';
 import { UploadProgressCard } from '@/componentes/groups/componentes/platform/UploadProgressCard';
 
 export const CreateVipGroup: React.FC = () => {

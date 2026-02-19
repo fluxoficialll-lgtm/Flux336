@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { marketplaceService } from '../../../ServiçosDoFrontend/marketplaceService';
-import { ProductCard } from '../../../componentes/marketplace/ProductCard';
+import { marketplaceService } from '@/ServiçosDoFrontend/marketplaceService';
+import { ProductCard } from '@/componentes/ComponentesDeMarketplace/ProductCard';
 
 interface ProfileProductsGridProps {
     userId: string;

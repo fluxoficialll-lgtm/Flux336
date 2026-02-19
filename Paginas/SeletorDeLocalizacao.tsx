@@ -1,9 +1,9 @@
 
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePreciseLocation } from '../hooks/usePreciseLocation';
-import { DistanceRadiusCard } from '../componentes/ComponentesDeLocalizacao/DistanceRadiusCard';
-import { LocationFilter } from '../types/location.types';
+import { usePreciseLocation } from '@/hooks/usePreciseLocation';
+import { DistanceRadiusCard } from '@/componentes/ComponentesDeLocalizacao/DistanceRadiusCard';
+import { LocationFilter } from '@/types/location.types';
 
 type PlacementType = 'feed' | 'reels' | 'marketplace';
 type DiscoveryMode = 'territory' | 'custom_radius';

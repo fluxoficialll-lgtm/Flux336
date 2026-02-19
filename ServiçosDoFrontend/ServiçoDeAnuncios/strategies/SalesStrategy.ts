@@ -1,7 +1,7 @@
 
-import { IAdStrategy } from './BaseStrategy';
-import { AdCampaign, User } from '../../../types';
-import { db } from '../../../database';
+import { IAdStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/BaseStrategy';
+import { AdCampaign, User } from '@/types';
+import { db } from '@/database';
 
 export const SalesStrategy: IAdStrategy = {
     objective: 'sales',

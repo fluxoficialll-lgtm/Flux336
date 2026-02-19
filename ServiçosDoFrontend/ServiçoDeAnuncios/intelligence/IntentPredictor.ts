@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { User, AdCampaign } from '../../../types';
+import { User, AdCampaign } from '@/types';
 
 export const IntentPredictor = {
   /**

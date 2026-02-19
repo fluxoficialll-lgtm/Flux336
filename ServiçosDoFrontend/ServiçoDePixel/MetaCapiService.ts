@@ -1,5 +1,5 @@
 
-import { PixelEventData, PixelUserData } from '../../types/pixel.types';
+import { PixelEventData, PixelUserData } from '@/types/pixel.types';
 import { API_BASE } from '../../apiConfig';
 
 /**

@@ -1,5 +1,5 @@
 
-import { apiClient } from './apiClient';
+import { apiClient } from '@/ServiçosDoFrontend/ServiçoDeAPI/apiClient';
 
 const BASE_URL = '/credentials';
 

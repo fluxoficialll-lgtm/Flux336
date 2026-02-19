@@ -1,14 +1,14 @@
-import { sqlite } from './engine';
-import { USE_MOCKS, MOCK_USERS, MOCK_POSTS, MOCK_PRODUCTS, MOCK_GROUPS, MOCK_CAMPAIGNS, MOCK_NOTIFICATIONS, MOCK_CHATS } from './mocks';
+import { sqlite } from '@/database/engine';
+import { USE_MOCKS, MOCK_USERS, MOCK_POSTS, MOCK_PRODUCTS, MOCK_GROUPS, MOCK_CAMPAIGNS, MOCK_NOTIFICATIONS, MOCK_CHATS } from '@/mocks';
 
 // Managers
-import { UserManager } from './managers/UserManager';
-import { PostManager } from './managers/PostManager';
-import { GroupManager } from './managers/GroupManager';
-import { ChatManager } from './managers/ChatManager';
-import { NotificationManager } from './managers/NotificationManager';
-import { RelationshipManager } from './managers/RelationshipManager';
-import { FinancialManager } from './managers/FinancialManager';
+import { UserManager } from '@/database/managers/UserManager';
+import { PostManager } from '@/database/managers/PostManager';
+import { GroupManager } from '@/database/managers/GroupManager';
+import { ChatManager } from '@/database/managers/ChatManager';
+import { NotificationManager } from '@/database/managers/NotificationManager';
+import { RelationshipManager } from '@/database/managers/RelationshipManager';
+import { FinancialManager } from '@/database/managers/FinancialManager';
 
 const STORAGE_KEY_SESSION_ID = 'app_current_user_id';
 

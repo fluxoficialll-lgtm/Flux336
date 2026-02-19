@@ -1,10 +1,10 @@
 
-import { Post, MarketplaceItem, User } from '../../types';
-import { FeedEngine } from './engines/FeedEngine';
-import { ReelsEngine } from './engines/ReelsEngine';
-import { MarketEngine } from './engines/MarketEngine';
-import { EngineContext } from '../types'';
-import { authService } from '../ServiçoDeAutenticacao/authService';
+import { Post, MarketplaceItem, User } from '@/types';
+import { FeedEngine } from '@/ServiçosDoFrontend/ServiçoDeDescoberta/engines/FeedEngine';
+import { ReelsEngine } from '@/ServiçosDoFrontend/ServiçoDeDescoberta/engines/ReelsEngine';
+import { MarketEngine } from '@/ServiçosDoFrontend/ServiçoDeDescoberta/engines/MarketEngine';
+import { EngineContext } from '@/ServiçosDoFrontend/ServiçoDeDescoberta/types'';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { UserInterestService } from '@/ServiçosDoFrontend/ai/user/UserInterestService';
 import { RecommendationService } from '@/ServiçosDoFrontend/ai/core/RecommendationService';
 

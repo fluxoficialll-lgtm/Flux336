@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { User, GroupLink } from '../../../../types';
-import { groupService } from '../../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { User, GroupLink } from '@/types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
 
 interface AccessSectionProps {
     groupId: string;

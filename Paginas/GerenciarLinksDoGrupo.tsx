@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { Group, GroupLink } from '../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { Group, GroupLink } from '@/types';
 
 export const ManageGroupLinks: React.FC = () => {
   const navigate = useNavigate();

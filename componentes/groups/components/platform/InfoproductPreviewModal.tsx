@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Infoproduct } from '../../../../types';
+import { Infoproduct } from '@/types';
 
 interface InfoproductPreviewModalProps {
     items: Infoproduct[];

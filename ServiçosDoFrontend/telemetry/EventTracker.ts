@@ -1,7 +1,7 @@
 
-import { eventCollectorService } from '../ServiçoDeTelemetria/eventCollectorService';
-import { stateLogger } from './StateLogger';
-import { trafficSource } from '../ServiçoDePixel/context/TrafficSource';
+import { eventCollectorService } from '@/ServiçosDoFrontend/ServiçoDeTelemetria/eventCollectorService';
+import { stateLogger } from '@/ServiçosDoFrontend/telemetry/StateLogger';
+import { trafficSource } from '@/ServiçosDoFrontend/ServiçoDePixel/context/TrafficSource';
 
 /**
  * Retorna metadados comuns a serem anexados em todos os eventos de telemetria.

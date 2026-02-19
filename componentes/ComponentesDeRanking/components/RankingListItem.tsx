@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Group } from '../../../types';
+import { Group } from '@/types';
 
 interface RankingListItemProps {
     group: Group;

@@ -1,6 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
-import { Post, MarketplaceItem } from '../../types';
+import { Post, MarketplaceItem } from '@/types';
 
 /**
  * Flow: Creation

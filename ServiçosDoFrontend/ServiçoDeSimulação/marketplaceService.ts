@@ -1,7 +1,7 @@
 
-import { authService } from '../ServiçoDeAutenticacao/authService';
-import { MarketplaceItem, Comment, User } from '../../types';
-import { db } from '../../database';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { MarketplaceItem, Comment, User } from '@/types';
+import { db } from '@/database';
 
 export const marketplaceService = {
   getRecommendedItems: () => {

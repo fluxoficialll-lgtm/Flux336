@@ -1,6 +1,6 @@
 
-import { UserDNA } from './dna.types';
-import { PaymentProviderConfig, NotificationSettings, SecuritySettings, MarketingConfig } from './financial.types';
+import { UserDNA } from '@/types/dna.types';
+import { PaymentProviderConfig, NotificationSettings, SecuritySettings, MarketingConfig } from '@/types/financial.types';
 
 export interface User {
   id: string;

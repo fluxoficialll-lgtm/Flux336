@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MetricCard } from './MetricCard';
+import { MetricCard } from '@/componentes/ComponentesDeAnuncios/performance/MetricCard';
 
 interface FunnelMetricsProps {
     data: any;

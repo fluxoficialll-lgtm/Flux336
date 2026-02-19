@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SyncPayModel } from './SyncPayModel';
-import { PayPalModel } from './PayPalModel';
-import { StripeModel } from './StripeModel';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { GeoData } from '../../ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService';
-import { ConversionResult } from '../../ServiçosDoFrontend/ServiçoDeMoeda/currencyService';
-import { Group } from '../../types/index.ts';
+import { SyncPayModel } from '@/componentes/ComponentesDePagamentos/SyncPayModel';
+import { PayPalModel } from '@/componentes/ComponentesDePagamentos/PayPalModel';
+import { StripeModel } from '@/componentes/ComponentesDePagamentos/StripeModel';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { GeoData } from '@/ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService';
+import { ConversionResult } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService';
+import { Group } from '@/types/index.ts';
 import { PurchaseIntention } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/PurchaseIntention.ts';
 
 interface PaymentFlowModalProps {

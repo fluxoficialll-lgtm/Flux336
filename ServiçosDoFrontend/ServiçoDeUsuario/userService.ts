@@ -1,6 +1,6 @@
 
 import { USE_MOCKS } from '@/ServiçosDoFronte./mocks';
-import { profileService as RealUserService } from './real/profileService';
+import { profileService as RealUserService } from '@/ServiçosDoFrontend/ServiçoDeUsuario/real/profileService';
 // Import mock se existir: import { userService as MockUserService } from './mocks/userService'';
 
 // Por enquanto, não temos um mock para userService, então usamos o real diretamente.

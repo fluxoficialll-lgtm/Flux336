@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { postService } from '../../../ServiçosDoFrontend/postService';
+import { postService } from '@/ServiçosDoFrontend/postService';
 
 interface ProfileReelsGridProps {
     userId: string;

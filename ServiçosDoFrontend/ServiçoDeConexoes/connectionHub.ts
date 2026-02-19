@@ -1,6 +1,6 @@
 
-import { geminiConnection } from './gemini.connection';
-import { paymentConnection } from './payment.connection';
+import { geminiConnection } from '@/ServiçosDoFrontend/ServiçoDeConexoes/gemini.connection';
+import { paymentConnection } from '@/ServiçosDoFrontend/ServiçoDeConexoes/payment.connection';
 
 /**
  * CONNECTION HUB

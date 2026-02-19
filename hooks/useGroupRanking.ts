@@ -1,9 +1,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Group } from '../types';
-import { db } from '../database';
-import { RankingService } from '../ServiçosDoFrontend/real/groups/RankingService';
+import { Group } from '@/types';
+import { db } from '@/database';
+import { RankingService } from '@/ServiçosDoFrontend/real/groups/RankingService';
 
 /**
  * useGroupRanking

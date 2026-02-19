@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ScheduledMessage, Channel } from '../../../../types';
+import { ScheduledMessage, Channel } from '@/types';
 
 interface ScheduleSectionProps {
     schedules: ScheduledMessage[];

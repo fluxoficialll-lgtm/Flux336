@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
-import { adService } from '../ServiçosDoFrontend/ServiçoDeAnuncios/adService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { screenService, BusinessDashboardData } from '../ServiçosDoFrontend/ServiçoDeUI/screenService';
+import { marketplaceService } from '@/ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
+import { adService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/adService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { screenService, BusinessDashboardData } from '@/ServiçosDoFrontend/ServiçoDeUI/screenService';
 import { MarketplaceItem, AdCampaign } from '@/types/index';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { ProductStoreList } from '../componentes/ComponentesDeLoja/ProductStoreList';
-import { CampaignStoreList } from '../componentes/ComponentesDeLoja/CampaignStoreList';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { ProductStoreList } from '@/componentes/ComponentesDeLoja/ProductStoreList';
+import { CampaignStoreList } from '@/componentes/ComponentesDeLoja/CampaignStoreList';
 
 export const MyStore: React.FC = () => {
   const navigate = useNavigate();

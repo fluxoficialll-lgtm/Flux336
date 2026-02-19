@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { syncPayService } from '../ServiçosDoFrontend/ServiçoDePagamentos/syncPayService';
-import { BalanceCard, CurrencyCode } from '../componentes/ComponentesFinanceiros/ComponenteCartaoDeSaldo';
-import { GatewayCard } from '../componentes/ComponentesFinanceiros/ComponenteCartaoDeGateway';
-import CashFlowChart from '../componentes/ComponentesFinanceiros/ComponenteGraficoDeFluxoDeCaixa';
-import TransactionHistoryCard from '../componentes/ComponentesFinanceiros/ComponenteCartaoDeHistoricoDeTransacoes';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { syncPayService } from '@/ServiçosDoFrontend/ServiçoDePagamentos/syncPayService';
+import { BalanceCard, CurrencyCode } from '@/componentes/ComponentesFinanceiros/ComponenteCartaoDeSaldo';
+import { GatewayCard } from '@/componentes/ComponentesFinanceiros/ComponenteCartaoDeGateway';
+import CashFlowChart from '@/componentes/ComponentesFinanceiros/ComponenteGraficoDeFluxoDeCaixa';
+import TransactionHistoryCard from '@/componentes/ComponentesFinanceiros/ComponenteCartaoDeHistoricoDeTransacoes';
 
 export const FinancialPanel: React.FC = () => {
   const navigate = useNavigate();

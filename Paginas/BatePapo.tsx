@@ -1,21 +1,21 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { ChatMessage, ChatData } from '../types';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../database';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { ChatMessage, ChatData } from '@/types';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/database';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
-import { ChatHeader } from '../componentes/ComponentesDeChat/ChatHeader';
-import { ChatInput } from '../componentes/ComponentesDeChat/ChatInput';
-import { MessageItem } from '../componentes/ComponentesDeChat/MessageItem';
-import { MediaPreviewOverlay } from '../componentes/ComponentesDeChat/MediaPreviewOverlay';
-import { ChatMenuModal } from '../componentes/ComponentesDeChat/ChatMenuModal';
-import { useChatActions } from '../hooks/useChatActions';
-import { PinnedMessage } from '../componentes/ComponentesDeChat/PinnedMessage';
-import { ForwardMessageModal } from '../componentes/ComponentesDeChat/ForwardMessageModal';
-import { ReportMessageModal } from '../componentes/ComponentesDeChat/ReportMessageModal';
+import { ChatHeader } from '@/componentes/ComponentesDeChat/ChatHeader';
+import { ChatInput } from '@/componentes/ComponentesDeChat/ChatInput';
+import { MessageItem } from '@/componentes/ComponentesDeChat/MessageItem';
+import { MediaPreviewOverlay } from '@/componentes/ComponentesDeChat/MediaPreviewOverlay';
+import { ChatMenuModal } from '@/componentes/ComponentesDeChat/ChatMenuModal';
+import { useChatActions } from '@/hooks/useChatActions';
+import { PinnedMessage } from '@/componentes/ComponentesDeChat/PinnedMessage';
+import { ForwardMessageModal } from '@/componentes/ComponentesDeChat/ForwardMessageModal';
+import { ReportMessageModal } from '@/componentes/ComponentesDeChat/ReportMessageModal';
 
 export const Chat: React.FC = () => {
   const navigate = useNavigate();

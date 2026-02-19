@@ -1,4 +1,4 @@
-import { Group } from '../../types';
+import { Group } from '@/types';
 
 export const stripeService = {
     authenticate: async (secretKey: string) => {

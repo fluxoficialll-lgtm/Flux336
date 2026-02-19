@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AdCampaign } from '../../types';
+import { AdCampaign } from '@/types';
 
 interface BudgetSectionProps {
     campaign: Partial<AdCampaign>;

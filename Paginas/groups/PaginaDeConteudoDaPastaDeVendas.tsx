@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { postService } from '../../ServiçosDoFrontend/postService';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { Group, SalesFolder, Infoproduct } from '../../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { postService } from '@/ServiçosDoFrontend/postService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { Group, SalesFolder, Infoproduct } from '@/types';
 
 // Subcomponentes
-import { FolderContentHeader } from '../../features/groups/componentes/platform/FolderContentHeader';
-import { InfoproductCard } from '../../features/groups/componentes/platform/InfoproductCard';
-import { EmptyFolderState } from '../../features/groups/componentes/platform/EmptyFolderState';
-import { InfoproductPreviewModal } from '../../features/groups/componentes/platform/InfoproductPreviewModal';
-import { AddFileSophisticatedButton } from '../../features/groups/componentes/platform/AddFileSophisticatedButton';
-import { UploadProgressCard } from '../../features/groups/componentes/platform/UploadProgressCard';
+import { FolderContentHeader } from '@/componentes/groups/components/platform/FolderContentHeader';
+import { InfoproductCard } from '@/componentes/groups/components/platform/InfoproductCard';
+import { EmptyFolderState } from '@/componentes/groups/components/platform/EmptyFolderState';
+import { InfoproductPreviewModal } from '@/componentes/groups/components/platform/InfoproductPreviewModal';
+import { AddFileSophisticatedButton } from '@/componentes/groups/components/platform/AddFileSophisticatedButton';
+import { UploadProgressCard } from '@/componentes/groups/components/platform/UploadProgressCard';
 
 export const SalesFolderContentPage: React.FC = () => {
     const navigate = useNavigate();

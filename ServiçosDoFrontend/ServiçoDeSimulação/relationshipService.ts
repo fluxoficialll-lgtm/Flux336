@@ -1,8 +1,8 @@
 
-import { Relationship } from '../../types';
-import { db } from '../../database';
-import { authService } from '../ServiçoDeAutenticacao/authService';
-import { MOCK_USERS } from '.././mocks';
+import { Relationship } from '@/types';
+import { db } from '@/database';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { MOCK_USERS } from '@/mocks/index';
 
 export const relationshipService = {
   syncRelationships: async () => {},

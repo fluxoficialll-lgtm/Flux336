@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Group } from '../../../../types';
+import { Group } from '@/types';
 
 export const useGroupIdentity = (group: Group | null) => {
   const [groupName, setGroupName] = useState('');

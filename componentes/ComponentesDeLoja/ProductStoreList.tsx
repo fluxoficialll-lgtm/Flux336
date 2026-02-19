@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MarketplaceItem } from '../../types';
+import { MarketplaceItem } from '@/types';
 
 interface ProductStoreListProps {
     products: MarketplaceItem[];

@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { logClientEvent } from '../../utils/logger'; // Caminho de importação corrigido
+import { logClientEvent } from '@/utils/logger'; // Caminho de importação corrigido
 
 interface LayoutProps {
   children: React.ReactNode;

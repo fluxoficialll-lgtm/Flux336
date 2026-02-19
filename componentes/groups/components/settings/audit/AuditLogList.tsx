@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { AuditLog } from '../../../../../types';
-import { AuditLogItem } from './AuditLogItem';
-import { AuditLogEmptyState } from './AuditLogEmptyState';
+import { AuditLog } from '@/types';
+import { AuditLogItem } from '@/componentes/groups/components/settings/audit/AuditLogItem';
+import { AuditLogEmptyState } from '@/componentes/groups/components/settings/audit/AuditLogEmptyState';
 
 interface AuditLogListProps {
     logs: AuditLog[];

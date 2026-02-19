@@ -1,6 +1,6 @@
 
-import { MarketplaceItem } from '../../../types';
-import { db } from '../../../database';
+import { MarketplaceItem } from '@/types';
+import { db } from '@/database';
 import { EngineContext } from '@/ServiçosDoFrontend/ServiçoDeDescober../types';
 
 // O MarketEngine é responsável por classificar os itens à venda no marketplace.

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { AdCampaign } from '../../types';
-import { SelectionField } from './SelectionField';
-import { AdDurationModal } from './AdDurationModal';
+import { AdCampaign } from '@/types';
+import { SelectionField } from '@/componentes/ComponentesDeAnuncios/SelectionField';
+import { AdDurationModal } from '@/componentes/ComponentesDeAnuncios/AdDurationModal';
 
 interface StrategySectionProps {
     campaign: Partial<AdCampaign>;

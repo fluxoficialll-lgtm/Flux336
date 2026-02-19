@@ -1,11 +1,11 @@
 
-import { PixelEventData, PixelUserData, PixelConfig } from '../../types/pixel.types';
-import { metaBrowserService } from './MetaBrowserService';
-import { metaCapiService } from './MetaCapiService';
-import { generateDeterministicEventId } from './logic/DeterministicId';
-import { eventGuard } from './logic/EventGuard';
-import { pixelPayloadBuilder } from './logic/PixelPayloadBuilder';
-import { pixelPolicy } from './logic/PixelPolicy';
+import { PixelEventData, PixelUserData, PixelConfig } from '@/types/pixel.types';
+import { metaBrowserService } from '@/ServiçosDoFrontend/ServiçoDePixel/MetaBrowserService';
+import { metaCapiService } from '@/ServiçosDoFrontend/ServiçoDePixel/MetaCapiService';
+import { generateDeterministicEventId } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/DeterministicId';
+import { eventGuard } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/EventGuard';
+import { pixelPayloadBuilder } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/PixelPayloadBuilder';
+import { pixelPolicy } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/PixelPolicy';
 
 class PixelOrchestrator {
   private config: PixelConfig = {};

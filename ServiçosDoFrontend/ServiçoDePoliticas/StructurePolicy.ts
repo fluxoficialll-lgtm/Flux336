@@ -1,5 +1,5 @@
 
-import { Group } from '../../types';
+import { Group } from '@/types';
 
 /**
  * StructurePolicy

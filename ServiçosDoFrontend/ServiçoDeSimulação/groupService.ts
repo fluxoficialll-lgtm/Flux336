@@ -1,9 +1,9 @@
 
-import { Group, User, GroupLink } from '../../types';
-import { db } from '../../database';
-import { authService } from '../ServiçoDeAutenticacao/authService';
+import { Group, User, GroupLink } from '@/types';
+import { db } from '@/database';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { IGroupService } from '@/ServiçosDoFrontend/groupService.interface';
-import { MOCK_GROUPS, MOCK_USERS } from '.././mocks';
+import { MOCK_GROUPS, MOCK_USERS } from '@/mocks/index';
 
 export const MockGroupService: IGroupService = {
     fetchGroups: async () => {

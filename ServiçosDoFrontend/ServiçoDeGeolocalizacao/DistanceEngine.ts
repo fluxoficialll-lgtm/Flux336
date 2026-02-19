@@ -1,5 +1,5 @@
 
-import { Coordinates } from '../../types/location.types';
+import { Coordinates } from '@/types/location.types';
 
 export const DistanceEngine = {
     /**

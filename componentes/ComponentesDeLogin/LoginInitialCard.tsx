@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { logClientEvent } from '../../../utils/logger';
+import { logClientEvent } from '@/utils/logger';
 
 declare const google: any;
 

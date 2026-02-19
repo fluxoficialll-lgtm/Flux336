@@ -1,5 +1,5 @@
 
-import { Post, MarketplaceItem, ContentDNA } from "../../../types";
+import { Post, MarketplaceItem, ContentDNA } from "@/types";
 
 // Tipos de conteúdo que o serviço pode processar
 type RecommendableItem = Post | MarketplaceItem;

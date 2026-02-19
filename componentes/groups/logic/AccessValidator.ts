@@ -1,4 +1,4 @@
-import { Group, VipAccess } from '../../../types';
+import { Group, VipAccess } from '@/types';
 
 export const AccessValidator = {
   isAccessExpired: (access?: VipAccess): boolean => {

@@ -1,5 +1,5 @@
 
-import { db } from '../../../database';
+import { db } from '@/database';
 
 interface OptimizationWeights {
   topicBonus: Record<string, number>;

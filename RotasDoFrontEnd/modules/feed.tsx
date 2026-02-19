@@ -1,6 +1,6 @@
 
 import React, { lazy } from 'react';
-import { ProtectedRoute } from '../../componentes/ComponentesDeLogin/ProtectedRoute';
+import { ProtectedRoute } from '@/componentes/ComponentesDeLogin/ProtectedRoute';
 
 const Feed = lazy(() => import('../../Paginas/Feed').then(m => ({ default: m.Feed })));
 const PostDetails = lazy(() => import('../../Paginas/DetalhesDaPostagem').then(m => ({ default: m.PostDetails })));

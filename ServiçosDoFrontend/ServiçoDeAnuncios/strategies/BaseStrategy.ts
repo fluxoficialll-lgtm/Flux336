@@ -1,5 +1,5 @@
 
-import { AdCampaign, User } from '../../../types';
+import { AdCampaign, User } from '@/types';
 
 export interface IAdStrategy {
     objective: string;

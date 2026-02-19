@@ -1,6 +1,6 @@
 
-import { BaseConnection } from "./base.connection";
-import { ConnectionResponse } from '../types"';
+import { BaseConnection } from "@/ServiçosDoFrontend/ServiçoDeConexoes/base.connection";
+import { ConnectionResponse } from '@/ServiçosDoFrontend/types';
 
 export class PaymentConnection extends BaseConnection {
   /**

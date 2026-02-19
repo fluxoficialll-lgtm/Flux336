@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { AdCampaign, Group } from '../../types';
-import { SelectionField } from './SelectionField';
+import { AdCampaign, Group } from '@/types';
+import { SelectionField } from '@/componentes/ComponentesDeAnuncios/SelectionField';
 import { useModal } from '@/componentes/ModalSystem';
 
 interface DestinationCreativeSectionProps {

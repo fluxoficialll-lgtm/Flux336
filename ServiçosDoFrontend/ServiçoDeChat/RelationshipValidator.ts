@@ -1,5 +1,5 @@
 
-import { db } from '../../database';
+import { db } from '@/database';
 import { groupService } from '@/ServiçosDoFrontend/groupService';
 import { chatService } from '@/ServiçosDoFrontend/chatService';
 

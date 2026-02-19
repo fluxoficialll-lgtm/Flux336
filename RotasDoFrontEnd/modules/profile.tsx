@@ -1,6 +1,6 @@
 
 import React, { lazy } from 'react';
-import { ProtectedRoute } from '../../componentes/ComponentesDeLogin/ProtectedRoute';
+import { ProtectedRoute } from '@/componentes/ComponentesDeLogin/ProtectedRoute';
 
 const Profile = lazy(() => import('../../Paginas/Perfil').then(m => ({ default: m.Profile })));
 const EditProfile = lazy(() => import('../../Paginas/EditarPerfil'));

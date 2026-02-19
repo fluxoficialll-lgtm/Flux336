@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { NotificationSettings as INotificationSettings } from '../types';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { NotificationSettings as INotificationSettings } from '@/types';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
 
 // Subcomponentes Modulares
 import { GlobalPauseCard } from '@/componentes/ComponentesDeNotificacoes/notifications/componentes/settings/GlobalPauseCard.tsx';

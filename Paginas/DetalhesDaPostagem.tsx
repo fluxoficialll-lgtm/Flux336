@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { Post, Comment } from '@/types/index';
-import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { FeedItem } from '../componentes/ComponentesDoFeed/FeedItem';
-import { CommentItem } from '../componentes/ComponentesDeInterface/comments/CommentItem';
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { FeedItem } from '@/componentes/ComponentesDoFeed/FeedItem';
+import { CommentItem } from '@/componentes/ComponentesDeInterface/comments/CommentItem';
 
 export const PostDetails: React.FC = () => {
   const navigate = useNavigate();

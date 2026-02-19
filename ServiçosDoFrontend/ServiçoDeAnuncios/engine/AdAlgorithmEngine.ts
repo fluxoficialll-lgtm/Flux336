@@ -1,12 +1,12 @@
 
-import { AdCampaign, User } from '../../../types';
-import { AwarenessStrategy } from '../strategies/AwarenessStrategy';
-import { TrafficStrategy } from '../strategies/TrafficStrategy';
-import { SalesStrategy } from '../strategies/SalesStrategy';
-import { EngagementStrategy } from '../strategies/EngagementStrategy';
-import { LeadsStrategy } from '../strategies/LeadsStrategy';
-import { AppPromotionStrategy } from '../strategies/AppPromotionStrategy';
-import { IAdStrategy } from '../strategies/BaseStrategy';
+import { AdCampaign, User } from '@/types';
+import { AwarenessStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/AwarenessStrategy';
+import { TrafficStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/TrafficStrategy';
+import { SalesStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/SalesStrategy';
+import { EngagementStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/EngagementStrategy';
+import { LeadsStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/LeadsStrategy';
+import { AppPromotionStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/AppPromotionStrategy';
+import { IAdStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/BaseStrategy';
 import { GoogleGenAI } from "@google/genai";
 
 const strategies: Record<string, IAdStrategy> = {

@@ -1,6 +1,6 @@
 
-import { apiClient } from '../ServiçoDeAPI/apiClient';
-import { User } from '../types';
+import { apiClient } from '@/ServiçosDoFrontend/ServiçoDeAPI/apiClient';
+import { User } from '@/ServiçosDoFrontend/types';
 
 // Memória cache local para relacionamentos (padrão Observer)
 let following: User[] = [];

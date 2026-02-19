@@ -1,13 +1,13 @@
 
-import { AdCampaign, User } from '../../../types';
-import { targetingMatcher } from './TargetingMatcher';
-import { budgetManager } from './BudgetManager';
-import { adPacingService } from './AdPacingService';
-import { IntentPredictor } from '../intelligence/IntentPredictor';
-import { PacingController } from '../intelligence/PacingController';
-import { ConversionHub } from '../attribution/ConversionHub';
-import { CausalityGuard } from '../intelligence/CausalityGuard';
-import { FeedbackOptimizer } from '../intelligence/FeedbackOptimizer';
+import { AdCampaign, User } from '@/types';
+import { targetingMatcher } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/engine/TargetingMatcher';
+import { budgetManager } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/engine/BudgetManager';
+import { adPacingService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/engine/AdPacingService';
+import { IntentPredictor } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/intelligence/IntentPredictor';
+import { PacingController } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/intelligence/PacingController';
+import { ConversionHub } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/attribution/ConversionHub';
+import { CausalityGuard } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/intelligence/CausalityGuard';
+import { FeedbackOptimizer } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/intelligence/FeedbackOptimizer';
 
 export const adAuctionEngine = {
     /**

@@ -1,8 +1,8 @@
 
-import { ContentDNA, Post } from "../../../types";
-import { authService } from "../../ServiçoDeAutenticacao/authService";
+import { ContentDNA, Post } from "@/types";
+import { authService } from "@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService";
 import { postService } from "@/ServiçosDoFrontend/real/postService";
-import { db } from "../database";
+import { db } from "@/ServiçosDoFrontend/ServiçoDeDados/database";
 
 export const UserInterestService = {
 

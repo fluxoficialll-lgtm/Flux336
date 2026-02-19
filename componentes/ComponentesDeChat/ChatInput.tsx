@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChatMessage } from '../../types'; // Assuming this path is correct
+import { ChatMessage } from '@/types'; // Assuming this path is correct
 
 interface ChatInputProps {
     onSendMessage: (text: string) => void;

@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../database';
-import { Group } from '../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/database';
+import { Group } from '@/types';
 
 export const TopGroupsPublic: React.FC = () => {
   const navigate = useNavigate();

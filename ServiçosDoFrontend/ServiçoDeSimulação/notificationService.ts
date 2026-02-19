@@ -1,6 +1,6 @@
-import { NotificationItem } from '../../types';
-import { db } from '../database';
-import { MOCK_NOTIFICATIONS } from '.././mocks';
+import { NotificationItem } from '@/types';
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { MOCK_NOTIFICATIONS } from '@/mocks/index';
 
 export const notificationService = {
   getNotifications: (): NotificationItem[] => {

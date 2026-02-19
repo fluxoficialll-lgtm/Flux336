@@ -1,5 +1,5 @@
 
-import { IGroupService } from "./groupService.interface";
+import { IGroupService } from "@/ServiçosDoFrontend/ServiçoDeGrupos/groupService";
 
 
 export const RealGroupService: IGroupService = {

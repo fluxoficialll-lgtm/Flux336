@@ -1,7 +1,7 @@
 
-import { GroupRole } from '../../../types';
-import { ROLE_WEIGHTS } from '../../../constants/RoleWeights';
-import { GROUP_ROLE_LIMITS } from '../../../constants/GroupLimits';
+import { GroupRole } from '@/types';
+import { ROLE_WEIGHTS } from '@/componentes/groups/constants/RoleWeights';
+import { GROUP_ROLE_LIMITS } from '@/constants/GroupLimits';
 
 interface Member {
     id: string;

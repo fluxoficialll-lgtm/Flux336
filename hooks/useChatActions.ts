@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { chatService } from '../ServiçosDoFrontend/chatService';
-import { ChatMessage } from '../types';
+import { chatService } from '@/ServiçosDoFrontend/chatService';
+import { ChatMessage } from '@/types';
 
 export const useChatActions = (chatId: string) => {
 

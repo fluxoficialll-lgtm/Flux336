@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Channel, ChannelSection } from '../../../../types';
-import { ChannelListItem } from './channels/ChannelListItem';
+import { Channel, ChannelSection } from '@/types';
+import { ChannelListItem } from '@/componentes/groups/components/settings/channels/ChannelListItem';
 
 interface ChannelsSectionProps {
     channels: Channel[];

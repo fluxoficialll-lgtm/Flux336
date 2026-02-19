@@ -1,12 +1,12 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useCheckoutConfig } from '../../../features/groups/hooks/settings/useCheckoutConfig';
+import { useCheckoutConfig } from '@/componentes/groups/hooks/settings/useCheckoutConfig';
 
 // Componentes Modulares
-import { CheckoutConfigHeader } from '../../../features/groups/componentes/settings/checkout/CheckoutConfigHeader';
-import { CheckoutStepSelector } from '../../../features/groups/componentes/settings/checkout/CheckoutStepSelector';
-import { CheckoutMethodItem } from '../../../features/groups/componentes/settings/checkout/CheckoutMethodItem';
-import { CheckoutLivePreview } from '../../../features/groups/componentes/settings/checkout/CheckoutLivePreview';
+import { CheckoutConfigHeader } from '@/componentes/groups/components/settings/checkout/CheckoutConfigHeader';
+import { CheckoutStepSelector } from '@/componentes/groups/components/settings/checkout/CheckoutStepSelector';
+import { CheckoutMethodItem } from '@/componentes/groups/components/settings/checkout/CheckoutMethodItem';
+import { CheckoutLivePreview } from '@/componentes/groups/components/settings/checkout/CheckoutLivePreview';
 
 export const GroupCheckoutConfigPage: React.FC = () => {
     const navigate = useNavigate();

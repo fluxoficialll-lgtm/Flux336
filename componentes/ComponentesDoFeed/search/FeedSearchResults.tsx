@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Post, User } from '../../../types';
-import { FeedItem } from '../FeedItem';
-import { postService } from '../../../ServiçosDoFrontend/postService';
+import { Post, User } from '@/types';
+import { FeedItem } from '@/componentes/ComponentesDoFeed/FeedItem';
+import { postService } from '@/ServiçosDoFrontend/postService';
 import { useModal } from '@/componentes/ModalSystem';
 import { SearchTab } from '../../../pages/FeedSearch';
 import { UserBadge } from '@/componentes/ui/user/UserBadge';

@@ -1,5 +1,5 @@
 
-import { Post, MarketplaceItem, User } from '../../types';
+import { Post, MarketplaceItem, User } from '@/types';
 
 export interface ScoredItem<T> {
     item: T;

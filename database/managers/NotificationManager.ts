@@ -1,7 +1,7 @@
 
-import { BaseManager } from './BaseManager';
-import { NotificationItem } from '../../types';
-import { sqlite } from '../database/engine';
+import { BaseManager } from '@/database/managers/BaseManager';
+import { NotificationItem } from '@/types';
+import { sqlite } from '@/database/engine';
 
 export class NotificationManager extends BaseManager {
     private table = 'notifications';

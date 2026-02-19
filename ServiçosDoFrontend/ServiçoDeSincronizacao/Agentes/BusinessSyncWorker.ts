@@ -1,10 +1,10 @@
 
-import { syncPayService } from '../../ServiçoDePagamentos/syncPayService';
-import { adService } from '../../ServiçoDeAnuncios/adService';
-import { marketplaceService } from '../../ServiçoDeSimulação/marketplaceService';
-import { authService } from '../../ServiçoDeAutenticacao/authService';
-import { db } from '../../../database';
-import { hydrationManager } from '../HydrationManager';
+import { syncPayService } from '@/ServiçosDoFrontend/ServiçoDePagamentos/syncPayService';
+import { adService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/adService';
+import { marketplaceService } from '@/mocks/marketplaceService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/database';
+import { hydrationManager } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager';
 
 export const BusinessSyncWorker = {
     name: 'BusinessWorker',

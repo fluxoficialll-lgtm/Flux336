@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { commentService } from '../ServiçosDoFrontend/commentService';
-import { Comment, CommentableType } from '../types'; // Ajuste o caminho se necessário
+import { commentService } from '@/ServiçosDoFrontend/commentService';
+import { Comment, CommentableType } from '@/types'; // Ajuste o caminho se necessário
 
 /**
  * @fileoverview Hook customizado para gerenciar a lógica de comentários de um item.

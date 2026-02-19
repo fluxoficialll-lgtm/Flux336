@@ -1,8 +1,8 @@
 
-import { AdCampaign } from '../../types';
-import { db } from '../../database';
-import { authService } from '../ServiçoDeAutenticacao/authService';
-import { MOCK_CAMPAIGNS } from '.././mocks';
+import { AdCampaign } from '@/types';
+import { db } from '@/database';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { MOCK_CAMPAIGNS } from '@/mocks/index';
 
 export const adService = {
     createCampaign: async (campaign: AdCampaign) => {

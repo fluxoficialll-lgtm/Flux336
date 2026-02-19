@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MainHeader } from '../../../componentes/layout/MainHeader';
+import { MainHeader } from '@/componentes/ComponentesDeLayout/MainHeader';
 
 interface VisitorHeaderProps {
     onBack: () => void;

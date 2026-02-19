@@ -1,8 +1,8 @@
-import { IPixelProvider } from './BaseProvider';
-import { PixelEventData, PixelUserData } from '../../../types/pixel.types';
-import { TikTokMapping } from '../mappings/TikTokMapping';
-import { mapToTikTokParams } from '../mappings/params/TikTokParams';
-import { anonymizeUserData } from '../utils/pixelHasher';
+import { IPixelProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/BaseProvider';
+import { PixelEventData, PixelUserData } from '@/types/pixel.types';
+import { TikTokMapping } from '@/ServiçosDoFrontend/ServiçoDePixel/mappings/TikTokMapping';
+import { mapToTikTokParams } from '@/ServiçosDoFrontend/ServiçoDePixel/mappings/params/TikTokParams';
+import { anonymizeUserData } from '@/ServiçosDoFrontend/ServiçoDePixel/utils/pixelHasher';
 
 export class TikTokProvider implements IPixelProvider {
   id = 'tiktok';

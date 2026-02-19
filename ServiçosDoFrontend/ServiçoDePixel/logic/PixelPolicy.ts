@@ -1,5 +1,5 @@
 
-import { PixelEventName } from '../../../types/pixel.types';
+import { PixelEventName } from '@/types/pixel.types';
 
 /**
  * Eventos que devem ocorrer apenas UMA vez por contexto (usuário/produto)

@@ -1,5 +1,5 @@
 
-import { ChatData } from '../../types';
+import { ChatData } from '@/types';
 
 /**
  * ChatVisibilityManager

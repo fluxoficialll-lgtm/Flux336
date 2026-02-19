@@ -1,7 +1,7 @@
 
 import { useNavigate } from 'react-router-dom';
-import { User } from '../../types';
-import { PurchaseIntention } from '../../ServiçosDoFrontend/sync/PurchaseIntention';
+import { User } from '@/types';
+import { PurchaseIntention } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/NucleoDeSincronizacao/PurchaseIntention';
 
 /**
  * Flow: Onboarding

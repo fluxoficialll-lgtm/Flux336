@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { AvatarPreviewModal } from './ui/AvatarPreviewModal.tsx';
-import { UserBadge } from './ui/user/UserBadge.tsx';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { AvatarPreviewModal } from '@/componentes/ComponentesDeInterface/AvatarPreviewModal';
+import { UserBadge } from '@/componentes/ComponentesDeInterface/user/UserBadge';
 
 interface PostHeaderProps {
     username: string;

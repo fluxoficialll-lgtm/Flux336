@@ -1,9 +1,9 @@
 
-import { PixelUserData, PixelEventData } from '../../../types/pixel.types';
-import { authService } from '../../ServiçoDeAutenticacao/authService';
+import { PixelUserData, PixelEventData } from '@/types/pixel.types';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { geoService } from '@/ServiçosDoFrontend/geoService';
-import { trafficSource } from '../context/TrafficSource';
-import { anonymizeUserData } from '../utils/pixelHasher';
+import { trafficSource } from '@/ServiçosDoFrontend/ServiçoDePixel/context/TrafficSource';
+import { anonymizeUserData } from '@/ServiçosDoFrontend/ServiçoDePixel/utils/pixelHasher';
 import { Capacitor } from '@capacitor/core';
 
 /**

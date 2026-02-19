@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { BaseConnection } from "./base.connection";
+import { BaseConnection } from "@/ServiçosDoFrontend/ServiçoDeConexoes/base.connection";
 
 export class GeminiConnection extends BaseConnection {
   /**

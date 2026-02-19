@@ -2,7 +2,7 @@
 import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { useStripe } from './useStripe';
+import { useStripe } from '@/componentes/ComponentesDePagamentos/CardsConexaoDeProvedores/useStripe';
 
 interface StripeFormProps {
     clientSecret: string;

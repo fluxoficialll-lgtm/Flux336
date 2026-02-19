@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Group } from '../../../types';
-import { RankingPodiumItem } from './RankingPodiumItem';
+import { Group } from '@/types';
+import { RankingPodiumItem } from '@/componentes/ComponentesDeRanking/components/RankingPodiumItem';
 
 interface RankingPodiumProps {
     groups: Group[];

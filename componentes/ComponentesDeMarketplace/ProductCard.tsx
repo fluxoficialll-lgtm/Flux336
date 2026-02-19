@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MarketplaceItem } from '../../types';
+import { MarketplaceItem } from '@/types';
 
 interface ProductCardProps {
     product: MarketplaceItem;

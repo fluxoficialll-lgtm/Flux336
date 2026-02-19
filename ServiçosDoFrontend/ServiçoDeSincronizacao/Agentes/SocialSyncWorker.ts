@@ -1,8 +1,8 @@
-import { groupService } from '../../ServiçoDeGrupos/groupService';
-import { chatService } from '../../ServiçoDeChat/chatService';
-import { relationshipService } from '../../ServiçoDeRelacionamentos/relationshipService';
-import { authService } from '../../ServiçoDeAutenticacao/authService';
-import { hydrationManager } from '../HydrationManager';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { relationshipService } from '@/ServiçosDoFrontend/ServiçoDeRelacionamentos/relationshipService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { hydrationManager } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager';
 
 export const SocialSyncWorker = {
     name: 'SocialWorker',

@@ -1,4 +1,4 @@
-import { Group, User } from '../../../types';
+import { Group, User } from '@/types';
 
 /**
  * Engine de Permissões Flux

@@ -1,4 +1,4 @@
-import { SyncState } from './SyncState';
+import { SyncState } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/NucleoDeSincronizacao/SyncState';
 
 /**
  * HydrationManager

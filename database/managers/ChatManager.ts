@@ -1,7 +1,7 @@
 
-import { BaseManager } from './BaseManager';
-import { ChatData } from '../../types';
-import { sqlite } from '../database/engine';
+import { BaseManager } from '@/database/managers/BaseManager';
+import { ChatData } from '@/types';
+import { sqlite } from '@/database/engine';
 
 export class ChatManager extends BaseManager {
     private table = 'chats';

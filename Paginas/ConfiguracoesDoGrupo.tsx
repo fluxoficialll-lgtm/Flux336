@@ -1,8 +1,8 @@
 
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGroupSettings } from '../hooks/useGroupSettings';
-import { SettingItem } from '../componentes/ComponentesDeConfiguracoes/ConfiguracaoItem';
+import { useGroupSettings } from '@/hooks/useGroupSettings';
+import { SettingItem } from '@/componentes/ComponentesDeConfiguracoes/ConfiguracaoItem';
 
 export const GroupSettings: React.FC = () => {
     const navigate = useNavigate();

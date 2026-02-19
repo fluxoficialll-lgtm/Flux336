@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Group, VipMediaItem } from '../../../../types';
+import { Group, VipMediaItem } from '@/types';
 
 export const useGroupVIP = (group: Group | null) => {
   const [vipPrice, setVipPrice] = useState('');

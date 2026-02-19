@@ -1,5 +1,5 @@
 
-import { internalConnector } from './InternalConnector';
+import { internalConnector } from '@/ServiçosDoFrontend/ServiçoDeAdmin/InternalConnector';
 
 export interface PlatformConfig {
   maintenanceMode: boolean;

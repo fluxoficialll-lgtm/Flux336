@@ -1,5 +1,5 @@
-import { eventTracker } from './EventTracker';
-import { stateLogger } from './StateLogger';
+import { eventTracker } from '@/ServiçosDoFrontend/telemetry/EventTracker';
+import { stateLogger } from '@/ServiçosDoFrontend/telemetry/StateLogger';
 
 /**
  * NetworkInterceptor: Wrapper global para a Fetch API.

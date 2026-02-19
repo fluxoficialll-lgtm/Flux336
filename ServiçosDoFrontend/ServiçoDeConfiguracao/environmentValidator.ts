@@ -1,5 +1,5 @@
 
-import { envService } from './envService';
+import { envService } from '@/ServiçosDoFrontend/ServiçoDeConfiguracao/envService';
 
 /**
  * Environment Validator

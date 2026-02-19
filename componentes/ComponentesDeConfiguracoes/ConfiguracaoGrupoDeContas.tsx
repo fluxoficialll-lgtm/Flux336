@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SettingItem } from './SettingItem';
+import { SettingItem } from '@/componentes/ComponentesDeConfiguracoes/SettingItem';
 
 export const AccountGroup: React.FC = () => {
     const navigate = useNavigate();

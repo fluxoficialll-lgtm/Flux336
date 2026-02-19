@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { Post, User } from '@/types/index';
-import { FeedSearchHeader } from '../componentes/ComponentesDoFeed/search/FeedSearchHeader';
-import { FeedSearchFilters } from '../componentes/ComponentesDoFeed/search/FeedSearchFilters';
-import { FeedSearchResults } from '../componentes/ComponentesDoFeed/search/FeedSearchResults';
+import { FeedSearchHeader } from '@/componentes/ComponentesDoFeed/search/FeedSearchHeader';
+import { FeedSearchFilters } from '@/componentes/ComponentesDoFeed/search/FeedSearchFilters';
+import { FeedSearchResults } from '@/componentes/ComponentesDoFeed/search/FeedSearchResults';
 
 export type FeedSearchFilter = 'relevant' | 'recent';
 export type SearchTab = 'posts' | 'users';

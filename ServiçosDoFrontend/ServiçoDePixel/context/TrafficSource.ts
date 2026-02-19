@@ -1,5 +1,5 @@
 
-import { TrafficSourceData } from '../../../types/pixel.types';
+import { TrafficSourceData } from '@/types/pixel.types';
 
 const STORAGE_KEY = 'flux_traffic_origin';
 

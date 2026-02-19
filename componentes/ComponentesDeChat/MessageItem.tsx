@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { ChatMessage } from '../../types';
+import { ChatMessage } from '@/types';
 import { LazyMedia } from '@/componentes/LazyMedia';
-import { AudioPlayer } from './AudioPlayer';
-import MessageActionsModal from './MessageActionsModal';
-import { ReactionPicker } from './ReactionPicker'; // Import the new component
+import { AudioPlayer } from '@/componentes/ComponentesDeChat/AudioPlayer';
+import MessageActionsModal from '@/componentes/ComponentesDeChat/MessageActionsModal';
+import { ReactionPicker } from '@/componentes/ComponentesDeChat/ReactionPicker'; // Import the new component
 
 interface MessageItemProps {
     msg: ChatMessage;

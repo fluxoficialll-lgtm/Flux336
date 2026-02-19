@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AdCampaign, Group } from '../../types';
+import { AdCampaign, Group } from '@/types';
 
 interface LookalikeSectionProps {
     campaign: Partial<AdCampaign>;

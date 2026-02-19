@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GroupRole } from '../../../../../types';
+import { GroupRole } from '@/types';
 
 interface RoleAssignmentModalProps {
     isOpen: boolean;

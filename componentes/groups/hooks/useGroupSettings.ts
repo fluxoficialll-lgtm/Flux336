@@ -1,19 +1,19 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../database/database.ts';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/componentes/groups/database/database.ts';
 import { useModal } from '@/componentes/ComponentesDeSistema/ModalSystem.tsx';
-import { Group } from '../../../types/social.types';
+import { Group } from '@/backend/RotasDoBackEnd/social';
 import { GroupLifeCycleService } from '@/ServiçosDoFrontend/real/groups/GroupLifeCycleService.ts';
 
 // Sub-hooks modulares
-import { useGroupIdentity } from './settings/useGroupIdentity';
-import { useGroupModeration } from './settings/useGroupModeration';
-import { useGroupVIP } from './settings/useGroupVIP';
-import { useGroupStructure } from './settings/useGroupStructure';
-import { useGroupMembers } from './settings/useGroupMembers';
+import { useGroupIdentity } from '@/componentes/groups/hooks/settings/useGroupIdentity';
+import { useGroupModeration } from '@/componentes/groups/hooks/settings/useGroupModeration';
+import { useGroupVIP } from '@/componentes/groups/hooks/settings/useGroupVIP';
+import { useGroupStructure } from '@/componentes/groups/hooks/settings/useGroupStructure';
+import { useGroupMembers } from '@/componentes/groups/hooks/settings/useGroupMembers';
 
 export const useGroupSettings = () => {
     const navigate = useNavigate();

@@ -1,5 +1,5 @@
 
-import { User, Group } from '../../types';
+import { User, Group } from '@/types';
 
 export const syncPayService = {
     authenticate: async () => true,

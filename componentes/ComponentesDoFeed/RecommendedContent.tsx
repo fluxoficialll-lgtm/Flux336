@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Post, MarketplaceItem } from '../../../types';
-import { ProductCard } from '../../marketplace/ProductCard';
-import { FeedItem } from './FeedItem';
+import { ProductCard } from '@/componentes/ComponentesDeMarketplace/ProductCard';
+import { FeedItem } from '@/componentes/ComponentesDoFeed/FeedItem';
 
 type RecommendableItem = Post | MarketplaceItem;
 

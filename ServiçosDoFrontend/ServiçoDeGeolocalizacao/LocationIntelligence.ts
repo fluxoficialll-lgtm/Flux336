@@ -1,5 +1,5 @@
 
-import { Coordinates, AddressProfile } from '../../types/location.types';
+import { Coordinates, AddressProfile } from '@/types/location.types';
 
 export const LocationIntelligence = {
     /**

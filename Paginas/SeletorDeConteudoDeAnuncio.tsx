@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { Post } from '@/types/index';
 
 // Componentes Modulares
-import { AdSelectionHeader } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCabecalhoDeSelecao';
-import { AdContentTabs } from '../componentes/ComponentesDeAnuncios/selection/AnuncioAbasDeConteudo';
-import { PostSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecaoDePost';
-import { ReelSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecaoDeReel';
+import { AdSelectionHeader } from '@/componentes/ComponentesDeAnuncios/selection/AnuncioCabecalhoDeSelecao';
+import { AdContentTabs } from '@/componentes/ComponentesDeAnuncios/selection/AnuncioAbasDeConteudo';
+import { PostSelectionCard } from '@/componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecaoDePost';
+import { ReelSelectionCard } from '@/componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecaoDeReel';
 
 export const AdContentSelector: React.FC = () => {
     const navigate = useNavigate();

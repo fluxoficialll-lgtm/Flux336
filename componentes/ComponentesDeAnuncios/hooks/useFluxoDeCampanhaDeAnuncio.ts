@@ -1,9 +1,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { adService } from '../../../ServiçosDoFrontend/ServiçoDeAnuncios/adService';
-import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { AdCampaign, Group } from '../../../types';
+import { adService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/adService';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { AdCampaign, Group } from '@/types';
 
 export const useAdCampaignFlow = () => {
     const navigate = useNavigate();

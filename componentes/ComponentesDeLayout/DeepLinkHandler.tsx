@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { App as CapacitorApp } from '@capacitor/app';
-import { trackingService } from '../../ServiçosDoFrontend/ServiçoDeTelemetria/trackingService';
+import { trackingService } from '@/ServiçosDoFrontend/ServiçoDeTelemetria/trackingService';
 
 export const DeepLinkHandler = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Group, ChatMessage } from '../../../types';
-import { GroupMenuDropdown } from './GroupMenuDropdown';
-import { db } from '../../../database';
+import { Group, ChatMessage } from '@/types';
+import { GroupMenuDropdown } from '@/componentes/ComponentesDeGrupos/list/GroupMenuDropdown';
+import { db } from '@/database';
 
 interface GroupListItemProps {
     group: Group;

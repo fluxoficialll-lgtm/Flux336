@@ -1,4 +1,4 @@
-import { FingerprintService } from './FingerprintService';
+import { FingerprintService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/attribution/FingerprintService';
 
 interface AttributionData {
   adId: string;

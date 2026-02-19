@@ -1,6 +1,6 @@
 import React from 'react';
-import { Comment } from '../../../../types';
-import { postService } from '../../../../ServiçosDoFrontend/postService';
+import { Comment } from '@/types';
+import { postService } from '@/ServiçosDoFrontend/postService';
 
 interface ProductQuestionsProps {
     questions: Comment[];

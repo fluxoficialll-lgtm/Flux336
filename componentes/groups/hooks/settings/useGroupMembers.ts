@@ -1,9 +1,9 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Group, User, GroupRole } from '../../../../types/social.types';
-import { groupService } from '../../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../database/database.ts';
+import { Group, User, GroupRole } from '@/backend/RotasDoBackEnd/social';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/componentes/groups/hooks/database/database.ts';
 
 export const useGroupMembers = (group: Group | null) => {
   const [members, setMembers] = useState<User[]>([]);

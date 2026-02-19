@@ -1,6 +1,6 @@
 
-import { USE_MOCKS } from '.././mocks';
-import { syncPayService as RealSyncPayService } from './RealSyncPayService';
-import { syncPayService as MockSyncPayService } from '../ServiçoDeSimulação/syncPayService';
+import { USE_MOCKS } from '@/mocks';
+import { syncPayService as RealSyncPayService } from '@/ServiçosDoFrontend/ServiçoDePagamentos/RealSyncPayService';
+import { syncPayService as MockSyncPayService } from '@/mocks/syncPayService';
 
 export const syncPayService = USE_MOCKS ? MockSyncPayService : RealSyncPayService;

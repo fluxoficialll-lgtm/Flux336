@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { Group } from '../types';
-import { db } from '../database';
-import { GroupCapacityBadge } from '../componentes/ComponentesDeGrupos/ui/GroupCapacityBadge';
-import { CapacityValidator } from '../features/groups/logic/CapacityValidator';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { Group } from '@/types';
+import { db } from '@/database';
+import { GroupCapacityBadge } from '@/componentes/ComponentesDeGrupos/ui/GroupCapacityBadge';
+import { CapacityValidator } from '@/componentes/groups/logic/CapacityValidator';
 
 export const GroupLanding: React.FC = () => {
   const navigate = useNavigate();

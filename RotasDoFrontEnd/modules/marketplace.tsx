@@ -1,6 +1,6 @@
 
 import React, { lazy } from 'react';
-import { ProtectedRoute } from '../../componentes/ComponentesDeLogin/ProtectedRoute';
+import { ProtectedRoute } from '@/componentes/ComponentesDeLogin/ProtectedRoute';
 
 const Marketplace = lazy(() => import('../../Paginas/Mercado').then(m => ({ default: m.Marketplace })));
 const ProductDetails = lazy(() => import('../../Paginas/DetalhesDoProduto').then(m => ({ default: m.ProductDetails })));

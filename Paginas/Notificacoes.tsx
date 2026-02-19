@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Notification as NotificationType } from '@/ServiçosDoFrontend/notificationService';
 import { useNotifications } from '@/hooks/useNotifications';
-import { MainHeader } from '../componentes/ComponentesDeLayout/MainHeader';
-import { Footer } from '../componentes/ComponentesDeLayout/Footer';
+import { MainHeader } from '@/componentes/ComponentesDeLayout/MainHeader';
+import { Footer } from '@/componentes/ComponentesDeLayout/Footer';
 
 const NotificationItem: React.FC<{ notification: NotificationType }> = ({ notification }) => {
     const getNotificationMessage = (notif: NotificationType) => {

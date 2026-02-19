@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
-import { SecuritySettings as ISecuritySettings, UserSession } from '../types';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { SecuritySettings as ISecuritySettings, UserSession } from '@/types';
 
 export const SecurityLogin: React.FC = () => {
   const navigate = useNavigate();

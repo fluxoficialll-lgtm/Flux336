@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { AdCampaign, Post, MarketplaceItem } from '../../types';
+import { AdCampaign, Post, MarketplaceItem } from '@/types';
 import { FeedItem } from '@/componentes/feed/FeedItem';
 import { ProductCard } from '@/componentes/marketplace/ProductCard';
 

@@ -1,4 +1,4 @@
-import { PixelEventName } from '../../../types/pixel.types';
+import { PixelEventName } from '@/types/pixel.types';
 
 /**
  * Mapeamento de Engajamento Granular

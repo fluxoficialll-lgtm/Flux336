@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { Post, Group } from '../../../types';
-import { ReelPlayer } from './ReelPlayer';
-import { ReelActions } from './ReelActions';
-import { ReelInfo } from './ReelInfo';
-import { CommentSheetContainer } from '../../../componentes/ui/comments/CommentSheetContainer'; // Importando o container
+import { Post, Group } from '@/types';
+import { ReelPlayer } from '@/componentes/ComponentesDeReels/components/ReelPlayer';
+import { ReelActions } from '@/componentes/ComponentesDeReels/components/ReelActions';
+import { ReelInfo } from '@/componentes/ComponentesDeReels/components/ReelInfo';
+import { CommentSheetContainer } from '@/componentes/ComponentesDeInterface/comments/CommentSheetContainer'; // Importando o container
 
 interface ReelItemProps {
     reel: Post;

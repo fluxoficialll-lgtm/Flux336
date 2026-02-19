@@ -1,5 +1,5 @@
 import React from 'react';
-import { GroupLink } from '../../../../types';
+import { GroupLink } from '@/types';
 
 interface InviteLinkManagerProps {
   links: GroupLink[];

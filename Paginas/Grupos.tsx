@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback, Suspense, lazy } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { Group } from '../types';
-import { db } from '../database';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { Footer } from '../componentes/ComponentesDeLayout/Footer';
-import { MainHeader } from '../componentes/ComponentesDeLayout/MainHeader';
-import { JoinViaLinkBtn } from '../componentes/ComponentesDeGrupos/list/JoinViaLinkBtn';
-import { GroupListItem } from '../componentes/ComponentesDeGrupos/list/GroupListItem';
-import { CreateGroupFAB } from '../componentes/ComponentesDeGrupos/list/CreateGroupFAB';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { Group } from '@/types';
+import { db } from '@/database';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { Footer } from '@/componentes/ComponentesDeLayout/Footer';
+import { MainHeader } from '@/componentes/ComponentesDeLayout/MainHeader';
+import { JoinViaLinkBtn } from '@/componentes/ComponentesDeGrupos/list/JoinViaLinkBtn';
+import { GroupListItem } from '@/componentes/ComponentesDeGrupos/list/GroupListItem';
+import { CreateGroupFAB } from '@/componentes/ComponentesDeGrupos/list/CreateGroupFAB';
 
 const TrackingModal = lazy(() => import('../componentes/ComponentesDeGrupos/TrackingModal').then(m => ({ default: m.TrackingModal })));
 

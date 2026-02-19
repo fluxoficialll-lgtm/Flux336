@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
-import { Post } from '../../types';
+import { Post } from '@/types';
 import { PostHeader } from '@/componentes/PostHeader';
 import { PostText } from '@/componentes/PostText';
 import { ImageCarousel } from '@/componentes/ImageCarousel';
 import { GroupAttachmentCard } from '@/componentes/GroupAttachmentCard';
-import { PollPost } from './PollPost';
-import { PostActions } from './PostActions';
-import { postService } from '../../ServiçosDoFrontend/postService';
+import { PollPost } from '@/componentes/ComponentesDoFeed/PollPost';
+import { PostActions } from '@/componentes/ComponentesDoFeed/PostActions';
+import { postService } from '@/ServiçosDoFrontend/postService';
 import { CommentSheetContainer } from '@/componentes/ui/comments/CommentSheetContainer'; // Importando o container de comentários
 
 interface FeedItemProps {

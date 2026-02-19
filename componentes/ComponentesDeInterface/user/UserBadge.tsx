@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { UserAvatar, AvatarSize } from './UserAvatar';
-import { UserName } from './UserName';
+import { UserAvatar, AvatarSize } from '@/componentes/ComponentesDeInterface/user/UserAvatar';
+import { UserName } from '@/componentes/ComponentesDeInterface/user/UserName';
 
 interface UserBadgeProps {
     avatarUrl?: string;

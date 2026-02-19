@@ -1,6 +1,6 @@
 
-import { Comment } from './social.types';
-import { ContentDNA } from "./dna.types";
+import { Comment } from '@/backend/RotasDoBackEnd/social';
+import { ContentDNA } from "@/types/dna.types";
 
 export interface MarketplaceItem {
   id: string;

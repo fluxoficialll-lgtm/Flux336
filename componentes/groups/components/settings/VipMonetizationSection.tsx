@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { PixelConfigCard } from './PixelConfigCard';
+import { PixelConfigCard } from '@/componentes/groups/components/settings/PixelConfigCard';
 
 interface PixelConfig {
     metaId?: string;

@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { notificationService } from '../../ServiçosDoFrontend/notificationService';
-import { chatService } from '../../ServiçosDoFrontend/chatService';
-import { db } from '../../database';
+import { notificationService } from '@/ServiçosDoFrontend/notificationService';
+import { chatService } from '@/ServiçosDoFrontend/chatService';
+import { db } from '@/database';
 
 interface FooterProps {
     visible?: boolean;

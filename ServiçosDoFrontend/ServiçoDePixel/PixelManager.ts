@@ -1,13 +1,13 @@
-import { PixelEventData, PixelUserData, PixelConfig } from '../../types/pixel.types';
-import { IPixelProvider } from './providers/BaseProvider';
-import { MetaProvider } from './providers/MetaProvider';
-import { TikTokProvider } from './providers/TikTokProvider';
-import { GoogleAdsProvider } from './providers/GoogleAdsProvider';
+import { PixelEventData, PixelUserData, PixelConfig } from '@/types/pixel.types';
+import { IPixelProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/BaseProvider';
+import { MetaProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/MetaProvider';
+import { TikTokProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/TikTokProvider';
+import { GoogleAdsProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/GoogleAdsProvider';
 import { API_BASE } from '../../apiConfig';
-import { eventGuard } from './logic/EventGuard';
-import { generateDeterministicEventId } from './logic/DeterministicId';
-import { advancedMatcher } from './logic/AdvancedMatcher';
-import { trafficSource } from './context/TrafficSource';
+import { eventGuard } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/EventGuard';
+import { generateDeterministicEventId } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/DeterministicId';
+import { advancedMatcher } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/AdvancedMatcher';
+import { trafficSource } from '@/ServiçosDoFrontend/ServiçoDePixel/context/TrafficSource';
 
 const BROWSER_EVENTS = ['PageView', 'ViewContent', 'TimeStay30s', 'GalleryInteraction', 'GalleryZoom'];
 const SERVER_ONLY_EVENTS = ['Lead', 'InitiateCheckout', 'Purchase'];

@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { Group } from '../../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { Group } from '@/types';
 
 // Subcomponentes Modulares
-import { ChannelsHero } from '../../features/groups/componentes/channels/ChannelsHero';
-import { ChannelListRenderer } from '../../features/groups/componentes/channels/ChannelListRenderer';
-import { ChannelsFooter } from '../../features/groups/componentes/channels/ChannelsFooter';
-import { OwnerControls } from '../../features/groups/componentes/platform/OwnerControls';
+import { ChannelsHero } from '@/componentes/groups/components/channels/ChannelsHero';
+import { ChannelListRenderer } from '@/componentes/groups/components/channels/ChannelListRenderer';
+import { ChannelsFooter } from '@/componentes/groups/components/channels/ChannelsFooter';
+import { OwnerControls } from '@/componentes/groups/components/platform/OwnerControls';
 
 export const GroupChannelsList: React.FC = () => {
     const navigate = useNavigate();

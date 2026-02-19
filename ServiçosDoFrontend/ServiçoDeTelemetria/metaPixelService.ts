@@ -1,4 +1,4 @@
-import { pixelOrchestrator } from '../ServiçoDePixel/PixelOrchestrator';
+import { pixelOrchestrator } from '@/ServiçosDoFrontend/ServiçoDePixel/PixelOrchestrator';
 import { PixelEventData, PixelUserData } from '@/ServiçosDoFronte../types/pixel.types';
 import { API_BASE } from '@/ServiçosDoFrontend/apiConfig';
 

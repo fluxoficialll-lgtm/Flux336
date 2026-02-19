@@ -2,7 +2,7 @@
 import React from 'react';
 
 // A interface ProviderData será importada do novo arquivo de constantes
-import { ProviderData } from '../../constants/providerData';
+import { ProviderData } from '@/ServiçosDoFrontend/ServiçoDePagamentos/providerData';
 
 interface ProviderListItemProps {
     provider: ProviderData;

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../database';
-import { MarketplaceItem } from '../types/marketplace.types';
+import { marketplaceService } from '@/ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '@/database';
+import { MarketplaceItem } from '@/types/marketplace.types';
 
 // Importação dos Componentes Isolados
-import { MarketplaceHeader } from '../componentes/ComponentesDeMarketplace/MarketplaceHeader';
-import { MarketplaceSearchBar } from '../componentes/ComponentesDeMarketplace/MarketplaceSearchBar';
-import { CategoryBar } from '../componentes/ComponentesDeMarketplace/CategoryBar';
-import { ProductsGrid } from '../componentes/ComponentesDeMarketplace/ProductsGrid';
-import { MarketplaceFAB } from '../componentes/ComponentesDeMarketplace/MarketplaceFAB';
-import { Footer } from '../componentes/ComponentesDeLayout/Footer';
+import { MarketplaceHeader } from '@/componentes/ComponentesDeMarketplace/MarketplaceHeader';
+import { MarketplaceSearchBar } from '@/componentes/ComponentesDeMarketplace/MarketplaceSearchBar';
+import { CategoryBar } from '@/componentes/ComponentesDeMarketplace/CategoryBar';
+import { ProductsGrid } from '@/componentes/ComponentesDeMarketplace/ProductsGrid';
+import { MarketplaceFAB } from '@/componentes/ComponentesDeMarketplace/MarketplaceFAB';
+import { Footer } from '@/componentes/ComponentesDeLayout/Footer';
 
 export const Marketplace: React.FC = () => {
   const navigate = useNavigate();

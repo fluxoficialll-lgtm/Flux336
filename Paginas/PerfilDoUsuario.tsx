@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { relationshipService } from '../ServiçosDoFrontend/ServiçoDeRelacionamentos/relationshipService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { notificationService } from '../ServiçosDoFrontend/ServiçoDeNotificacoes/notificationService';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { relationshipService } from '@/ServiçosDoFrontend/ServiçoDeRelacionamentos/relationshipService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { notificationService } from '@/ServiçosDoFrontend/ServiçoDeNotificacoes/notificationService';
+import { marketplaceService } from '@/ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
 import { Post, MarketplaceItem } from '@/types/index';
-import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { FeedItem } from '../componentes/ComponentesDoFeed/FeedItem';
-import { AvatarPreviewModal } from '../componentes/ComponentesDeInterface/AvatarPreviewModal';
-import { Footer } from '../componentes/ComponentesDeLayout/Footer';
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { FeedItem } from '@/componentes/ComponentesDoFeed/FeedItem';
+import { AvatarPreviewModal } from '@/componentes/ComponentesDeInterface/AvatarPreviewModal';
+import { Footer } from '@/componentes/ComponentesDeLayout/Footer';
 
 // Novos componentes modulares para visitante
 import { VisitorHeader } from '@/componentes/ComponentesDePerfilDeUsuario/componentes/VisitorHeader';

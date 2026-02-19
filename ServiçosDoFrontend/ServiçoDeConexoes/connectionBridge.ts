@@ -1,5 +1,5 @@
 
-import { fluxClient } from './fluxClient';
+import { fluxClient } from '@/ServiçosDoFrontend/ServiçoDeConexoes/fluxClient';
 
 /**
  * ConnectionBridge

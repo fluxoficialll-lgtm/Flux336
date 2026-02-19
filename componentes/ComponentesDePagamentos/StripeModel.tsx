@@ -1,29 +1,29 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { stripeService } from '@/ServiçosDoFrontend/gateways/stripeService.ts';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { GeoData } from '@/ServiçosDoFrontend/geoService.ts';
 import { ConversionResult } from '@/ServiçosDoFrontend/currencyService.ts';
 import { vipSalesTracker } from '@/ServiçosDoFrontend/pixel/trackers/VipSalesTracker.ts';
-import { Group } from '../../types/social.types';
-import { USE_MOCKS } from '.././mocks/index.ts';
+import { Group } from '@/backend/RotasDoBackEnd/social';
+import { USE_MOCKS } from '@/componentes/mocks/index.ts';
 
 // Sub-views Internas
-import { StripePixView } from './CardsMetodosDePagamentos/StripePixView';
-import { StripeCardForm } from './CardsMetodosDePagamentos/StripeCardForm';
-import { StripeOxxoView } from './CardsMetodosDePagamentos/StripeOxxoView';
-import { StripeSepaForm } from './CardsMetodosDePagamentos/StripeSepaForm';
-import { StripeBoletoView } from './CardsMetodosDePagamentos/StripeBoletoView';
-import { StripeBacsForm } from './CardsMetodosDePagamentos/StripeBacsForm';
-import { StripeUpiView } from './CardsMetodosDePagamentos/StripeUpiView';
-import { StripeKonbiniView } from './CardsMetodosDePagamentos/StripeKonbiniView';
-import { StripePayNowView } from './CardsMetodosDePagamentos/StripePayNowView';
-import { StripeAchForm } from './CardsMetodosDePagamentos/StripeAchForm';
-import { StripeInteracView } from './CardsMetodosDePagamentos/StripeInteracView';
-import { StripeBecsForm } from './CardsMetodosDePagamentos/StripeBecsForm';
-import { StripePadForm } from './CardsMetodosDePagamentos/StripePadForm';
+import { StripePixView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripePixView';
+import { StripeCardForm } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeCardForm';
+import { StripeOxxoView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeOxxoView';
+import { StripeSepaForm } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeSepaForm';
+import { StripeBoletoView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeBoletoView';
+import { StripeBacsForm } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeBacsForm';
+import { StripeUpiView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeUpiView';
+import { StripeKonbiniView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeKonbiniView';
+import { StripePayNowView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripePayNowView';
+import { StripeAchForm } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeAchForm';
+import { StripeInteracView } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeInteracView';
+import { StripeBecsForm } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripeBecsForm';
+import { StripePadForm } from '@/componentes/ComponentesDePagamentos/CardsMetodosDePagamentos/StripePadForm';
 
-import { RedirectionBridgeCard, RedirectionProvider } from './RedirectionBridgeCard';
+import { RedirectionBridgeCard, RedirectionProvider } from '@/componentes/ComponentesDePagamentos/RedirectionBridgeCard';
 
 interface StripeModelProps {
     group: Group;

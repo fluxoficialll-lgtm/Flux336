@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { trackingService } from '../ServiçosDoFrontend/trackingService';
-import { LoginInitialCard } from '../features/auth/componentes/LoginInitialCard';
-import { LoginEmailCard } from '../features/auth/componentes/LoginEmailCard';
-import { logClientEvent } from '../utils/logger';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { trackingService } from '@/ServiçosDoFrontend/trackingService';
+import { LoginInitialCard } from '@/componentes/ComponentesDeLogin/LoginInitialCard';
+import { LoginEmailCard } from '@/componentes/ComponentesDeLogin/LoginEmailCard';
+import { logClientEvent } from '@/utils/logger';
 
 declare const google: any;
 

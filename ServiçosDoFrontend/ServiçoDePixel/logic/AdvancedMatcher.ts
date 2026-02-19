@@ -1,5 +1,5 @@
 
-import { PixelUserData } from '../../../types/pixel.types';
+import { PixelUserData } from '@/types/pixel.types';
 
 export const advancedMatcher = {
   /**

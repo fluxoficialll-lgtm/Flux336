@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Channel, ChannelSection } from '@/component../types';
-import { ModerationOptions } from './options/ModerationOptions';
-import { ContentOptions } from './options/ContentOptions';
+import { ModerationOptions } from '@/componentes/groups/components/settings/channels/options/ModerationOptions';
+import { ContentOptions } from '@/componentes/groups/components/settings/channels/options/ContentOptions';
 
 interface ChannelOptionsModalProps {
     isOpen: boolean;

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Channel } from '@/component../types';
-import { OptionToggle } from './OptionToggle';
+import { OptionToggle } from '@/componentes/groups/components/settings/channels/options/OptionToggle';
 
 interface ModerationOptionsProps {
     channel: Partial<Channel>;

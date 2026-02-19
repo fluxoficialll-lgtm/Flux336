@@ -1,5 +1,5 @@
 
-import { pixelPolicy } from './PixelPolicy';
+import { pixelPolicy } from '@/ServiçosDoFrontend/ServiçoDePixel/logic/PixelPolicy';
 
 /**
  * EventGuard: O "segurança" do Pixel.

@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { CapacityValidator } from '../../../features/groups/logic/CapacityValidator';
-import { Group } from '../../../types';
+import { CapacityValidator } from '@/componentes/groups/logic/CapacityValidator';
+import { Group } from '@/types';
 
 interface GroupCapacityBadgeProps {
     group: Group;

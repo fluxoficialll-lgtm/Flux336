@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { recommendationService } from '../ServiçosDoFrontend/ServiçoDeRecomendacao/recommendationService';
-import { Post } from '../types';
-import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { FeedItem } from '../componentes/ComponentesDoFeed/FeedItem';
-import { Footer } from '../componentes/ComponentesDeLayout/Footer';
-import { MainHeader } from '../componentes/ComponentesDeLayout/MainHeader';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { recommendationService } from '@/ServiçosDoFrontend/ServiçoDeRecomendacao/recommendationService';
+import { Post } from '@/types';
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { FeedItem } from '@/componentes/ComponentesDoFeed/FeedItem';
+import { Footer } from '@/componentes/ComponentesDeLayout/Footer';
+import { MainHeader } from '@/componentes/ComponentesDeLayout/MainHeader';
 
 export const Feed: React.FC = () => {
   const navigate = useNavigate();

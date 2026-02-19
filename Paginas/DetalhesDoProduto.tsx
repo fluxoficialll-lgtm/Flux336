@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { db } from '../database';
+import { marketplaceService } from '@/ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { db } from '@/database';
 import { MarketplaceItem, ChatMessage } from '@/types/index';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
 
 // Componentes Modulares
 import { ProdutoCabecalho as ProductHeader } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoCabecalho';
@@ -16,7 +16,7 @@ import { ProdutoCartaoDeVendedor as ProductSellerCard } from '@/componentes/Comp
 import { ProdutoDescricao as ProductDescription } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoDescricao';
 import { ProdutoBarraInferior as ProductBottomBar } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoBarraInferior';
 import { ProdutoCaixaDeLuz as ProductLightbox } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoCaixaDeLuz';
-import { CommentSheetContainer } from '../componentes/ComponentesDeInterface/comments/CommentSheetContainer';
+import { CommentSheetContainer } from '@/componentes/ComponentesDeInterface/comments/CommentSheetContainer';
 
 export const ProductDetails: React.FC = () => {
   const navigate = useNavigate();

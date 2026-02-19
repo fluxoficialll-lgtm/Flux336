@@ -1,8 +1,8 @@
-import { IPixelProvider } from './BaseProvider';
-import { PixelEventData, PixelUserData } from '../../../types/pixel.types';
-import { MetaMapping } from '../mappings/MetaMapping';
-import { mapToMetaParams } from '../mappings/params/MetaParams';
-import { anonymizeUserData } from '../utils/pixelHasher';
+import { IPixelProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/BaseProvider';
+import { PixelEventData, PixelUserData } from '@/types/pixel.types';
+import { MetaMapping } from '@/ServiçosDoFrontend/ServiçoDePixel/mappings/MetaMapping';
+import { mapToMetaParams } from '@/ServiçosDoFrontend/ServiçoDePixel/mappings/params/MetaParams';
+import { anonymizeUserData } from '@/ServiçosDoFrontend/ServiçoDePixel/utils/pixelHasher';
 
 export class MetaProvider implements IPixelProvider {
   id = 'meta';

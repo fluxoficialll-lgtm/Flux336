@@ -1,6 +1,6 @@
 
-import { IAdStrategy } from './BaseStrategy';
-import { AdCampaign, User } from '../../../types';
+import { IAdStrategy } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/strategies/BaseStrategy';
+import { AdCampaign, User } from '@/types';
 
 export const AppPromotionStrategy: IAdStrategy = {
     objective: 'app_promotion',

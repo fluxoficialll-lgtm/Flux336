@@ -1,22 +1,22 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { adService } from '../ServiçosDoFrontend/ServiçoDeAnuncios/adService';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { CampaignInfoCard } from '../componentes/ComponentesDeAnuncios/performance/AnuncioCartaoDeInformacaoDeCampanha';
-import { DeliveryMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeEntrega';
-import { ClickMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeClique';
-import { ConversionMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeConversao';
-import { FinancialMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasFinanceiras';
-import { AudienceMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeAudiencia';
-import { CreativeMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeCriativo';
-import { FunnelMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeFunil';
-import { SystemMetrics } from '../componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeSistema';
-import { AdPreview } from '../componentes/ComponentesDeAnuncios/AnuncioPrevia';
+import { adService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/adService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { CampaignInfoCard } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioCartaoDeInformacaoDeCampanha';
+import { DeliveryMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeEntrega';
+import { ClickMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeClique';
+import { ConversionMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeConversao';
+import { FinancialMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasFinanceiras';
+import { AudienceMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeAudiencia';
+import { CreativeMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeCriativo';
+import { FunnelMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeFunil';
+import { SystemMetrics } from '@/componentes/ComponentesDeAnuncios/performance/AnuncioMetricasDeSistema';
+import { AdPreview } from '@/componentes/ComponentesDeAnuncios/AnuncioPrevia';
 // Fix: Import CTA_OPTIONS_CONFIG from constants instead of AdPlacementSelector
-import { CTA_OPTIONS_CONFIG } from '../constants';
-import { AdCampaign } from '../types/ads.types';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { CTA_OPTIONS_CONFIG } from '@/constants';
+import { AdCampaign } from '@/types/ads.types';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
 
 export const CampaignPerformance: React.FC = () => {
     const navigate = useNavigate();

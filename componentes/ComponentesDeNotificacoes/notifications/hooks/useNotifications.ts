@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { notificationService, Notification as NotificationType } from '@/ServiçosDoFrontend/notificationService';
-import { db } from '../database'; // Importa a instância do banco de dados
+import { db } from '@/componentes/ComponentesDeNotificacoes/notifications/database'; // Importa a instância do banco de dados
 
 export const useNotifications = () => {
     const [notifications, setNotifications] = useState<NotificationType[]>([]);

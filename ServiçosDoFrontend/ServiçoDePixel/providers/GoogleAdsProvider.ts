@@ -1,6 +1,6 @@
 
-import { IPixelProvider } from './BaseProvider';
-import { PixelEventData, PixelUserData } from '../../../types/pixel.types';
+import { IPixelProvider } from '@/ServiçosDoFrontend/ServiçoDePixel/providers/BaseProvider';
+import { PixelEventData, PixelUserData } from '@/types/pixel.types';
 
 export class GoogleAdsProvider implements IPixelProvider {
   id = 'google';

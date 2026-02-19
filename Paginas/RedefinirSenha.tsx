@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthLayout } from '../componentes/ComponentesDeLayout/Layout';
-import { Input } from '../componentes/ComponentesDeInterface/Input';
-import { Button } from '../componentes/ComponentesDeInterface/Button';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { AuthError } from '../types/user.types';
+import { AuthLayout } from '@/componentes/ComponentesDeLayout/Layout';
+import { Input } from '@/componentes/ComponentesDeInterface/Input';
+import { Button } from '@/componentes/ComponentesDeInterface/Button';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { AuthError } from '@/types/user.types';
 
 export const ResetPassword: React.FC = () => {
   const navigate = useNavigate();

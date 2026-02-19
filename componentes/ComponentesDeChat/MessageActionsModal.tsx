@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChatMessage } from '../../types';
+import { ChatMessage } from '@/types';
 
 interface MessageActionsModalProps {
   isVisible: boolean;

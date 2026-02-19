@@ -1,4 +1,4 @@
-import { GroupRole } from '../../../types';
+import { GroupRole } from '@/types';
 
 export const DEFAULT_MODERATOR_ROLE: Partial<GroupRole> = {
   name: 'Moderador',

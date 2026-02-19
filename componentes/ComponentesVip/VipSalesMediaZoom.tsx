@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { VipMediaItem } from '../../types';
+import { VipMediaItem } from '@/types';
 
 interface VipSalesMediaZoomProps {
     items: VipMediaItem[];

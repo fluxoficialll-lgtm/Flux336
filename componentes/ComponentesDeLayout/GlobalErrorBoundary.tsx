@@ -1,7 +1,7 @@
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
-import { logService } from '../../ServiçosDoFrontend/ServiçoDeTelemetria/logService';
-import { eventTracker } from '../../ServiçosDoFrontend/telemetry/EventTracker'; // Assuming this service exists
+import { logService } from '@/ServiçosDoFrontend/ServiçoDeTelemetria/logService';
+import { eventTracker } from '@/ServiçosDoFrontend/telemetry/EventTracker'; // Assuming this service exists
 
 /**
  * @interface Props

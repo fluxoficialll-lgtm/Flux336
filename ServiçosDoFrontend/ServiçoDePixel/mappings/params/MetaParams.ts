@@ -1,4 +1,4 @@
-import { PixelUserData, PixelEventData } from '../../../../types/pixel.types';
+import { PixelUserData, PixelEventData } from '@/types/pixel.types';
 
 /**
  * Traduz os dados do app para o padrão "Customer Information Parameters" do Meta.

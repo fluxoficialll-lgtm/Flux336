@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { Post, MarketplaceItem } from "../../../types";
+import { Post, MarketplaceItem } from "@/types";
 
 // Tipagem para o "DNA" de um conteúdo.
 // Representa as categorias e nichos identificados pela IA.

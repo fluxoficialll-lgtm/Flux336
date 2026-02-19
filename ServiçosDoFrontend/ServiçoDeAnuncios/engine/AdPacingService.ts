@@ -1,6 +1,6 @@
 
-import { AdCampaign } from '../../../types';
-import { budgetManager } from './BudgetManager';
+import { AdCampaign } from '@/types';
+import { budgetManager } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/engine/BudgetManager';
 
 export const adPacingService = {
     /**

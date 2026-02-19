@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { reelsService } from '../ServiçosDoFrontend/ServiçoDePosts/reelsService';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { recommendationService } from '../ServiçosDoFrontend/ServiçoDeRecomendacao/recommendationService';
-import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { Post, Comment } from '../types';
+import { reelsService } from '@/ServiçosDoFrontend/ServiçoDePosts/reelsService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { recommendationService } from '@/ServiçosDoFrontend/ServiçoDeRecomendacao/recommendationService';
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { Post, Comment } from '@/types';
 
 import { ReelItem } from '@/componentes/ComponentesDeReels/componentes/ReelItem';
-import { CommentSheet } from '../componentes/ComponentesDeInterface/comments/CommentSheet';
+import { CommentSheet } from '@/componentes/ComponentesDeInterface/comments/CommentSheet';
 
 export const Reels: React.FC = () => {
   const navigate = useNavigate();

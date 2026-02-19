@@ -1,7 +1,7 @@
 
-import { pixelOrchestrator } from '../PixelOrchestrator';
-import { Group } from '../../../types';
-import { authService } from '../../ServiçoDeAutenticacao/authService';
+import { pixelOrchestrator } from '@/ServiçosDoFrontend/ServiçoDePixel/PixelOrchestrator';
+import { Group } from '@/types';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 
 /**
  * VipSalesTracker: Orquestra o rastreio específico da página de vendas VIP.

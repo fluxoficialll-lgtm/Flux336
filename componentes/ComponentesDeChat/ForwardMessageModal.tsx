@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { chatService } from '@/ServiçosDoFrontend/chatService';
-import { ChatMessage, ChatData } from '../types'';
+import { ChatMessage, ChatData } from '@/componentes/types'';
 import { useModal } from '@/componentes/ModalSystem';
 
 interface ForwardMessageModalProps {

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { groupService } from '../../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { AuditLog } from '../../../../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { AuditLog } from '@/types';
 
 export const useGroupAuditLogs = (groupId: string | undefined) => {
     const [logs, setLogs] = useState<AuditLog[]>([]);

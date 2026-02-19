@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { VipMediaItem } from '../../types';
+import { VipMediaItem } from '@/types';
 
 interface VideoItemProps {
     url: string;

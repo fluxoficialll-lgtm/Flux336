@@ -1,5 +1,5 @@
 
-import { AdCampaign } from '../../../types';
+import { AdCampaign } from '@/types';
 
 // Valores de custo simulados para cálculo de consumo de saldo
 const CPM_BASE_COST = 10.00; // Custo por 1.000 visualizações

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { userService } from '../ServiçosDoFrontend/ServiçoDeUsuario/userService'; // Importa o userService
-import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
-import { MessagesMenuModal } from '../componentes/ComponentesDeChat/MessagesMenuModal';
-import { MainHeader } from '../componentes/ComponentesDeLayout/MainHeader';
-import { MessageListItem } from '../componentes/ComponentesDeChat/MessageListItem';
-import { MessagesEmptyState } from '../componentes/ComponentesDeChat/MessagesEmptyState';
-import { MessagesFooter } from '../componentes/ComponentesDeChat/MessagesFooter';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService';
+import { userService } from '@/ServiçosDoFrontend/ServiçoDeUsuario/userService'; // Importa o userService
+import { db } from '@/ServiçosDoFrontend/ServiçoDeDados/database';
+import { MessagesMenuModal } from '@/componentes/ComponentesDeChat/MessagesMenuModal';
+import { MainHeader } from '@/componentes/ComponentesDeLayout/MainHeader';
+import { MessageListItem } from '@/componentes/ComponentesDeChat/MessageListItem';
+import { MessagesEmptyState } from '@/componentes/ComponentesDeChat/MessagesEmptyState';
+import { MessagesFooter } from '@/componentes/ComponentesDeChat/MessagesFooter';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
 import { User } from '@/types/index';
 
 interface Contact {

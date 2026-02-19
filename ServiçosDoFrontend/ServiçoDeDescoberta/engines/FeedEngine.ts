@@ -1,6 +1,6 @@
 
-import { Post, User } from '../../../types';
-import { db } from '../../../database';
+import { Post, User } from '@/types';
+import { db } from '@/database';
 import { ScoredItem, EngineContext } from '@/ServiçosDoFrontend/ServiçoDeDescober../types';
 
 // O FeedEngine é responsável por classificar e ordenar as postagens no feed de um usuário.

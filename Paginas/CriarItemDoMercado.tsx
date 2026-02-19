@@ -1,10 +1,10 @@
 
 import React, { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { MarketplaceItem } from '../types';
+import { marketplaceService } from '@/ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { MarketplaceItem } from '@/types';
 
 const SELECTABLE_CATEGORIES = [
     { id: 'Eletrônicos', icon: 'fa-mobile-screen', label: 'Eletrônicos' },

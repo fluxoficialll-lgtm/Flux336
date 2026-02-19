@@ -1,5 +1,5 @@
 
-import { RetryConfig } from '../types'';
+import { RetryConfig } from '@/ServiçosDoFrontend/ServiçoDeConexoes/types'';
 
 export class BaseConnection {
   protected defaultRetryConfig: RetryConfig = {

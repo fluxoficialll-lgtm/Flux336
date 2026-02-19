@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Group, Channel } from '../../../../types';
-import { ChannelSectionTitle } from './ChannelSectionTitle';
-import { ChannelItem } from './ChannelItem';
-import { EmptyChannelsState } from './EmptyChannelsState';
+import { Group, Channel } from '@/types';
+import { ChannelSectionTitle } from '@/componentes/groups/components/channels/ChannelSectionTitle';
+import { ChannelItem } from '@/componentes/groups/components/channels/ChannelItem';
+import { EmptyChannelsState } from '@/componentes/groups/components/channels/EmptyChannelsState';
 
 interface ChannelListRendererProps {
     group: Group;

@@ -1,8 +1,8 @@
 
-import { SyncState } from './NucleoDeSincronizacao/SyncState';
-import { SocialSyncWorker } from './Agentes/SocialSyncWorker';
-import { SystemSyncWorker } from './Agentes/SystemSyncWorker';
-import { BusinessSyncWorker } from './Agentes/BusinessSyncWorker';
+import { SyncState } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/NucleoDeSincronizacao/SyncState';
+import { SocialSyncWorker } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/Agentes/SocialSyncWorker';
+import { SystemSyncWorker } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/Agentes/SystemSyncWorker';
+import { BusinessSyncWorker } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/Agentes/BusinessSyncWorker';
 
 /**
  * AccountSyncService (Orchestrator)

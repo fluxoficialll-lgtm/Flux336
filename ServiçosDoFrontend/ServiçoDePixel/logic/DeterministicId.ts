@@ -1,5 +1,5 @@
 
-import { hashPixelData } from '../utils/pixelHasher';
+import { hashPixelData } from '@/ServiçosDoFrontend/ServiçoDePixel/utils/pixelHasher';
 
 /**
  * Gera um ID de evento determinístico.

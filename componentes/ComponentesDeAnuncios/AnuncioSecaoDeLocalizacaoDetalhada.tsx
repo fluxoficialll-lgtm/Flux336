@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AdCampaign, TargetedLocation } from '../../types';
+import { AdCampaign, TargetedLocation } from '@/types';
 
 interface DetailedLocationSectionProps {
     campaign: Partial<AdCampaign>;

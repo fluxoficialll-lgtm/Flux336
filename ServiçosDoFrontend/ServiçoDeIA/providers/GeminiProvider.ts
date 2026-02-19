@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { BaseAiProvider } from "./BaseAiProvider";
+import { BaseAiProvider } from "@/ServiçosDoFrontend/ServiçoDeIA/providers/BaseAiProvider";
 import { AiRequestOptions, AiResponse } from "@/ServiçosDoFrontend/ServiçoDe../types";
 
 export class GeminiProvider extends BaseAiProvider {

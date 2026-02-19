@@ -1,6 +1,6 @@
 
-import { BaseManager } from './BaseManager';
-import { User } from '../../types';
+import { BaseManager } from '@/database/managers/BaseManager';
+import { User } from '@/types';
 
 export class UserManager extends BaseManager {
     private table = 'users';

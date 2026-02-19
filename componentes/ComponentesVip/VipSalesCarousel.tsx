@@ -1,5 +1,5 @@
 import React from 'react';
-import { VipMediaItem } from '../../types';
+import { VipMediaItem } from '@/types';
 
 interface VipSalesCarouselProps {
     mediaItems: VipMediaItem[];

@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { userService } from '../../../ServiçosDoFrontend/ServiçoDeUsuario/userService';
-import { db } from '../../../infraestrutura/db.ts'; // Importa a instância do banco de dados
-import { User } from '../../../types/index.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { userService } from '@/ServiçosDoFrontend/ServiçoDeUsuario/userService';
+import { db } from '@/infraestrutura/db.ts'; // Importa a instância do banco de dados
+import { User } from '@/types/index.ts';
 
 export const useUserProfile = () => {
     const navigate = useNavigate();

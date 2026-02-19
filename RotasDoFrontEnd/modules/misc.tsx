@@ -1,6 +1,6 @@
 
 import React, { lazy } from 'react';
-import { ProtectedRoute } from '../../componentes/ComponentesDeLogin/ProtectedRoute';
+import { ProtectedRoute } from '@/componentes/ComponentesDeLogin/ProtectedRoute';
 
 const Leaderboard = lazy(() => import('../../Paginas/PlacarDeLideres').then(m => ({ default: m.Leaderboard })));
 const LocationSelector = lazy(() => import('../../Paginas/SeletorDeLocalizacao').then(m => ({ default: m.LocationSelector })));

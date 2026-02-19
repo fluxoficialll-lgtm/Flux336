@@ -1,6 +1,6 @@
 
-import { Post } from '../../types';
-import { db } from '../../database';
+import { Post } from '@/types';
+import { db } from '@/database';
 
 export const reelsService = {
   fetchReels: async () => {},

@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { HashRouter } from 'react-router-dom';
-import { ModalProvider } from './componentes/ComponentesDeInterface/ModalSystem';
-import { GlobalTracker } from './componentes/ComponentesDeLayout/GlobalTracker';
-import { DeepLinkHandler } from './componentes/ComponentesDeLayout/DeepLinkHandler';
+import { ModalProvider } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { GlobalTracker } from '@/componentes/ComponentesDeLayout/GlobalTracker';
+import { DeepLinkHandler } from '@/componentes/ComponentesDeLayout/DeepLinkHandler';
 import AppRoutes from './RotasDoFrontEnd/AppRoutes';
-import { useAuthSync } from './hooks/useAuthSync';
-import { GlobalErrorBoundary } from './componentes/ComponentesDeLayout/GlobalErrorBoundary';
-import { configControl } from './ServiçosDoFrontend/ServiçoDeAdmin/ConfigControl';
-import { hydrationManager } from './ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager';
+import { useAuthSync } from '@/hooks/useAuthSync';
+import { GlobalErrorBoundary } from '@/componentes/ComponentesDeLayout/GlobalErrorBoundary';
+import { configControl } from '@/ServiçosDoFrontend/ServiçoDeAdmin/ConfigControl';
+import { hydrationManager } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager';
 
 const Maintenance = lazy(() => import('./Paginas/Manutencao').then(m => ({ default: m.Maintenance })));
 

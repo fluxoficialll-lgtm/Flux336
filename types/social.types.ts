@@ -1,5 +1,5 @@
 
-import { ContentDNA } from "./dna.types";
+import { ContentDNA } from "@/types/dna.types";
 
 export interface Post {
   id: string;

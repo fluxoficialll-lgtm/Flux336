@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Group } from '../../types';
-import { generateTrackingLinkModel } from '../../ServiçosDoFrontend/trackingService';
+import { Group } from '@/types';
+import { generateTrackingLinkModel } from '@/ServiçosDoFrontend/trackingService';
 
 interface TrackingModalProps {
     isOpen: boolean;

@@ -1,17 +1,17 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { syncPayService } from '../ServiçosDoFrontend/syncPayService';
-import { currencyService } from '../ServiçosDoFrontend/currencyService';
-import { Group } from '../types';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { syncPayService } from '@/ServiçosDoFrontend/syncPayService';
+import { currencyService } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService';
+import { Group } from '@/types';
 
 // Subcomponentes Modulares
-import { RevenueHeader } from '../features/groups/componentes/revenue/RevenueHeader';
-import { RevenueSummaryCard } from '../features/groups/componentes/revenue/RevenueSummaryCard';
-import { RevenueMetricsGrid } from '../features/groups/componentes/revenue/RevenueMetricsGrid';
-import { PaymentMixCard } from '../features/groups/componentes/revenue/PaymentMixCard';
+import { RevenueHeader } from '@/componentes/groups/components/revenue/RevenueHeader';
+import { RevenueSummaryCard } from '@/componentes/groups/components/revenue/RevenueSummaryCard';
+import { RevenueMetricsGrid } from '@/componentes/groups/components/revenue/RevenueMetricsGrid';
+import { PaymentMixCard } from '@/componentes/groups/components/revenue/PaymentMixCard';
 
 type CurrencyCode = 'BRL' | 'USD' | 'EUR';
 

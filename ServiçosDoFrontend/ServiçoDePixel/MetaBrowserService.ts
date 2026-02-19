@@ -1,7 +1,7 @@
 
-import { PixelEventData, PixelUserData } from '../../types/pixel.types';
-import { anonymizeUserData } from './utils/pixelHasher';
-import { mapToMetaParams } from './mappings/params/MetaParams';
+import { PixelEventData, PixelUserData } from '@/types/pixel.types';
+import { anonymizeUserData } from '@/ServiçosDoFrontend/ServiçoDePixel/utils/pixelHasher';
+import { mapToMetaParams } from '@/ServiçosDoFrontend/ServiçoDePixel/mappings/params/MetaParams';
 
 // Cache para evitar reinicialização do mesmo Pixel ID
 const initializedPixels = new Set<string>();

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Infoproduct } from '../../../../types';
+import { Infoproduct } from '@/types';
 
 interface InfoproductCardProps {
     item: Infoproduct;

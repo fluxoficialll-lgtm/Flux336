@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGroupSettings } from '../../../features/groups/hooks/useGroupSettings';
-import { StatisticsSection } from '../../../features/groups/componentes/settings/StatisticsSection';
+import { useGroupSettings } from '@/features/groups/hooks/useGroupSettings';
+import { StatisticsSection } from '@/componentes/groups/components/settings/StatisticsSection';
 
 export const GroupStatisticsPage: React.FC = () => {
     const navigate = useNavigate();

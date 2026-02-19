@@ -1,7 +1,7 @@
 
-import { ChannelNormalizer } from './ChannelNormalizer';
-import { RelationshipValidator } from './RelationshipValidator';
-import { ParticipantResolver } from './ParticipantResolver';
+import { ChannelNormalizer } from '@/ServiçosDoFrontend/ServiçoDeChat/ChannelNormalizer';
+import { RelationshipValidator } from '@/ServiçosDoFrontend/ServiçoDeChat/RelationshipValidator';
+import { ParticipantResolver } from '@/ServiçosDoFrontend/ServiçoDeChat/ParticipantResolver';
 
 /**
  * ChatRelationshipService

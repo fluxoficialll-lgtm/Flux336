@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AddressProfile } from '../../../types/location.types';
+import { AddressProfile } from '@/types/location.types';
 
 interface RegionHierarchySelectorProps {
     onSelect: (addr: AddressProfile) => void;

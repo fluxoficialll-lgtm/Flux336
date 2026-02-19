@@ -1,5 +1,5 @@
 
-import { Post } from '../../../types';
+import { Post } from '@/types';
 import { GoogleGenAI } from "@google/genai"; // Importa a biblioteca de IA do Google (Gemini).
 import { EngineContext } from '@/ServiçosDoFrontend/ServiçoDeDescober../types';
 

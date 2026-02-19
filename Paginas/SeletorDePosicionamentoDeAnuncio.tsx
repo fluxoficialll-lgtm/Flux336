@@ -1,14 +1,14 @@
 
 import React from 'react';
-import { useFluxoDeCampanhaDeAnuncio as useAdCampaignFlow } from '../componentes/ComponentesDeAnuncios/hooks/useFluxoDeCampanhaDeAnuncio';
-import { CTA_OPTIONS_CONFIG } from '../constants';
+import { useFluxoDeCampanhaDeAnuncio as useAdCampaignFlow } from '@/componentes/ComponentesDeAnuncios/hooks/useFluxoDeCampanhaDeAnuncio';
+import { CTA_OPTIONS_CONFIG } from '@/constants';
 
-import { AnuncioCabecalhoDeFluxo as AdFlowHeader } from '../componentes/ComponentesDeAnuncios/AnuncioCabecalhoDeFluxo';
-import { AnuncioRodapeDeFluxo as AdFlowFooter } from '../componentes/ComponentesDeAnuncios/AnuncioRodapeDeFluxo';
+import { AnuncioCabecalhoDeFluxo as AdFlowHeader } from '@/componentes/ComponentesDeAnuncios/AnuncioCabecalhoDeFluxo';
+import { AnuncioRodapeDeFluxo as AdFlowFooter } from '@/componentes/ComponentesDeAnuncios/AnuncioRodapeDeFluxo';
 
-import { AnuncioSecaoDeObjetivo } from '../componentes/ComponentesDeAnuncios/AnuncioSecaoDeObjetivo';
-import { AnuncioSecaoDeSegmentacao } from '../componentes/ComponentesDeAnuncios/AnuncioSecaoDeSegmentacao';
-import { AnuncioSecaoDeCriativoDeDestino } from '../componentes/ComponentesDeAnuncios/AnuncioSecaoDeCriativoDeDestino';
+import { AnuncioSecaoDeObjetivo } from '@/componentes/ComponentesDeAnuncios/AnuncioSecaoDeObjetivo';
+import { AnuncioSecaoDeSegmentacao } from '@/componentes/ComponentesDeAnuncios/AnuncioSecaoDeSegmentacao';
+import { AnuncioSecaoDeCriativoDeDestino } from '@/componentes/ComponentesDeAnuncios/AnuncioSecaoDeCriativoDeDestino';
 
 export const AdPlacementSelector: React.FC = () => {
   const {

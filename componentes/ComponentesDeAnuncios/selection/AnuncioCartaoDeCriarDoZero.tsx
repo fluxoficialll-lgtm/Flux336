@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AdSelectionCard } from './BaseSelectionCard';
+import { AdSelectionCard } from '@/componentes/ComponentesDeAnuncios/selection/BaseSelectionCard';
 
 export const CreateFromScratchCard: React.FC<{ onClick: () => void }> = ({ onClick }) => (
     <AdSelectionCard 

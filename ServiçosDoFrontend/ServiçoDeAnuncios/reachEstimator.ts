@@ -1,5 +1,5 @@
 
-import { AdCampaign } from '../../types';
+import { AdCampaign } from '@/types';
 
 export const reachEstimator = {
     /**

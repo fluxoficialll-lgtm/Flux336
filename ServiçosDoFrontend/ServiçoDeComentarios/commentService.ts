@@ -1,5 +1,5 @@
 
-import { apiClient } from './apiClient';
+import { apiClient } from '@/ServiçosDoFrontend/ServiçoDeAPI/apiClient';
 import { Comment, CommentableType } from '@/ServiçosDoFronte../types'; 
 
 const getComments = async (commentableType: CommentableType, commentableId: string | number): Promise<Comment[]> => {

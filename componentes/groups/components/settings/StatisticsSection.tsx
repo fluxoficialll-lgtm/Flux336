@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react';
-import { MemberMetrics } from '../../logic/MemberMetrics';
-import { GroupRole } from '../../../../types';
+import { MemberMetrics } from '@/componentes/groups/logic/MemberMetrics';
+import { GroupRole } from '@/types';
 
 interface Member {
     id: string;

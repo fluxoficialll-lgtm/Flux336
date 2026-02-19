@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { MemberSearchBar } from './members/MemberSearchBar';
-import { MemberList } from './members/MemberList';
-import { MemberItem } from './members/MemberItem';
-import { RoleAssignmentModal } from './members/RoleAssignmentModal';
-import { useRoleAssignment } from '../../hooks/settings/useRoleAssignment';
-import { GroupRole } from '../../../../types';
+import { MemberSearchBar } from '@/componentes/groups/components/settings/members/MemberSearchBar';
+import { MemberList } from '@/componentes/groups/components/settings/members/MemberList';
+import { MemberItem } from '@/componentes/groups/components/settings/members/MemberItem';
+import { RoleAssignmentModal } from '@/componentes/groups/components/settings/members/RoleAssignmentModal';
+import { useRoleAssignment } from '@/componentes/groups/hooks/settings/useRoleAssignment';
+import { GroupRole } from '@/types';
 
 interface Member {
     id: string;

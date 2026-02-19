@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { fluxClient } from '../../../ServiçosDoFrontend/fluxClient';
-import { MASTER_HEALTH_COPY, PROVIDER_LABELS, MasterStatus } from './MasterHealthCopy';
+import { fluxClient } from '@/ServiçosDoFrontend/ServiçoDeConexoes/fluxClient';
+import { MASTER_HEALTH_COPY, PROVIDER_LABELS, MasterStatus } from '@/componentes/ComponentesDeAdmin/MasterHealthCopy';
 
 export const MasterHealthRadar: React.FC = () => {
     const [health, setHealth] = useState<Record<string, MasterStatus>>({

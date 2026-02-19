@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Group, Channel, SalesSection, GroupLink, ChannelSection } from '../../../../types';
+import { Group, Channel, SalesSection, GroupLink, ChannelSection } from '@/types';
 
 export const useGroupStructure = (group: Group | null) => {
   const [channels, setChannels] = useState<Channel[]>([]);

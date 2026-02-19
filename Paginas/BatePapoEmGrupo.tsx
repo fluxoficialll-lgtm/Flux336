@@ -1,21 +1,21 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
-import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService'; 
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { privacyService } from '../ServiçosDoFrontend/ServiçoDeSeguranca/privacyService'; 
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { db } from '../database';
-import { Group, ChatMessage } from '../types';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { chatService } from '@/ServiçosDoFrontend/ServiçoDeChat/chatService'; 
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { privacyService } from '@/ServiçosDoFrontend/ServiçoDeSeguranca/privacyService'; 
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { db } from '@/database';
+import { Group, ChatMessage } from '@/types';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
-import { ChatHeader } from '../componentes/ComponentesDeChat/ChatHeader';
-import { ChatInput } from '../componentes/ComponentesDeChat/ChatInput';
-import { MessageItem } from '../componentes/ComponentesDeChat/MessageItem';
-import { MediaPreviewOverlay } from '../componentes/ComponentesDeChat/MediaPreviewOverlay';
-import { GroupMenuModal } from '../componentes/ComponentesDeGrupos/menu/GroupMenuModal';
-import { useAccessValidationFlow } from '../flows/groups/AccessValidationFlow';
+import { ChatHeader } from '@/componentes/ComponentesDeChat/ChatHeader';
+import { ChatInput } from '@/componentes/ComponentesDeChat/ChatInput';
+import { MessageItem } from '@/componentes/ComponentesDeChat/MessageItem';
+import { MediaPreviewOverlay } from '@/componentes/ComponentesDeChat/MediaPreviewOverlay';
+import { GroupMenuModal } from '@/componentes/ComponentesDeGrupos/menu/GroupMenuModal';
+import { useAccessValidationFlow } from '@/flows/groups/AccessValidationFlow';
 
 export const GroupChat: React.FC = () => {
   const navigate = useNavigate();

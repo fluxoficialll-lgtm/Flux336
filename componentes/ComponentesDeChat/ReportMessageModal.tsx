@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChatMessage } from '../types'';
+import { ChatMessage } from '@/componentes/types'';
 import { useModal } from '@/componentes/ModalSystem';
 
 interface ReportMessageModalProps {

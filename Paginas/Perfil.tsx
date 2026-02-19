@@ -1,17 +1,17 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { userService } from '../ServiçosDoFrontend/ServiçoDeUsuario/userService';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
-import { relationshipService } from '../ServiçosDoFrontend/ServiçoDeRelacionamentos/relationshipService';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
-import { User } from '../types';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { userService } from '@/ServiçosDoFrontend/ServiçoDeUsuario/userService';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService';
+import { relationshipService } from '@/ServiçosDoFrontend/ServiçoDeRelacionamentos/relationshipService';
+import { marketplaceService } from '@/ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
+import { User } from '@/types';
 
-import { Footer } from '../componentes/ComponentesDeLayout/Footer';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { FollowListModal } from '../componentes/ComponentesDePerfil/FollowListModal';
-import { AvatarPreviewModal } from '../componentes/ComponentesDeInterface/AvatarPreviewModal';
+import { Footer } from '@/componentes/ComponentesDeLayout/Footer';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem';
+import { FollowListModal } from '@/componentes/ComponentesDePerfil/FollowListModal';
+import { AvatarPreviewModal } from '@/componentes/ComponentesDeInterface/AvatarPreviewModal';
 import { ProfileHeader } from '@/componentes/profile/componentes/ProfileHeader';
 import { ProfileInfoCard } from '@/componentes/profile/componentes/ProfileInfoCard';
 import { ProfileTabNav } from '@/componentes/profile/componentes/ProfileTabNav';

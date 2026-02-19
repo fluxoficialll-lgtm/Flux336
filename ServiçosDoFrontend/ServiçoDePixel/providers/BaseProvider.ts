@@ -1,4 +1,4 @@
-import { PixelEventName, PixelEventData, PixelUserData } from '../../../types/pixel.types';
+import { PixelEventName, PixelEventData, PixelUserData } from '@/types/pixel.types';
 
 export interface IPixelProvider {
   id: string;

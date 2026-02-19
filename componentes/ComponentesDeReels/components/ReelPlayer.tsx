@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Post } from '../../../types';
+import { Post } from '@/types';
 
 interface ReelPlayerProps {
     reel: Post;

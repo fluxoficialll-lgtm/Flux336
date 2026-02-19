@@ -1,7 +1,7 @@
 
-import { Group } from '../../types';
-import { db } from '../../database';
-import { ROLE_WEIGHTS } from '../../constants/RoleWeights';
+import { Group } from '@/types';
+import { db } from '@/database';
+import { ROLE_WEIGHTS } from '@/componentes/groups/constants/RoleWeights';
 
 /**
  * AccessPolicy Engine
