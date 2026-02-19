@@ -1,18 +1,18 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCreateVipGroupForm } from '../features/groups/hooks/useCreateVipGroupForm';
-import { CreateVipGroupHeader } from '../features/groups/components/createVip/CreateVipGroupHeader';
-import { GroupBasicInfo } from '../features/groups/components/createVip/GroupBasicInfo';
-import { VipDoorGallery } from '../features/groups/components/createVip/VipDoorGallery';
-import { GroupPricing } from '../features/groups/components/createVip/GroupPricing';
-import { GroupMarketing } from '../features/groups/components/createVip/GroupMarketing';
-import { PixelSettingsModal } from '../components/groups/PixelSettingsModal';
-import { AccessTypeModal } from '../components/groups/AccessTypeModal';
-import { CurrencySelectorModal } from '../components/groups/CurrencySelectorModal';
-import { ProviderSelectorModal } from '../components/groups/ProviderSelectorModal';
-import { ImageCropModal } from '../components/ui/ImageCropModal';
-import { UploadProgressCard } from '../features/groups/components/platform/UploadProgressCard';
+import { useCreateVipGroupForm } from '../componentes/groups/hooks/useCreateVipGroupForm';
+import { CreateVipGroupHeader } from '@/componentes/groups/componentes/createVip/CreateVipGroupHeader';
+import { GroupBasicInfo } from '@/componentes/groups/componentes/createVip/GroupBasicInfo';
+import { VipDoorGallery } from '@/componentes/groups/componentes/createVip/VipDoorGallery';
+import { GroupPricing } from '@/componentes/groups/componentes/createVip/GroupPricing';
+import { GroupMarketing } from '@/componentes/groups/componentes/createVip/GroupMarketing';
+import { PixelSettingsModal } from '../componentes/ComponentesDeGrupos/PixelSettingsModal';
+import { AccessTypeModal } from '../componentes/ComponentesDeGrupos/AccessTypeModal';
+import { CurrencySelectorModal } from '../componentes/ComponentesDeGrupos/CurrencySelectorModal';
+import { ProviderSelectorModal } from '../componentes/ComponentesDeGrupos/ProviderSelectorModal';
+import { ImageCropModal } from '../componentes/ComponentesDeInterface/ImageCropModal';
+import { UploadProgressCard } from '@/componentes/groups/componentes/platform/UploadProgressCard';
 
 export const CreateVipGroup: React.FC = () => {
   const navigate = useNavigate();

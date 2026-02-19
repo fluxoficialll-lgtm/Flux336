@@ -1,5 +1,5 @@
 
-import { Post } from '../types';
+import { Post } from '@/ServiçosDoFronte../types';
 
 /**
  * MOCK_POSTS otimizado para o fluxo de "Impulsionar Existente".

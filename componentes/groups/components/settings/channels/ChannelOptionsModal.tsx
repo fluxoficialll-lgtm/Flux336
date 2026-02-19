@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Channel, ChannelSection } from '../../../../types';
+import { Channel, ChannelSection } from '@/component../types';
 import { ModerationOptions } from './options/ModerationOptions';
 import { ContentOptions } from './options/ContentOptions';
 

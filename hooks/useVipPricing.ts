@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { GeoData } from '../services/geoService';
-import { ConversionResult } from '../services/currencyService';
-import { VipPriceResolver } from '../services/real/vip/VipPriceResolver';
+import { GeoData } from '../ServiçosDoFrontend/geoService';
+import { ConversionResult } from '../ServiçosDoFrontend/currencyService';
+import { VipPriceResolver } from '../ServiçosDoFrontend/real/vip/VipPriceResolver';
 import { Group } from '../types';
 
 export const useVipPricing = (group: Group | null) => {

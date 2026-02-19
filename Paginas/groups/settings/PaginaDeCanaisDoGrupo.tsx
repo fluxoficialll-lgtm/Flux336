@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Channel, ChannelSection } from '../../../types';
-import { useModal } from '../../../components/ModalSystem';
+import { useModal } from '../../../componentes/ModalSystem';
 import { useGroupSettings } from '../../../features/groups/hooks/useGroupSettings';
-import { ChannelsSection as ChannelsEditor } from '../../../features/groups/components/settings/ChannelsSection';
-import { ChannelsHeader } from '../../../features/groups/components/settings/channels/ChannelsHeader';
-import { ChannelsNotice } from '../../../features/groups/components/settings/channels/ChannelsNotice';
-import { ChannelOptionsModal } from '../../../features/groups/components/settings/channels/ChannelOptionsModal';
+import { ChannelsSection as ChannelsEditor } from '../../../features/groups/componentes/settings/ChannelsSection';
+import { ChannelsHeader } from '../../../features/groups/componentes/settings/channels/ChannelsHeader';
+import { ChannelsNotice } from '../../../features/groups/componentes/settings/channels/ChannelsNotice';
+import { ChannelOptionsModal } from '../../../features/groups/componentes/settings/channels/ChannelOptionsModal';
 
 export const GroupChannelsPage: React.FC = () => {
     const navigate = useNavigate();

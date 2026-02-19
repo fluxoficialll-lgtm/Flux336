@@ -1,6 +1,6 @@
 
 import { BaseConnection } from "./base.connection";
-import { ConnectionResponse } from "./types";
+import { ConnectionResponse } from '../types"';
 
 export class PaymentConnection extends BaseConnection {
   /**

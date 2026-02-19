@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CurrencyType } from '../../../../components/groups/CurrencySelectorModal';
+import { CurrencyType } from '../../../../componentes/groups/CurrencySelectorModal';
 
 interface GroupPricingProps {
     price: string;

@@ -1,6 +1,6 @@
 
-import { USE_MOCKS } from '../mocks';
+import { USE_MOCKS } from '@/ServiçosDoFronte./mocks';
 import { paypalService as RealPaypalService } from './real/paypalService';
-import { paypalService as MockPaypalService } from './mocks/paypalService';
+import { paypalService as MockPaypalService } from './mocks/paypalService'';
 
 export const paypalService = USE_MOCKS ? MockPaypalService : RealPaypalService;

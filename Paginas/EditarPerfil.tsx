@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '@/ServiçosDoFrontend/authService';
-import { postService } from '@/ServiçosDoFrontend/postService';
-import { AuthError, UserProfile } from '@/types/user.types';
-import { ImageCropModal } from '@/componentes/ComponentesDeInterface/ImageCropModal';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
+import { AuthError, UserProfile } from '../types/user.types';
+import { ImageCropModal } from '../componentes/ComponentesDeInterface/ImageCropModal';
 
 const EditProfile: React.FC = () => {
   const navigate = useNavigate();

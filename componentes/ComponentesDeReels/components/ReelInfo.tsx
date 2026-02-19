@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Post, Group } from '../../../types';
-import { groupService } from '../../../services/groupService';
-import { AvatarPreviewModal } from '../../../components/ui/AvatarPreviewModal';
-import { UserBadge } from '../../../components/ui/user/UserBadge';
+import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { AvatarPreviewModal } from '../../../componentes/ui/AvatarPreviewModal';
+import { UserBadge } from '../../../componentes/ui/user/UserBadge';
 
 interface ReelInfoProps {
     reel: Post;

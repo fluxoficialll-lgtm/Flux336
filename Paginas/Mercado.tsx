@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
 import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { db } from '../database/index';
+import { db } from '../database';
 import { MarketplaceItem } from '../types/marketplace.types';
 
 // Importação dos Componentes Isolados

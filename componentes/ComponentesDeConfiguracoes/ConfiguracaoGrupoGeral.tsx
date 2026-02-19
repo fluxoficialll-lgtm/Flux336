@@ -2,8 +2,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SettingItem } from './SettingItem';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { LANGUAGES } from '../../Paginas/LanguageSettings';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { LANGUAGES } from '@/Paginas/LanguageSettings';
 
 export const GeneralGroup: React.FC = () => {
     const navigate = useNavigate();

@@ -1,6 +1,6 @@
 
 import { internalConnector } from './InternalConnector';
-import { AdminDashboardData } from '../screenService';
+import { AdminDashboardData } from '@/ServiçosDoFrontend/screenService';
 
 /**
  * AdminGateway

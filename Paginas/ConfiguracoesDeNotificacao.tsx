@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { NotificationSettings as INotificationSettings } from '../tipos/index.ts';
-import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem.tsx';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { NotificationSettings as INotificationSettings } from '../types.ts';
+import { useModal } from '@/componentes/ComponentesDeInterface/ModalSystem.tsx';
 
 // Subcomponentes Modulares
-import { GlobalPauseCard } from '../componentes/ComponentesDeNotificacoes/notifications/components/settings/GlobalPauseCard.tsx';
-import { SocialSection } from '../componentes/ComponentesDeNotificacoes/notifications/components/settings/SocialSection.tsx';
-import { CommunicationSection } from '../componentes/ComponentesDeNotificacoes/notifications/components/settings/CommunicationSection.tsx';
-import { BusinessSection } from '../componentes/ComponentesDeNotificacoes/notifications/components/settings/BusinessSection.tsx';
-import { EmailPreferencesSection } from '../componentes/ComponentesDeNotificacoes/notifications/components/settings/EmailPreferencesSection.tsx';
+import { GlobalPauseCard } from '@/componentes/ComponentesDeNotificacoes/notifications/componentes/settings/GlobalPauseCard.tsx';
+import { SocialSection } from '@/componentes/ComponentesDeNotificacoes/notifications/componentes/settings/SocialSection.tsx';
+import { CommunicationSection } from '@/componentes/ComponentesDeNotificacoes/notifications/componentes/settings/CommunicationSection.tsx';
+import { BusinessSection } from '@/componentes/ComponentesDeNotificacoes/notifications/componentes/settings/BusinessSection.tsx';
+import { EmailPreferencesSection } from '@/componentes/ComponentesDeNotificacoes/notifications/componentes/settings/EmailPreferencesSection.tsx';
 
 export const NotificationSettings: React.FC = () => {
     const navigate = useNavigate();

@@ -1,5 +1,5 @@
 
-import { aiOrchestrator, MarketingPrompts } from '../../ai';
+import { aiOrchestrator, MarketingPrompts } from '@/ServiçosDoFrontend/ai';
 
 export const aiInterestEngine = {
     /**

@@ -1,7 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { ViolationType, IntegrityLog } from '../types/integrity.types';
-import { API_BASE } from '../apiConfig';
+import { ViolationType, IntegrityLog } from '@/ServiçosDoFronte../types/integrity.types';
+import { API_BASE } from '@/ServiçosDoFrontend/apiConfig';
 import { authService } from './authService';
 
 // Cache local de mensagens para detecção de spam por frequência

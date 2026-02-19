@@ -1,7 +1,7 @@
 
 import { BaseManager } from './BaseManager';
 import { Relationship } from '../../types';
-import { sqlite } from '../engine';
+import { sqlite } from '../database/engine';
 
 export class RelationshipManager extends BaseManager {
     private table = 'relationships';

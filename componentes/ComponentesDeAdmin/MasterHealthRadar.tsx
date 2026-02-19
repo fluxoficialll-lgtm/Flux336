@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fluxClient } from '../../../services/fluxClient';
+import { fluxClient } from '../../../ServiçosDoFrontend/fluxClient';
 import { MASTER_HEALTH_COPY, PROVIDER_LABELS, MasterStatus } from './MasterHealthCopy';
 
 export const MasterHealthRadar: React.FC = () => {

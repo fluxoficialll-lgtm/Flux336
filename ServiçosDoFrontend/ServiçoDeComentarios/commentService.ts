@@ -1,6 +1,6 @@
 
 import { apiClient } from './apiClient';
-import { Comment, CommentableType } from '../types'; 
+import { Comment, CommentableType } from '@/ServiçosDoFronte../types'; 
 
 const getComments = async (commentableType: CommentableType, commentableId: string | number): Promise<Comment[]> => {
     const { data } = await apiClient.get(`/${commentableType}/${commentableId}/comments`);

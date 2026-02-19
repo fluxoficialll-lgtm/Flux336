@@ -1,7 +1,7 @@
 
 import { User, UserProfile, NotificationSettings, SecuritySettings, PaymentProviderConfig } from '../../types';
 import { db } from '../../database';
-import { MOCK_USERS } from '../../mocks';
+import { MOCK_USERS } from '.././mocks';
 
 const TOKEN_KEY = 'auth_token';
 const CACHE_KEY = 'cached_user_profile';

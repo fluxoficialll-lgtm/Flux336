@@ -1,9 +1,9 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { groupService } from '../services/groupService';
-import { authService } from '../services/authService';
-import { vipSalesTracker } from '../services/pixel/trackers/VipSalesTracker';
-import { VipPlaybackController } from '../services/real/vip/VipPlaybackController';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { vipSalesTracker } from '../ServiçosDoFrontend/pixel/trackers/VipSalesTracker';
+import { VipPlaybackController } from '../ServiçosDoFrontend/real/vip/VipPlaybackController';
 import { useVipPricing } from './useVipPricing';
 import { Group } from '../types';
 

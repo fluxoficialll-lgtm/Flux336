@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { stripeService } from '../../ServiçosDoFrontend/gateways/stripeService.ts';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { GeoData } from '../../ServiçosDoFrontend/geoService.ts';
-import { ConversionResult } from '../../ServiçosDoFrontend/currencyService.ts';
-import { vipSalesTracker } from '../../ServiçosDoFrontend/pixel/trackers/VipSalesTracker.ts';
-import { Group } from '../../types/social.types.ts';
-import { USE_MOCKS } from '../../mocks/index.ts';
+import { stripeService } from '@/ServiçosDoFrontend/gateways/stripeService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { GeoData } from '@/ServiçosDoFrontend/geoService.ts';
+import { ConversionResult } from '@/ServiçosDoFrontend/currencyService.ts';
+import { vipSalesTracker } from '@/ServiçosDoFrontend/pixel/trackers/VipSalesTracker.ts';
+import { Group } from '@/types/social.types.ts';
+import { USE_MOCKS } from '.././mocks/index.ts';
 
 // Sub-views Internas
 import { StripePixView } from './CardsMetodosDePagamentos/StripePixView';

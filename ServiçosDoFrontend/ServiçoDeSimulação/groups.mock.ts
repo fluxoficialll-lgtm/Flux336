@@ -1,5 +1,5 @@
 
-import { Group } from '../types';
+import { Group } from '@/ServiçosDoFronte../types';
 
 export const MOCK_GROUPS: Group[] = [
   {

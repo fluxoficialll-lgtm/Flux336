@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { authService } from '../services/authService';
-import { groupService } from '../services/groupService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
 import { Group } from '../types';
 
 export const LimitAndControl: React.FC = () => {

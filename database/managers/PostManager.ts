@@ -1,7 +1,7 @@
 
 import { BaseManager } from './BaseManager';
 import { Post } from '../../types';
-import { sqlite } from '../engine';
+import { sqlite } from '../database/engine';
 
 export class PostManager extends BaseManager {
     private table = 'posts';

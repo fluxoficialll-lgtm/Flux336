@@ -1,1 +1,1 @@
-export { authService } from '../ServiçoDeSimulação/authService';
+export { authService } from '@/ServiçosDoFrontend/ServiçoDeSimulação/authService';

@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService.ts';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { Post, PollOption } from '../types/social.types.ts';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { Post, PollOption } from '@/types/social.types.ts';
 
 export const CreatePoll: React.FC = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 
 import { useState, useCallback } from 'react';
 import { LocationFilter, Coordinates, AddressProfile } from '../types/location.types';
-import { LocationIntelligence } from '../services/geo/LocationIntelligence';
-import { apiClient } from '../services/apiClient'; // CORREÇÃO: Importação nomeada
+import { LocationIntelligence } from '../ServiçosDoFrontend/geo/LocationIntelligence';
+import { apiClient } from '../ServiçosDoFrontend/apiClient'; // CORREÇÃO: Importação nomeada
 
 const STORAGE_KEY = 'flux_user_geo_filter';
 

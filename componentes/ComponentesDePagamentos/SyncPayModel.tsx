@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { syncPayService } from '../../ServiçosDoFrontend/ServiçoDeSyncPay/syncPayService.ts';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { currencyService } from '../../ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
-import { vipSalesTracker } from '../../ServiçosDoFrontend/ServiçoDePixel/trackers/VipSalesTracker.ts';
-import { Group, User } from '../../tipos/index.ts';
+import { syncPayService } from '@/ServiçosDoFrontend/ServiçoDeSyncPay/syncPayService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { currencyService } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
+import { vipSalesTracker } from '@/ServiçosDoFrontend/ServiçoDePixel/trackers/VipSalesTracker.ts';
+import { Group, User } from '../../types/index.ts';
 
 interface SyncPayModelProps {
     group: Group;

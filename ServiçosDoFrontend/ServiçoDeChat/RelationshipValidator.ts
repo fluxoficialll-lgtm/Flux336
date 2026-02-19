@@ -1,7 +1,7 @@
 
 import { db } from '../../database';
-import { groupService } from '../groupService';
-import { chatService } from '../chatService';
+import { groupService } from '@/ServiçosDoFrontend/groupService';
+import { chatService } from '@/ServiçosDoFrontend/chatService';
 
 export const RelationshipValidator = {
     /**

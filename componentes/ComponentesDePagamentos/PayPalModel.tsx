@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { paypalService } from '../../ServiçosDoFrontend/ServiçoDePayPal/paypalService.ts';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { metaPixelService } from '../../ServiçosDoFrontend/ServiçoDePixel/metaPixelService.ts';
-import { Group } from '../../tipos/index.ts';
-import { ConversionResult } from '../../ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
+import { paypalService } from '@/ServiçosDoFrontend/ServiçoDePayPal/paypalService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { metaPixelService } from '@/ServiçosDoFrontend/ServiçoDePixel/metaPixelService.ts';
+import { Group } from '../../types/index.ts';
+import { ConversionResult } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
 import { RedirectionBridgeCard } from './RedirectionBridgeCard.tsx';
 
 interface PayPalModelProps {

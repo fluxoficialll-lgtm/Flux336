@@ -1,5 +1,5 @@
 
-import { AiRequestOptions, AiResponse } from '../types';
+import { AiRequestOptions, AiResponse } from '@/ServiçosDoFrontend/ServiçoDe../types';
 
 /**
  * BaseAiProvider

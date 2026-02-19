@@ -4,4 +4,4 @@ import { trackingService as realTrackingService, generateTrackingLinkModel as re
 
 export const trackingService = mockMode ? mockTrackingService : realTrackingService;
 export const generateTrackingLinkModel = mockMode ? mockGenerateTrackingLinkModel : realGenerateTrackingLinkModel;
-export type { TrackingParams } from '@/ServiçosDoFrontend/ServiçoDeTelemetria/types.ts';
+export type { TrackingParams } from '@/ServiçosDoFrontend/ServiçoDeTelemetr../tipos.ts';

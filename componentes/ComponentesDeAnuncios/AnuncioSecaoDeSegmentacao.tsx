@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { AdCampaign, TargetedLocation } from '../../types';
-import { aiInterestEngine } from '../../services/ads/targeting/aiInterestEngine';
-import { reachEstimator } from '../../services/ads/reachEstimator';
-import { geoSearchService, GeoSearchResult } from '../../services/ads/targeting/geoSearchService';
+import { aiInterestEngine } from '../../ServiçosDoFrontend/ads/targeting/aiInterestEngine';
+import { reachEstimator } from '../../ServiçosDoFrontend/ads/reachEstimator';
+import { geoSearchService, GeoSearchResult } from '../../ServiçosDoFrontend/ads/targeting/geoSearchService';
 
 interface TargetingSectionProps {
     campaign: Partial<AdCampaign>;

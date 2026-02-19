@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState, useCallback, Suspense, lazy } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { authService } from '../services/authService';
-import { groupService } from '../services/groupService';
-import { chatService } from '../services/chatService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
 import { Group } from '../types';
-import { db } from '@/database';
-import { useModal } from '../components/ModalSystem';
-import { Footer } from '../components/layout/Footer';
-import { MainHeader } from '../components/layout/MainHeader';
-import { JoinViaLinkBtn } from '../components/groups/list/JoinViaLinkBtn';
-import { GroupListItem } from '../components/groups/list/GroupListItem';
-import { CreateGroupFAB } from '../components/groups/list/CreateGroupFAB';
+import { db } from '../database';
+import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
+import { Footer } from '../componentes/ComponentesDeLayout/Footer';
+import { MainHeader } from '../componentes/ComponentesDeLayout/MainHeader';
+import { JoinViaLinkBtn } from '../componentes/ComponentesDeGrupos/list/JoinViaLinkBtn';
+import { GroupListItem } from '../componentes/ComponentesDeGrupos/list/GroupListItem';
+import { CreateGroupFAB } from '../componentes/ComponentesDeGrupos/list/CreateGroupFAB';
 
-const TrackingModal = lazy(() => import('../components/groups/TrackingModal').then(m => ({ default: m.TrackingModal })));
+const TrackingModal = lazy(() => import('../componentes/ComponentesDeGrupos/TrackingModal').then(m => ({ default: m.TrackingModal })));
 
 export const Groups: React.FC = () => {
   const navigate = useNavigate();

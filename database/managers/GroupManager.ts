@@ -1,7 +1,7 @@
 
 import { BaseManager } from './BaseManager';
 import { Group } from '../../types';
-import { sqlite } from '../engine';
+import { sqlite } from '../database/engine';
 
 export class GroupManager extends BaseManager {
     private table = 'groups';

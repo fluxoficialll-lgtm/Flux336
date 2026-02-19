@@ -2,10 +2,10 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdCampaign } from '../../types';
-import { adService } from '../../services/adService';
+import { adService } from '../../ServiçosDoFrontend/adService';
 import { useVipPricing } from '../../hooks/useVipPricing';
-import { useModal } from '../ModalSystem';
-import { budgetManager } from '../../services/ads/engine/BudgetManager';
+import { useModal } from '@/componentes/ModalSystem';
+import { budgetManager } from '../../ServiçosDoFrontend/ads/engine/BudgetManager';
 
 // Lazy load do modal de pagamento para manter performance
 const PaymentFlowModal = lazy(() => import('../payments/PaymentFlowModal').then(m => ({ default: m.PaymentFlowModal })));

@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { paypalService } from '../../../ServiçosDoFrontend/ServiçoDePayPal/paypalService.ts';
-import { authService } from '../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { PaymentProviderConfig } from '../../../tipos/index.ts';
+import { paypalService } from '@/ServiçosDoFrontend/ServiçoDePayPal/paypalService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { PaymentProviderConfig } from '../../../types/index.ts';
 
 interface PayPalFormProps {
     isConnected: boolean;

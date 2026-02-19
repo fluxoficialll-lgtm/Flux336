@@ -1,5 +1,5 @@
 import React from 'react';
-import { NotificationSettings } from '../../../../types';
+import { NotificationSettings } from '@/component../types';
 
 interface EmailPreferencesSectionProps {
     settings: NotificationSettings;

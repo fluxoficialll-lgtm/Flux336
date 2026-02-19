@@ -1,8 +1,8 @@
 
 import React, { Suspense, lazy } from 'react';
 import { Group } from '../../types';
-import { GeoData } from '../../services/geoService';
-import { ConversionResult } from '../../services/currencyService';
+import { GeoData } from '../../ServiçosDoFrontend/geoService';
+import { ConversionResult } from '../../ServiçosDoFrontend/currencyService';
 
 const PaymentFlowModal = lazy(() => import('../payments/PaymentFlowModal').then(m => ({ default: m.PaymentFlowModal })));
 const EmailCaptureModal = lazy(() => import('../payments/EmailCaptureModal').then(m => ({ default: m.EmailCaptureModal })));

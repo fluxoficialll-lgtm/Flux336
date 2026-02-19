@@ -1,12 +1,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
-import { authService } from '../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { db } from '../../../database/database.ts';
-import { useModal } from '../../../componentes/ComponentesDeSistema/ModalSystem.tsx';
-import { Group } from '../../../types/social.types.ts';
-import { GroupLifeCycleService } from '../../../ServiçosDoFrontend/real/groups/GroupLifeCycleService.ts';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { db } from '../database/database.ts';
+import { useModal } from '@/componentes/ComponentesDeSistema/ModalSystem.tsx';
+import { Group } from '@/types/social.types.ts';
+import { GroupLifeCycleService } from '@/ServiçosDoFrontend/real/groups/GroupLifeCycleService.ts';
 
 // Sub-hooks modulares
 import { useGroupIdentity } from './settings/useGroupIdentity.ts';

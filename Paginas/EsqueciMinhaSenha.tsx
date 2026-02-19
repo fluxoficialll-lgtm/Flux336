@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { RecoveryEmailCard } from '../componentes/ComponentesDeLogin/RecoveryEmailCard.tsx';
-import { CodeVerificationCard } from '../componentes/ComponentesDeLogin/CodeVerificationCard.tsx';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { RecoveryEmailCard } from '@/componentes/ComponentesDeLogin/RecoveryEmailCard.tsx';
+import { CodeVerificationCard } from '@/componentes/ComponentesDeLogin/CodeVerificationCard.tsx';
 
 export const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();

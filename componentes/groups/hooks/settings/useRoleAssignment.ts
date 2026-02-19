@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
-import { groupService } from '../../../../services/groupService';
-import { useModal } from '../../../../components/ModalSystem';
-import { GroupAuditService } from '../../../../services/real/groups/GroupAuditService';
+import { groupService } from '../../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { useModal } from '../../../../componentes/ModalSystem';
+import { GroupAuditService } from '../../../../ServiçosDoFrontend/real/groups/GroupAuditService';
 
 export const useRoleAssignment = (groupId: string) => {
     const { showAlert } = useModal();

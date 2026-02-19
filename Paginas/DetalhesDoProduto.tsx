@@ -1,22 +1,22 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeLoja/marketplaceService';
+import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
 import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { chatService } from '../ServiçosDoFrontend/ServiçoDeChat/chatService';
-import { db } from '@/database';
-import { MarketplaceItem, ChatMessage } from '../types/index';
-import { useModal } from '../componentes/ModalSystem';
+import { db } from '../database';
+import { MarketplaceItem, ChatMessage } from '@/types/index';
+import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
 
 // Componentes Modulares
-import { ProductHeader } from '../componentes/ComponentesDeLoja/detalhes/ProductHeader';
-import { ProductMediaGallery } from '../componentes/ComponentesDeLoja/detalhes/ProductMediaGallery';
-import { ProductInfo } from '../componentes/ComponentesDeLoja/detalhes/ProductInfo';
-import { ProductSellerCard } from '../componentes/ComponentesDeLoja/detalhes/ProductSellerCard';
-import { ProductDescription } from '../componentes/ComponentesDeLoja/detalhes/ProductDescription';
-import { ProductBottomBar } from '../componentes/ComponentesDeLoja/detalhes/ProductBottomBar';
-import { ProductLightbox } from '../componentes/ComponentesDeLoja/detalhes/ProductLightbox';
-import { CommentSheetContainer } from '../componentes/ComponentesDeUI/comentarios/CommentSheetContainer'; // NOSSO NOVO CONTAINER
+import { ProdutoCabecalho as ProductHeader } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoCabecalho';
+import { ProdutoGaleriaDeMidia as ProductMediaGallery } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoGaleriaDeMidia';
+import { ProdutoInformacao as ProductInfo } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoInformacao';
+import { ProdutoCartaoDeVendedor as ProductSellerCard } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoCartaoDeVendedor';
+import { ProdutoDescricao as ProductDescription } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoDescricao';
+import { ProdutoBarraInferior as ProductBottomBar } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoBarraInferior';
+import { ProdutoCaixaDeLuz as ProductLightbox } from '@/componentes/ComponentesDeDetahesDeProdutos/componentes/details/ProdutoCaixaDeLuz';
+import { CommentSheetContainer } from '../componentes/ComponentesDeInterface/comments/CommentSheetContainer';
 
 export const ProductDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -26,10 +26,8 @@ export const ProductDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isSeller, setIsSeller] = useState(false);
   
-  // Estado simplificado: apenas para controlar a visibilidade do painel
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
-  // Estado para o zoom da mídia
   const [zoomedMedia, setZoomedMedia] = useState<{ url: string, type: 'image' | 'video' } | null>(null);
   
   const currentUser = authService.getCurrentUser();
@@ -53,21 +51,18 @@ export const ProductDetails: React.FC = () => {
     return () => unsub();
   }, [loadData]);
 
-  // A lógica de chat permanece a mesma
   const handleChat = (e: React.MouseEvent) => {
       e.stopPropagation(); 
       if (!currentUser || !item) return;
       if (isSeller) return;
       try {
           const chatId = chatService.getPrivateChatId(currentUser.email, item.sellerId);
-          // ... (lógica de criação de mensagem de contexto)
           navigate(`/chat/${chatId}`);
       } catch (err) {
           console.error(err);
       }
   };
 
-  // A lógica de deleção do item permanece a mesma
   const handleDelete = async () => {
       const confirmed = await showConfirm(
           "Excluir Anúncio",
@@ -88,7 +83,6 @@ export const ProductDetails: React.FC = () => {
 
   const mediaItems = useMemo(() => {
       if (!item) return [];
-      // ... (lógica de montagem de mídia)
       return [];
   }, [item]);
 
@@ -96,7 +90,6 @@ export const ProductDetails: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#0c0f14] text-white font-['Inter'] flex flex-col relative pb-[90px]">
-      {/* Estilos e outros componentes permanecem aqui... */}
 
       <ProductHeader />
 
@@ -123,7 +116,6 @@ export const ProductDetails: React.FC = () => {
 
               <ProductDescription description={item.description} />
 
-              {/* O botão agora apenas abre o painel. O número de comentários virá do nosso hook. */}
               <button className="qa-trigger-btn" onClick={() => setIsCommentModalOpen(true)}>
                   <span className="font-bold text-sm"><i className="fa-regular fa-comments mr-2 text-[#00c2ff]"></i> Perguntas e Respostas</span>
                   <i className="fa-solid fa-chevron-right text-xs"></i>
@@ -142,7 +134,6 @@ export const ProductDetails: React.FC = () => {
         onClose={() => setZoomedMedia(null)}
       />
 
-      {/* USANDO O NOVO CONTAINER DE COMENTÁRIOS */}
       {isCommentModalOpen && id && (
           <CommentSheetContainer 
               isOpen={isCommentModalOpen}

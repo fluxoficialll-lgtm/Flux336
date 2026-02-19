@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../../services/groupService';
-import { postService } from '../../services/postService';
-import { authService } from '../../services/authService';
+import { groupService } from '../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { postService } from '../../ServiçosDoFrontend/postService';
+import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { Group, SalesFolder, Infoproduct } from '../../types';
 
 // Subcomponentes
-import { FolderContentHeader } from '../../features/groups/components/platform/FolderContentHeader';
-import { InfoproductCard } from '../../features/groups/components/platform/InfoproductCard';
-import { EmptyFolderState } from '../../features/groups/components/platform/EmptyFolderState';
-import { InfoproductPreviewModal } from '../../features/groups/components/platform/InfoproductPreviewModal';
-import { AddFileSophisticatedButton } from '../../features/groups/components/platform/AddFileSophisticatedButton';
-import { UploadProgressCard } from '../../features/groups/components/platform/UploadProgressCard';
+import { FolderContentHeader } from '../../features/groups/componentes/platform/FolderContentHeader';
+import { InfoproductCard } from '../../features/groups/componentes/platform/InfoproductCard';
+import { EmptyFolderState } from '../../features/groups/componentes/platform/EmptyFolderState';
+import { InfoproductPreviewModal } from '../../features/groups/componentes/platform/InfoproductPreviewModal';
+import { AddFileSophisticatedButton } from '../../features/groups/componentes/platform/AddFileSophisticatedButton';
+import { UploadProgressCard } from '../../features/groups/componentes/platform/UploadProgressCard';
 
 export const SalesFolderContentPage: React.FC = () => {
     const navigate = useNavigate();

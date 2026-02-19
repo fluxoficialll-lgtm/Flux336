@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { SalesFolder, SalesSection, Channel } from '../../../../types';
-import { OptionToggle } from '../channels/options/OptionToggle';
+import { SalesFolder, SalesSection, Channel } from '@/component../types';
+import { OptionToggle } from '@/componentes/groups/componentes/settings/channels/options/OptionToggle';
 
 interface FolderOptionsModalProps {
     isOpen: boolean;

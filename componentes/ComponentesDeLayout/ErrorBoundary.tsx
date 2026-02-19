@@ -7,7 +7,7 @@
 import React, { Component, ReactNode } from 'react';
 
 // Importamos o nosso serviço de logging recém-criado. Ele será usado para enviar os detalhes do erro.
-import { logService } from '@/services/logService';
+import { logService } from '@/ServiçosDoFrontend/logService';
 
 // -------------------------------------------------------------------------------------
 // PASSO 2: DEFININDO OS "INGREDIENTES" (PROPS) E O "ESTADO" DO COMPONENTE

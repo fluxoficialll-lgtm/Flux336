@@ -4,7 +4,7 @@ import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace
 import { adService } from '../ServiçosDoFrontend/ServiçoDeAnuncios/adService';
 import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { screenService, BusinessDashboardData } from '../ServiçosDoFrontend/ServiçoDeUI/screenService';
-import { MarketplaceItem, AdCampaign } from '../types/index';
+import { MarketplaceItem, AdCampaign } from '@/types/index';
 import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
 import { ProductStoreList } from '../componentes/ComponentesDeLoja/ProductStoreList';
 import { CampaignStoreList } from '../componentes/ComponentesDeLoja/CampaignStoreList';

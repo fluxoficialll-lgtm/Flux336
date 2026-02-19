@@ -1,5 +1,5 @@
 import React from 'react';
-import { User } from '../../../../tipos/index.ts';
+import { User } from '../../../../types/index.ts';
 
 interface ProfileHeaderProps {
     user: User;

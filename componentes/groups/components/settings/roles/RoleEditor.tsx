@@ -1,5 +1,5 @@
 import React from 'react';
-import { GroupRole } from '../../../../types';
+import { GroupRole } from '@/component../types';
 import { PermissionToggle } from './PermissionToggle';
 
 interface RoleEditorProps {

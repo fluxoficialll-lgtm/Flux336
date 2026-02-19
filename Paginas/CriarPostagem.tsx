@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService.ts';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
-import { contentSafetyService } from '../ServiçosDoFrontend/ServiçoDeSeguranca/contentSafetyService.ts';
-import { adService } from '../ServiçosDoFrontend/ServiçoDeAnuncios/adService.ts';
-import { Post } from '../types/social.types.ts';
-import { Group } from '../types/groups.types.ts';
+import { postService } from '@/ServiçosDoFrontend/ServiçoDePosts/postService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { groupService } from '@/ServiçosDoFrontend/ServiçoDeGrupos/groupService.ts';
+import { contentSafetyService } from '@/ServiçosDoFrontend/ServiçoDeSeguranca/contentSafetyService.ts';
+import { adService } from '@/ServiçosDoFrontend/ServiçoDeAnuncios/adService.ts';
+import { Post } from '@/types/social.types.ts';
+import { Group } from '@/types/groups.types.ts';
 
 interface MediaPreview {
   file: File;

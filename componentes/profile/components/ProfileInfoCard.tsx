@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { UserAvatar } from '../../../components/ui/user/UserAvatar';
-import { UserName } from '../../../components/ui/user/UserName';
+import { UserAvatar } from '../../../componentes/ui/user/UserAvatar';
+import { UserName } from '../../../componentes/ui/user/UserName';
 
 interface ProfileInfoCardProps {
     avatar?: string;

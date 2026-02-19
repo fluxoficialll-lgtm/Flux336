@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Post } from '../../../types';
-import { FeedItem } from '../../feed/FeedItem';
+import { FeedItem } from '@/componentes/feed/FeedItem';
 
 interface PostSelectionCardProps {
     post: Post;

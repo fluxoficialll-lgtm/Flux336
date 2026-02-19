@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProviderCredentialsModal } from '../componentes/ComponentesFinanceiros/ProviderCredentialsModal';
-import ProviderSettingsModal from '../componentes/ComponentesFinanceiros/ProviderSettingsModal';
+import { ProviderCredentialsModal } from '../componentes/ComponentesFinanceiros/ComponenteModalDeCredenciaisDoProvedor';
+import ProviderSettingsModal from '../componentes/ComponentesFinanceiros/ComponenteModalDeConfiguracoesDoProvedor';
 import { credentialsService } from '../ServiçosDoFrontend/ServiçoDeSeguranca/credentialsService';
-import './ProviderConfig.css';
+import './ConfiguracaoDoProvedor.css';
 import { providers } from '../ServiçosDoFrontend/ServiçoDePagamentos/providerData';
-import { ProviderListItem } from '../componentes/ComponentesFinanceiros/ProviderListItem';
+import { ProviderListItem } from '../componentes/ComponentesFinanceiros/ComponenteItemDaListaDeProvedores';
 
 export const ProviderConfig: React.FC = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { syncPayService } from '../../../ServiçosDoFrontend/ServiçoDeSyncPay/syncPayService.ts';
-import { authService } from '../../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { PaymentProviderConfig } from '../../../tipos/index.ts';
+import { syncPayService } from '@/ServiçosDoFrontend/ServiçoDeSyncPay/syncPayService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { PaymentProviderConfig } from '../../../types/index.ts';
 
 interface SyncPayFormProps {
     isConnected: boolean;

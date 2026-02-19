@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { AuthError } from '../types/user.types.ts';
-import { RegisterCard } from '../componentes/ComponentesDeLogin/RegisterCard.tsx';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { AuthError } from '@/types/user.types.ts';
+import { RegisterCard } from '@/componentes/ComponentesDeLogin/RegisterCard.tsx';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();

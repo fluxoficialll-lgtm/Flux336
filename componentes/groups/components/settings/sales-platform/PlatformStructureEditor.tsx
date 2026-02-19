@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SalesSection, SalesFolder, Channel } from '../../../../types';
+import { SalesSection, SalesFolder, Channel } from '@/component../types';
 
 interface PlatformStructureEditorProps {
     sections: SalesSection[];

@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGroupSettings } from '../../../features/groups/hooks/useGroupSettings';
-import { useModal } from '../../../components/ModalSystem';
-import { PlatformStatusCard } from '../../../features/groups/components/settings/sales-platform/PlatformStatusCard';
-import { PlatformStructureEditor } from '../../../features/groups/components/settings/sales-platform/PlatformStructureEditor';
-import { PlatformInfoBox } from '../../../features/groups/components/settings/sales-platform/PlatformInfoBox';
-import { FolderOptionsModal } from '../../../features/groups/components/settings/sales-platform/FolderOptionsModal';
-import { ChannelOptionsModal } from '../../../features/groups/components/settings/channels/ChannelOptionsModal';
+import { useModal } from '../../../componentes/ModalSystem';
+import { PlatformStatusCard } from '../../../features/groups/componentes/settings/sales-platform/PlatformStatusCard';
+import { PlatformStructureEditor } from '../../../features/groups/componentes/settings/sales-platform/PlatformStructureEditor';
+import { PlatformInfoBox } from '../../../features/groups/componentes/settings/sales-platform/PlatformInfoBox';
+import { FolderOptionsModal } from '../../../features/groups/componentes/settings/sales-platform/FolderOptionsModal';
+import { ChannelOptionsModal } from '../../../features/groups/componentes/settings/channels/ChannelOptionsModal';
 import { SalesFolder, SalesSection, Channel } from '../../../types';
 
 export const GroupSalesPlatformPage: React.FC = () => {

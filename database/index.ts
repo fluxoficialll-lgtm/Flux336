@@ -1,5 +1,5 @@
 import { sqlite } from './engine';
-import { USE_MOCKS, MOCK_USERS, MOCK_POSTS, MOCK_PRODUCTS, MOCK_GROUPS, MOCK_CAMPAIGNS, MOCK_NOTIFICATIONS, MOCK_CHATS } from '../mocks';
+import { USE_MOCKS, MOCK_USERS, MOCK_POSTS, MOCK_PRODUCTS, MOCK_GROUPS, MOCK_CAMPAIGNS, MOCK_NOTIFICATIONS, MOCK_CHATS } from './mocks';
 
 // Managers
 import { UserManager } from './managers/UserManager';

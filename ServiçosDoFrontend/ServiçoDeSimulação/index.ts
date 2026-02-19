@@ -1,5 +1,5 @@
 
-import { envService } from '../ServiçosDoFrontend/envService';
+import { envService } from '@/ServiçosDoFrontend/ServiçosDoFrontend/envService';
 
 export * from './users.mock';
 export * from './posts.mock';

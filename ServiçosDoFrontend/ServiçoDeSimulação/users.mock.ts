@@ -1,5 +1,5 @@
 
-import { User } from '../types';
+import { User } from '@/ServiçosDoFronte../types';
 
 export const MOCK_USERS: Record<string, User> = {
   'admin': {

@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaqItem } from '../componentes/ComponentesDeAjuda/components/FaqItem';
-import { SupportContactCard } from '../componentes/ComponentesDeAjuda/components/SupportContactCard';
-import { SupportModal } from '../componentes/ComponentesDeAjuda/components/SupportModal';
+import { FaqItem } from '@/componentes/ComponentesDeAjuda/componentes/FaqItem';
+import { SupportContactCard } from '@/componentes/ComponentesDeAjuda/componentes/SupportContactCard';
+import { SupportModal } from '@/componentes/ComponentesDeAjuda/componentes/SupportModal';
 
 interface FaqData {
     question: string;

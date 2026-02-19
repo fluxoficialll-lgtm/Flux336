@@ -1,5 +1,5 @@
 
-import { sqlite } from '../engine';
+import { sqlite } from '../database/engine';
 
 /**
  * BaseManager refatorado para operar sobre o JSON Engine de forma síncrona.

@@ -1,8 +1,8 @@
 
 import React, { useMemo } from 'react';
 import { AdCampaign, Post, MarketplaceItem } from '../../types';
-import { FeedItem } from '../feed/FeedItem';
-import { ProductCard } from '../marketplace/ProductCard';
+import { FeedItem } from '@/componentes/feed/FeedItem';
+import { ProductCard } from '@/componentes/marketplace/ProductCard';
 
 interface AdPreviewProps {
     campaign: Partial<AdCampaign>;

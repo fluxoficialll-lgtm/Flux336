@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { SyncPayModel } from './SyncPayModel.tsx';
 import { PayPalModel } from './PayPalModel.tsx';
 import { StripeModel } from './StripeModel.tsx';
-import { authService } from '../../ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
-import { GeoData } from '../../ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService.ts';
-import { ConversionResult } from '../../ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
-import { Group } from '../../tipos/index.ts';
-import { PurchaseIntention } from '../../ServiçosDoFrontend/ServiçoDeSincronizacao/PurchaseIntention.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
+import { GeoData } from '@/ServiçosDoFrontend/ServiçoDeGeolocalizacao/geoService.ts';
+import { ConversionResult } from '@/ServiçosDoFrontend/ServiçoDeMoeda/currencyService.ts';
+import { Group } from '../../types/index.ts';
+import { PurchaseIntention } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/PurchaseIntention.ts';
 
 interface PaymentFlowModalProps {
     isOpen: boolean;

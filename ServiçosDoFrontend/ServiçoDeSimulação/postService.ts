@@ -1,7 +1,7 @@
 import { Post, Comment, PaginatedResponse } from '../../types';
 import { db } from '../../database';
-import { authService } from '../authService';
-import { MOCK_POSTS } from '../../mocks';
+import { authService } from '../ServiçoDeAutenticacao/authService';
+import { MOCK_POSTS } from '.././mocks';
 
 export const postService = {
   formatRelativeTime: (ts: number) => {

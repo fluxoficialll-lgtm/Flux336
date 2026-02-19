@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ChatMessage } from '../../types';
-import { LazyMedia } from '../LazyMedia';
+import { LazyMedia } from '@/componentes/LazyMedia';
 import { AudioPlayer } from './AudioPlayer';
 import MessageActionsModal from './MessageActionsModal';
 import { ReactionPicker } from './ReactionPicker'; // Import the new component

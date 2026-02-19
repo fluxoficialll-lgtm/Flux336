@@ -6,7 +6,7 @@ import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authS
 import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
 import { notificationService } from '../ServiçosDoFrontend/ServiçoDeNotificacoes/notificationService';
 import { marketplaceService } from '../ServiçosDoFrontend/ServiçoDeMarketplace/marketplaceService';
-import { Post, MarketplaceItem } from '../types/index';
+import { Post, MarketplaceItem } from '@/types/index';
 import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
 import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
 import { FeedItem } from '../componentes/ComponentesDoFeed/FeedItem';
@@ -14,14 +14,14 @@ import { AvatarPreviewModal } from '../componentes/ComponentesDeInterface/Avatar
 import { Footer } from '../componentes/ComponentesDeLayout/Footer';
 
 // Novos componentes modulares para visitante
-import { VisitorHeader } from '../componentes/ComponentesDePerfilDeUsuario/components/VisitorHeader';
-import { VisitorInfoCard } from '../componentes/ComponentesDePerfilDeUsuario/components/VisitorInfoCard';
-import { VisitorBlockedState, VisitorPrivateState } from '../componentes/ComponentesDePerfilDeUsuario/components/VisitorStates';
+import { VisitorHeader } from '@/componentes/ComponentesDePerfilDeUsuario/componentes/VisitorHeader';
+import { VisitorInfoCard } from '@/componentes/ComponentesDePerfilDeUsuario/componentes/VisitorInfoCard';
+import { VisitorBlockedState, VisitorPrivateState } from '@/componentes/ComponentesDePerfilDeUsuario/componentes/VisitorStates';
 
 // Componentes reaproveitados do perfil
-import { ProfileTabNav } from '../componentes/profile/components/ProfileTabNav';
-import { ProfileReelsGrid } from '../componentes/profile/components/ProfileReelsGrid';
-import { ProfileProductsGrid } from '../componentes/profile/components/ProfileProductsGrid';
+import { ProfileTabNav } from '@/componentes/profile/componentes/ProfileTabNav';
+import { ProfileReelsGrid } from '@/componentes/profile/componentes/ProfileReelsGrid';
+import { ProfileProductsGrid } from '@/componentes/profile/componentes/ProfileProductsGrid';
 
 export const UserProfile: React.FC = () => {
   const navigate = useNavigate();

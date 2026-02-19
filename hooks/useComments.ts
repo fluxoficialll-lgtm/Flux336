@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { commentService } from '../services/commentService';
+import { commentService } from '../ServiçosDoFrontend/commentService';
 import { Comment, CommentableType } from '../types'; // Ajuste o caminho se necessário
 
 /**

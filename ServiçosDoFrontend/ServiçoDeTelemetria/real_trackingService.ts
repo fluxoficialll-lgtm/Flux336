@@ -9,4 +9,4 @@ export const generateTrackingLinkModel = (params: any) => {
     return { ...params, tracked: true };
 }
 
-export type { TrackingParams } from './types';
+export type { TrackingParams } from '../tipos'';

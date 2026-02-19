@@ -1,5 +1,5 @@
 
-import { AdCampaign } from '../types';
+import { AdCampaign } from '@/ServiçosDoFronte../types';
 
 export const MOCK_CAMPAIGNS: AdCampaign[] = [
   {

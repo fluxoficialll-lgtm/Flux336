@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
 import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
-import { Post } from '../types/index';
+import { Post } from '@/types/index';
 
 // Componentes Modulares
 import { AdSelectionHeader } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCabecalhoDeSelecao';

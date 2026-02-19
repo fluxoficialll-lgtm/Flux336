@@ -1,7 +1,7 @@
-import { BusinessDashboardData } from '../real/screenService';
+import { BusinessDashboardData } from '@/ServiçosDoFrontend/real/screenService';
 import { db } from '../../database';
-import { authService } from '../authService';
-import { MOCK_PRODUCTS, MOCK_CAMPAIGNS } from '../../mocks';
+import { authService } from '../ServiçoDeAutenticacao/authService';
+import { MOCK_PRODUCTS, MOCK_CAMPAIGNS } from '.././mocks';
 
 export const MockScreenService = {
     getMyBusinessData: async (userId: string): Promise<BusinessDashboardData> => {

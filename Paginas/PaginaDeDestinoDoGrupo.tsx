@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../services/groupService';
-import { authService } from '../services/authService';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
 import { Group } from '../types';
-import { db } from '@/database';
-import { GroupCapacityBadge } from '../components/groups/ui/GroupCapacityBadge';
+import { db } from '../database';
+import { GroupCapacityBadge } from '../componentes/ComponentesDeGrupos/ui/GroupCapacityBadge';
 import { CapacityValidator } from '../features/groups/logic/CapacityValidator';
 
 export const GroupLanding: React.FC = () => {

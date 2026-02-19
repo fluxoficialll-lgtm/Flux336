@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { groupService } from '../services/groupService';
-import { authService } from '../services/authService';
-import { db } from '@/database';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { db } from '../database';
 import { Group } from '../types';
 
 export const TopGroupsPrivate: React.FC = () => {

@@ -1,6 +1,6 @@
 
-import { sqlite } from '../../database/engine';
-import { API_BASE } from '../../apiConfig';
+import { sqlite } from '@/ServiçosDoFrontend/database/engine';
+import { API_BASE } from '@/ServiçosDoFrontend/apiConfig';
 
 /**
  * DataHydrator: O sincronizador inteligente.

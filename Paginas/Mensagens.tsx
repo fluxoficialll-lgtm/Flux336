@@ -10,7 +10,7 @@ import { MessageListItem } from '../componentes/ComponentesDeChat/MessageListIte
 import { MessagesEmptyState } from '../componentes/ComponentesDeChat/MessagesEmptyState';
 import { MessagesFooter } from '../componentes/ComponentesDeChat/MessagesFooter';
 import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
-import { User } from '../types/index';
+import { User } from '@/types/index';
 
 interface Contact {
   id: string;

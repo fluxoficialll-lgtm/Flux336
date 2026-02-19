@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { chatService } from '../../../../services/chatService';
+import { chatService } from '../../../../ServiçosDoFrontend/chatService';
 
 interface ChannelItemProps {
     id: string;

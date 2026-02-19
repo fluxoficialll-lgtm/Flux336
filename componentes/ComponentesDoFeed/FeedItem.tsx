@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react';
 import { Post } from '../../types';
-import { PostHeader } from '../PostHeader';
-import { PostText } from '../PostText';
-import { ImageCarousel } from '../ImageCarousel';
-import { GroupAttachmentCard } from '../GroupAttachmentCard';
+import { PostHeader } from '@/componentes/PostHeader';
+import { PostText } from '@/componentes/PostText';
+import { ImageCarousel } from '@/componentes/ImageCarousel';
+import { GroupAttachmentCard } from '@/componentes/GroupAttachmentCard';
 import { PollPost } from './PollPost';
 import { PostActions } from './PostActions';
-import { postService } from '../../services/postService';
-import { CommentSheetContainer } from '../ui/comments/CommentSheetContainer'; // Importando o container de comentários
+import { postService } from '../../ServiçosDoFrontend/postService';
+import { CommentSheetContainer } from '@/componentes/ui/comments/CommentSheetContainer'; // Importando o container de comentários
 
 interface FeedItemProps {
     post: Post;

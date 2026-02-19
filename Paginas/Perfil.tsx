@@ -12,11 +12,11 @@ import { Footer } from '../componentes/ComponentesDeLayout/Footer';
 import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
 import { FollowListModal } from '../componentes/ComponentesDePerfil/FollowListModal';
 import { AvatarPreviewModal } from '../componentes/ComponentesDeInterface/AvatarPreviewModal';
-import { ProfileHeader } from '../componentes/profile/components/ProfileHeader';
-import { ProfileInfoCard } from '../componentes/profile/components/ProfileInfoCard';
-import { ProfileTabNav } from '../componentes/profile/components/ProfileTabNav';
-import { ProfileReelsGrid } from '../componentes/profile/components/ProfileReelsGrid';
-import { ProfileProductsGrid } from '../componentes/profile/components/ProfileProductsGrid';
+import { ProfileHeader } from '@/componentes/profile/componentes/ProfileHeader';
+import { ProfileInfoCard } from '@/componentes/profile/componentes/ProfileInfoCard';
+import { ProfileTabNav } from '@/componentes/profile/componentes/ProfileTabNav';
+import { ProfileReelsGrid } from '@/componentes/profile/componentes/ProfileReelsGrid';
+import { ProfileProductsGrid } from '@/componentes/profile/componentes/ProfileProductsGrid';
 
 export const Profile: React.FC = () => {
     const navigate = useNavigate();

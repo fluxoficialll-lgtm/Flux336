@@ -1,8 +1,8 @@
 
-import { AiRequestOptions, AiResponse } from '../types';
+import { AiRequestOptions, AiResponse } from '@/ServiçosDoFrontend/ServiçoDe../types';
 import { GeminiProvider } from '../providers/GeminiProvider';
 import { tokenGuard } from './TokenGuard';
-import { authService } from '../../authService';
+import { authService } from '../../ServiçoDeAutenticacao/authService';
 
 class AiOrchestrator {
   private providers = [new GeminiProvider()];

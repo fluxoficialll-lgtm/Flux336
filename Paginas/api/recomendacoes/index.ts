@@ -1,9 +1,9 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Post, MarketplaceItem } from '../../../types';
-import { postService } from '../../../services/real/postService';
-import { marketplaceService } from '../../../services/real/marketplaceService';
-import { RecommendationService } from '../../../services/ai/core/RecommendationService';
+import { postService } from '../../../ServiçosDoFrontend/real/postService';
+import { marketplaceService } from '../../../ServiçosDoFrontend/real/marketplaceService';
+import { RecommendationService } from '../../../ServiçosDoFrontend/ai/core/RecommendationService';
 
 /**
  * API Endpoint: /api/recommendations

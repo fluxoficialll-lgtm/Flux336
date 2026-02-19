@@ -1,16 +1,14 @@
 
 import React from 'react';
-import { useAdCampaignFlow } from '../componentes/ComponentesDeAnuncios/hooks/useAdCampaignFlow';
-import { CTA_OPTIONS_CONFIG } from '../componentes/ComponentesDeAnuncios/constants/AdConstants';
+import { useFluxoDeCampanhaDeAnuncio as useAdCampaignFlow } from '../componentes/ComponentesDeAnuncios/hooks/useFluxoDeCampanhaDeAnuncio';
+import { CTA_OPTIONS_CONFIG } from '../constants';
 
-// Layout e Cabeçalho
-import { AdFlowHeader } from '../componentes/ComponentesDeAnuncios/AdFlowHeader';
-import { AdFlowFooter } from '../componentes/ComponentesDeAnuncios/AdFlowFooter';
+import { AnuncioCabecalhoDeFluxo as AdFlowHeader } from '../componentes/ComponentesDeAnuncios/AnuncioCabecalhoDeFluxo';
+import { AnuncioRodapeDeFluxo as AdFlowFooter } from '../componentes/ComponentesDeAnuncios/AnuncioRodapeDeFluxo';
 
-// Componentes de Etapa
-import { CampaignStep } from '../componentes/ComponentesDeAnuncios/CampaignStep';
-import { AudienceStep } from '../componentes/ComponentesDeAnuncios/AudienceStep';
-import { CreativeStep } from '../componentes/ComponentesDeAnuncios/CreativeStep';
+import { AnuncioSecaoDeObjetivo } from '../componentes/ComponentesDeAnuncios/AnuncioSecaoDeObjetivo';
+import { AnuncioSecaoDeSegmentacao } from '../componentes/ComponentesDeAnuncios/AnuncioSecaoDeSegmentacao';
+import { AnuncioSecaoDeCriativoDeDestino } from '../componentes/ComponentesDeAnuncios/AnuncioSecaoDeCriativoDeDestino';
 
 export const AdPlacementSelector: React.FC = () => {
   const {
@@ -225,14 +223,14 @@ export const AdPlacementSelector: React.FC = () => {
               )}
 
               {currentStep === 'campaign' && (
-                  <CampaignStep 
+                  <AnuncioSecaoDeObjetivo 
                     campaign={campaign} 
                     onInputChange={handleInputChange} 
                   />
               )}
 
               {currentStep === 'adset' && (
-                  <AudienceStep 
+                  <AnuncioSecaoDeSegmentacao
                     campaign={campaign}
                     interestInput={interestInput}
                     setInterestInput={setInterestInput}
@@ -247,7 +245,7 @@ export const AdPlacementSelector: React.FC = () => {
               )}
 
               {currentStep === 'ad' && (
-                  <CreativeStep 
+                  <AnuncioSecaoDeCriativoDeDestino 
                     campaign={campaign}
                     previewTab={previewTab}
                     setPreviewTab={setPreviewTab}

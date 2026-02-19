@@ -1,7 +1,7 @@
 
 import { Post } from '../../../types';
 import { GoogleGenAI } from "@google/genai"; // Importa a biblioteca de IA do Google (Gemini).
-import { EngineContext } from '../types';
+import { EngineContext } from '@/ServiçosDoFrontend/ServiçoDeDescober../types';
 
 // O ReelsEngine é projetado para classificar e ordenar vídeos curtos (Reels).
 // Ele foca em três pilares: o potencial de viralização, a afinidade do conteúdo com os

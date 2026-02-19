@@ -1,6 +1,6 @@
 import { BaseManager } from './BaseManager';
 import { VipAccess, MarketplaceItem, AdCampaign } from '../../types';
-import { sqlite } from '../engine';
+import { sqlite } from '../database/engine';
 
 export class FinancialManager extends BaseManager {
     public vip = {

@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { relationshipService } from '../ServiçosDoFrontend/ServiçoDeRelacionamentos/relationshipService';
 import { User } from '../types';
-import { PodiumItem } from '../componentes/ComponentesDeLeaderboard/components/PodiumItem';
-import { LeaderboardListItem } from '../componentes/ComponentesDeLeaderboard/components/LeaderboardListItem';
+import { PodiumItem } from '@/componentes/ComponentesDeLeaderboard/componentes/PodiumItem';
+import { LeaderboardListItem } from '@/componentes/ComponentesDeLeaderboard/componentes/LeaderboardListItem';
 
 interface RankedUser extends User {
     followerCount: number;

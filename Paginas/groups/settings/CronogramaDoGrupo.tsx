@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { groupService } from '../../../services/groupService';
+import { groupService } from '../../../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
 import { ScheduledMessage, Channel } from '../../../types';
-import { useModal } from '../../../components/ModalSystem';
-import { ScheduleSection } from '../../../features/groups/components/settings/ScheduleSection';
+import { useModal } from '../../../componentes/ModalSystem';
+import { ScheduleSection } from '../../../features/groups/componentes/settings/ScheduleSection';
 
 export const GroupSchedule: React.FC = () => {
     const navigate = useNavigate();

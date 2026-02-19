@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { i18nService, SupportedLanguage } from '../services/real/i18nService';
-import { VipTranslationEngine, TranslatedVipData } from '../services/real/vip/VipTranslationEngine';
+import { i18nService, SupportedLanguage } from '../ServiçosDoFrontend/real/i18nService';
+import { VipTranslationEngine, TranslatedVipData } from '../ServiçosDoFrontend/real/vip/VipTranslationEngine';
 import { Group } from '../types';
 
 export const useAutoLanguage = (group: Group | null) => {

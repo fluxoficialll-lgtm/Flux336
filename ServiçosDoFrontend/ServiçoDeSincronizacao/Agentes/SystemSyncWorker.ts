@@ -1,9 +1,9 @@
 
-import { notificationService } from '../../ServiçoDeNotificacoes/notificationService.ts';
-import { authService } from '../../ServiçoDeAutenticacao/authService.ts';
+import { notificationService } from '@/ServiçosDoFrontend/ServiçoDeNotificacoes/notificationService.ts';
+import { authService } from '@/ServiçosDoFrontend/ServiçoDeAutenticacao/authService.ts';
 import { API_BASE } from '../../../apiConfig.ts';
-import { db } from '../../../database/index.ts';
-import { hydrationManager } from '../HydrationManager.ts';
+import { db } from '../database/index.ts';
+import { hydrationManager } from '@/ServiçosDoFrontend/ServiçoDeSincronizacao/HydrationManager.ts';
 
 export const SystemSyncWorker = {
     name: 'SystemWorker',

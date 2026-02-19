@@ -8,7 +8,7 @@ import { db } from '../ServiçosDoFrontend/ServiçoDeDados/database';
 import { useModal } from '../componentes/ComponentesDeInterface/ModalSystem';
 import { Post, Comment } from '../types';
 
-import { ReelItem } from '../componentes/ComponentesDeReels/components/ReelItem';
+import { ReelItem } from '@/componentes/ComponentesDeReels/componentes/ReelItem';
 import { CommentSheet } from '../componentes/ComponentesDeInterface/comments/CommentSheet';
 
 export const Reels: React.FC = () => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AdSelectionHeader } from '../componentes/ComponentesDeAnuncios/selection/AdSelectionHeader';
-import { AdSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/AdSelectionCard';
-import { AdSelectionInfoBox } from '../componentes/ComponentesDeAnuncios/selection/AdSelectionInfoBox';
+import { AdSelectionHeader } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCabecalhoDeSelecao';
+import { AdSelectionCard } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCartaoDeSelecao';
+import { AdSelectionInfoBox } from '../componentes/ComponentesDeAnuncios/selection/AnuncioCaixaDeInformacaoDeSelecao';
 
 export const AdCampaignTypeSelector: React.FC = () => {
     const navigate = useNavigate();

@@ -3,13 +3,13 @@
  * Este arquivo centraliza todas as exportações dos tipos modulares.
  */
 
-export * from './types/dna.types';
-export * from './types/user.types';
-export * from './types/ads.types';
-export * from './types/groups.types';
-export * from './types/marketplace.types';
-export * from './types/financial.types';
-export * from './types/social.types';
+export * from '../tipos/dna.types'';
+export * from '../tipos/user.types'';
+export * from '../tipos/ads.types'';
+export * from '../tipos/groups.types'';
+export * from '../tipos/marketplace.types'';
+export * from '../tipos/financial.types'';
+export * from '../tipos/social.types'';
 
 // Tipos utilitários globais
 export interface PaginatedResponse<T> {

@@ -1,5 +1,5 @@
 
-import { ChatData } from '../types';
+import { ChatData } from '@/ServiçosDoFronte../types';
 
 /**
  * MOCK_CHATS define as conversas iniciais visíveis no modo demonstração.

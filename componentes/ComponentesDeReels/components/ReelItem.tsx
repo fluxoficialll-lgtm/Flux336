@@ -4,7 +4,7 @@ import { Post, Group } from '../../../types';
 import { ReelPlayer } from './ReelPlayer';
 import { ReelActions } from './ReelActions';
 import { ReelInfo } from './ReelInfo';
-import { CommentSheetContainer } from '../../../components/ui/comments/CommentSheetContainer'; // Importando o container
+import { CommentSheetContainer } from '../../../componentes/ui/comments/CommentSheetContainer'; // Importando o container
 
 interface ReelItemProps {
     reel: Post;

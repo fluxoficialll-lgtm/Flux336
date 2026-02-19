@@ -2,7 +2,7 @@
 import React from 'react';
 import { AdCampaign, Group } from '../../types';
 import { SelectionField } from './SelectionField';
-import { useModal } from '../ModalSystem';
+import { useModal } from '@/componentes/ModalSystem';
 
 interface DestinationCreativeSectionProps {
     campaign: Partial<AdCampaign>;

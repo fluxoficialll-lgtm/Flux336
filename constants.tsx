@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModelConfig } from './types';
+import { ModelConfig } from '../types'';
 
 export const MODELS: ModelConfig[] = [
   {

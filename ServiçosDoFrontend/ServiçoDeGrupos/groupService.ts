@@ -1,7 +1,7 @@
 
-import { USE_MOCKS } from '../ServiçoDeSimulação/index.ts';
+import { USE_MOCKS } from '@/ServiçosDoFrontend/ServiçoDeSimulação/index.ts';
 import { RealGroupService } from './RealGroupService.ts';
-import { MockGroupService } from '../ServiçoDeSimulação/groupService.ts';
+import { MockGroupService } from '@/ServiçosDoFrontend/ServiçoDeSimulação/groupService.ts';
 import { IGroupService } from './groupService.interface.ts';
 
 /**

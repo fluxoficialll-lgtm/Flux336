@@ -1,5 +1,5 @@
 
-import { authService } from '../authService';
+import { authService } from '../ServiçoDeAutenticacao/authService';
 import { MarketplaceItem, Comment, User } from '../../types';
 import { db } from '../../database';
 

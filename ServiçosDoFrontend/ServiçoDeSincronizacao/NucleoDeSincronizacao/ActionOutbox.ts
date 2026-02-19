@@ -1,5 +1,5 @@
 
-import { API_BASE } from '../../apiConfig';
+import { API_BASE } from '@/ServiçosDoFrontend/apiConfig';
 
 interface QueuedAction {
     id: string;

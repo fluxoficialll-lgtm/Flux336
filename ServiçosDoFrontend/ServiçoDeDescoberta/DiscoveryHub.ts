@@ -3,10 +3,10 @@ import { Post, MarketplaceItem, User } from '../../types';
 import { FeedEngine } from './engines/FeedEngine';
 import { ReelsEngine } from './engines/ReelsEngine';
 import { MarketEngine } from './engines/MarketEngine';
-import { EngineContext } from './types';
-import { authService } from '../authService';
-import { UserInterestService } from '../ai/user/UserInterestService';
-import { RecommendationService } from '../ai/core/RecommendationService';
+import { EngineContext } from '../types'';
+import { authService } from '../ServiçoDeAutenticacao/authService';
+import { UserInterestService } from '@/ServiçosDoFrontend/ai/user/UserInterestService';
+import { RecommendationService } from '@/ServiçosDoFrontend/ai/core/RecommendationService';
 
 export const DiscoveryHub = {
 

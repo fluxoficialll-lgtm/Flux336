@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ChatMessage } from '@/types';
-import { useModal } from '../ModalSystem';
+import { ChatMessage } from '../types'';
+import { useModal } from '@/componentes/ModalSystem';
 
 interface ReportMessageModalProps {
   messageToReport: ChatMessage | null;

@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/authService';
-import { groupService } from '../services/groupService';
-import { postService } from '../services/postService';
+import { authService } from '../ServiçosDoFrontend/ServiçoDeAutenticacao/authService';
+import { groupService } from '../ServiçosDoFrontend/ServiçoDeGrupos/groupService';
+import { postService } from '../ServiçosDoFrontend/ServiçoDePosts/postService';
 import { Group } from '../types';
-import { ImageCropModal } from '../components/ui/ImageCropModal';
+import { ImageCropModal } from '../componentes/ComponentesDeInterface/ImageCropModal';
 
 export const CreatePrivateGroup: React.FC = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 
-import { MarketplaceItem } from '../types';
+import { MarketplaceItem } from '@/ServiçosDoFronte../types';
 
 export const MOCK_PRODUCTS: MarketplaceItem[] = [
   {

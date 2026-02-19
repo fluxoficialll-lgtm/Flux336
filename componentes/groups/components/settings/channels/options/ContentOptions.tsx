@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Channel } from '../../../../../types';
+import { Channel } from '@/component../types';
 import { OptionToggle } from './OptionToggle';
 
 interface ContentOptionsProps {

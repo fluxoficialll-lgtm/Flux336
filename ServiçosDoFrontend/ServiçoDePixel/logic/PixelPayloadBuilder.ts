@@ -1,7 +1,7 @@
 
 import { PixelUserData, PixelEventData } from '../../../types/pixel.types';
-import { authService } from '../../authService';
-import { geoService } from '../../geoService';
+import { authService } from '../../ServiçoDeAutenticacao/authService';
+import { geoService } from '@/ServiçosDoFrontend/geoService';
 import { trafficSource } from '../context/TrafficSource';
 import { anonymizeUserData } from '../utils/pixelHasher';
 import { Capacitor } from '@capacitor/core';

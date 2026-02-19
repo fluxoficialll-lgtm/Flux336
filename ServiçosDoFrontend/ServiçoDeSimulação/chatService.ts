@@ -1,8 +1,8 @@
 
 import { db } from '../../database';
 import { ChatMessage, ChatData } from '../../types';
-import { authService } from '../authService';
-import { MOCK_CHATS } from '../../mocks';
+import { authService } from '../ServiçoDeAutenticacao/authService';
+import { MOCK_CHATS } from '.././mocks';
 
 /**
  * Helper para ajustar os mocks ao usuário atual.
